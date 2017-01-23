@@ -103,13 +103,13 @@
         <h1>配置hexo + github page 个人Blog</h1>
         
         <div class="time-info">
-发表于:<time datetime="2017-01-22T04:52:26.000Z" itemprop="datePublished">2017-01-22</time>，更新于:<time datetime="2017-01-23T04:28:44.000Z" itemprop="dateModified">2017-01-23</time>，By <a href="http://yoursite.com" title="FloatingGuy">FloatingGuy</a>
+发表于:<time datetime="2017-01-22T04:52:26.000Z" itemprop="datePublished">2017-01-22</time>，更新于:<time datetime="2017-01-23T09:00:42.000Z" itemprop="dateModified">2017-01-23</time>，By <a href="http://yoursite.com" title="FloatingGuy">FloatingGuy</a>
         </div>
         
         <div class="post-body-inner">
             <div id="toc" class="toc-article well">
                 <strong class="toc-title">大纲</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础配置（一）"><span class="toc-number">1.</span> <span class="toc-text">基础配置（一）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工具安装"><span class="toc-number">1.1.</span> <span class="toc-text">工具安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置Hexo"><span class="toc-number">1.2.</span> <span class="toc-text">配置Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hexo-用法"><span class="toc-number">1.3.</span> <span class="toc-text">Hexo 用法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主题类（二）"><span class="toc-number">2.</span> <span class="toc-text">主题类（二）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#切换主题"><span class="toc-number">2.1.</span> <span class="toc-text">切换主题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多功能"><span class="toc-number">3.</span> <span class="toc-text">更多功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CI辅助自动部署"><span class="toc-number">4.</span> <span class="toc-text">CI辅助自动部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#辅助脚本"><span class="toc-number">5.</span> <span class="toc-text">辅助脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#本地测试脚本"><span class="toc-number">5.1.</span> <span class="toc-text">本地测试脚本</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础配置（一）"><span class="toc-number">1.</span> <span class="toc-text">基础配置（一）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工具安装"><span class="toc-number">1.1.</span> <span class="toc-text">工具安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置Hexo"><span class="toc-number">1.2.</span> <span class="toc-text">配置Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hexo-用法"><span class="toc-number">1.3.</span> <span class="toc-text">Hexo 用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#切换主题"><span class="toc-number">1.4.</span> <span class="toc-text">切换主题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多功能"><span class="toc-number">2.</span> <span class="toc-text">更多功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#夸主机同步-Blog"><span class="toc-number">3.</span> <span class="toc-text">夸主机同步 Blog</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CI辅助自动部署"><span class="toc-number">3.1.</span> <span class="toc-text">CI辅助自动部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#github-托管-source"><span class="toc-number">3.2.</span> <span class="toc-text">github 托管 source</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#辅助脚本"><span class="toc-number">4.</span> <span class="toc-text">辅助脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#本地测试脚本"><span class="toc-number">4.1.</span> <span class="toc-text">本地测试脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gitignore-内容"><span class="toc-number">4.2.</span> <span class="toc-text">.gitignore 内容</span></a></li></ol></li></ol>
             </div>
             
             <h2 id="基础配置（一）"><a href="#基础配置（一）" class="headerlink" title="基础配置（一）"></a>基础配置（一）</h2><h3 id="工具安装"><a href="#工具安装" class="headerlink" title="工具安装"></a>工具安装</h3><p>1.install nodejs-v6.9.4</p>
@@ -133,26 +133,33 @@
 <pre><code>sudo npm install -g hexo-cli --registry=https://registry.npm.taobao.org
 </code></pre><h3 id="配置Hexo"><a href="#配置Hexo" class="headerlink" title="配置Hexo"></a>配置Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir <span class="variable">$Blog</span>-name &amp;&amp; <span class="built_in">cd</span> <span class="variable">$Blog</span>-name</div><div class="line">hexo init <span class="variable">$blog</span></div><div class="line"><span class="built_in">cd</span> <span class="variable">$blog</span></div></pre></td></tr></table></figure>
 <h3 id="Hexo-用法"><a href="#Hexo-用法" class="headerlink" title="Hexo 用法"></a>Hexo 用法</h3><ol>
-<li>常用命令列表：<ol>
+<li><p>常用命令列表：</p>
+<ol>
 <li><strong>~ generate <g>        #生成静态文件</g></strong></li>
 <li><strong>~ server <s>          #本地预览环境</s></strong></li>
 <li><strong>~ new “paper name”    #创建博文</strong></li>
 <li><strong>~ deploy <d>          #部署</d></strong></li>
-<li>~ new page “page name”#创建页面</li>
+<li>~ new page “page name”  #创建页面<br>本地测试在浏览器中打开 localhost:4000</li>
 </ol>
 </li>
-</ol>
-<p>本地测试在浏览器中打开 localhost:4000</p>
-<ol>
-<li>根目录结构介绍<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">#全局配置文件，站点基本信息(title/subtitle/author/..), 主题 ...</div><div class="line">*此文件修改以后不会被覆盖*</div><div class="line">-rw-rw-r--  1 floatg floatg 1.5K  1月 21 16:51 _config.yml</div><div class="line">-rw-rw-r--  1 floatg floatg  24K  1月 21 17:07 db.json</div><div class="line">drwxrwxr-x 12 floatg floatg 4.0K  1月 21 16:53 node_modules</div><div class="line">-rw-rw-r--  1 floatg floatg  448  1月 21 17:07 package.json</div><div class="line">drwxrwxr-x  7 floatg floatg 4.0K  1月 21 17:07 public</div><div class="line">drwxrwxr-x  2 floatg floatg 4.0K  1月 21 16:51 scaffolds</div><div class="line">#makedown 的文字都在source/_posts目录下</div><div class="line">drwxrwxr-x  3 floatg floatg 4.0K  1月 21 16:51 source</div><div class="line">#所有可以使用的主题都在这个目录下，每个主题对应一个文件夹</div><div class="line">drwxrwxr-x  4 floatg floatg 4.0K  1月 21 17:17 themes</div></pre></td></tr></table></figure>
+<li><p>Hexo根目录结构</p>
 </li>
 </ol>
-<h2 id="主题类（二）"><a href="#主题类（二）" class="headerlink" title="主题类（二）"></a>主题类（二）</h2><h3 id="切换主题"><a href="#切换主题" class="headerlink" title="切换主题"></a>切换主题</h3><blockquote>
-<p>目前 我找到的主题比较少，只有默认的landscape 和huno，较喜欢huno。</p>
-</blockquote>
+<ul>
+<li><p>需要上传到 source repo 的文件</p>
+<p>  #全局配置文件，站点基本信息(title/subtitle/author/..), 主题 …<br>  -rw-rw-r–  1 floatg floatg 1.5K  1月 21 16:51 _config.yml</p>
+<p>  #所有博文都在source/目录下<br>  drwxrwxr-x  3 floatg floatg 4.0K  1月 21 16:51 source<br>  drwxrwxr-x  2 floatg floatg 4.0K  1月 21 16:51 scaffolds<br>  -rw-rw-r–  1 floatg floatg  448  1月 21 17:07 package.json</p>
+<p>  #所有可以使用的主题都在这个目录下，每个主题对应一个文件夹<br>  drwxrwxr-x  4 floatg floatg 4.0K  1月 21 17:17 themes<br>  -rw-r–r–  1 floatg floatg  77B  1 23 15:39 .gitignore</p>
+</li>
+<li><p>.gitignore 过滤的文件</p>
+<p>  -rw-rw-r–  1 floatg floatg  24K  1月 21 17:07 db.json<br>  drwxrwxr-x 12 floatg floatg 4.0K  1月 21 16:53 node_modules<br>  drwxrwxr-x  7 floatg floatg 4.0K  1月 21 17:07 public<br>  drwxr-xr-x   17 floatg  floatg   578B  1 23 15:16 .deploy_git</p>
+</li>
+</ul>
+<p>#本地测试脚本<br>    -rwxr-xr-x    1 floatg  floatg    91B  1 23 14:38 rtest.sh<br>    -rw-r–r–@   1 floatg  floatg   6.0K  1 23 14:55 .DS_Store</p>
+<h3 id="切换主题"><a href="#切换主题" class="headerlink" title="切换主题"></a>切换主题</h3><p>目前 我找到的主题比较少，只有默认的landscape 和huno，较喜欢huno。</p>
 <ol>
 <li><p>下载主题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd themes</div><div class="line">git clone git@github.com:someus/huno.git</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> themes</div><div class="line">git <span class="built_in">clone</span> git@github.com:someus/huno.git</div></pre></td></tr></table></figure>
 </li>
 <li><p>分析主题</p>
 <ol>
@@ -163,12 +170,13 @@
 <li>aero-dual   上下布局，喜欢配色</li>
 <li>yelee    很喜欢， 冬天显示列表+目录</li>
 <li>xnew      目录+归档–按日期排列</li>
+<li>GhoSadillaX  使用中</li>
 </ol>
 </li>
 </ol>
 <h2 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h2><p>(更多内容)[<a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">http://ibruce.info/2013/11/22/hexo-your-blog/</a>]<br>(统计)[<a href="http://busuanzi.ibruce.info/" target="_blank" rel="external">http://busuanzi.ibruce.info/</a>]</p>
 <p>hexo config review<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">hexo: 3.2.2</div><div class="line">hexo-cli: 1.0.2</div><div class="line">os: Linux 4.x.x-xx-generic linux xxx</div><div class="line">http_parser: 1.0</div><div class="line">node: 0.10.25</div><div class="line">v8: 3.xx.5.9</div><div class="line">ares: 1.10.0</div><div class="line">uv: 0.10.23</div><div class="line">zlib: 1.2.8</div><div class="line">modules: 11</div><div class="line">openssl: x.x.xf</div></pre></td></tr></table></figure></p>
-<h2 id="CI辅助自动部署"><a href="#CI辅助自动部署" class="headerlink" title="CI辅助自动部署"></a>CI辅助自动部署</h2><p>参考文章:<br><a href="http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/" target="_blank" rel="external">http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/</a><br><a href="https://formulahendry.github.io/2016/12/04/hexo-ci/" target="_blank" rel="external">https://formulahendry.github.io/2016/12/04/hexo-ci/</a></p>
+<h2 id="夸主机同步-Blog"><a href="#夸主机同步-Blog" class="headerlink" title="夸主机同步 Blog"></a>夸主机同步 Blog</h2><h3 id="CI辅助自动部署"><a href="#CI辅助自动部署" class="headerlink" title="CI辅助自动部署"></a>CI辅助自动部署</h3><p>参考文章:<br><a href="http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/" target="_blank" rel="external">http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/</a><br><a href="https://formulahendry.github.io/2016/12/04/hexo-ci/" target="_blank" rel="external">https://formulahendry.github.io/2016/12/04/hexo-ci/</a></p>
 <p>我首先尝试了使用appveyor 做CI的办法，效果不尽如人意。主要的问题在：</p>
 <pre><code>1. nodejs, hexo的版本和我本地不同，导致命令 解析都不一样。解决办法：可以在yml中下载制定版本
 2. 使用作者的yml, 直接把我content repo下的内容删除了连site都打不开了。
@@ -196,8 +204,37 @@
 </ol>
 </li>
 </ol>
-<p>最终没有找到好的解决办法，目前就先这样啦。。。 等找到办法了再来更新。</p>
-<h2 id="辅助脚本"><a href="#辅助脚本" class="headerlink" title="辅助脚本"></a>辅助脚本</h2><h3 id="本地测试脚本"><a href="#本地测试脚本" class="headerlink" title="本地测试脚本"></a>本地测试脚本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Bhome=/home/floatg/data/FG-Blog/hexo/blog</div><div class="line">killall -9 hexo</div><div class="line">cd $Bhome</div><div class="line">hexo g</div><div class="line">hexo s</div></pre></td></tr></table></figure>
+<p><del>最终没有找到好的解决办法,目前就先这样啦,等找到办法了再来更新</del></p>
+<h3 id="github-托管-source"><a href="#github-托管-source" class="headerlink" title="github 托管 source"></a>github 托管 source</h3><p>原理就是将常用电脑上的 blog根目录下建立 git仓库(source repo)，然后注意哪些文件要上传，哪些不能上传。以后可以在任意一台电脑上将 source repo clone 到本地，然后按照下面的步骤来配置。<br>步骤：</p>
+<ol>
+<li>安装 node-v6.9.4</li>
+<li>clone 到本地以后，进入 repo目录然后安装工具&amp;模块。</li>
+<li><p>执行下面的命令就可以配置好 hexo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">npm install hexo --save</div><div class="line">npm install</div><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
+</li>
+<li><p>下面就是测试 server,generate,deploy命令了</p>
+</li>
+</ol>
+<p>再来总结一下哪些文件需要上传，哪些不能上传：<br>上传:</p>
+<pre><code>* _config.yml
+* theme/
+* source/
+* scaffolds/
+* package.json
+* .gitignore
+</code></pre><p>theme 下所有的.git/目录要删除，.gitignore 根据需要做修改。</p>
+<p>不上传:</p>
+<pre><code>* .git/
+* db.json
+* node_modules/
+* public/
+* .deploy_git/
+</code></pre><blockquote>
+<p>我遇到的坑, 在使用 GhoSadillaX 主题时，因为其gitignore 不上传_config.yml, 导致在 mac 上测试一直显示 duoshao 没配置short_name, 最后还是把 theme下的_config.yml找回来才解决。</p>
+</blockquote>
+<h2 id="辅助脚本"><a href="#辅助脚本" class="headerlink" title="辅助脚本"></a>辅助脚本</h2><h3 id="本地测试脚本"><a href="#本地测试脚本" class="headerlink" title="本地测试脚本"></a>本地测试脚本</h3><p>rtest.sh<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Bhome=/home/floatg/data/FG-B<span class="built_in">log</span>/hexo/blog</div><div class="line">killall -9 hexo</div><div class="line"><span class="built_in">cd</span> <span class="variable">$Bhome</span></div><div class="line">hexo g</div><div class="line">hexo s</div></pre></td></tr></table></figure></p>
+<h3 id="gitignore-内容"><a href="#gitignore-内容" class="headerlink" title=".gitignore 内容"></a>.gitignore 内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.DS_Store</div><div class="line">*.log</div><div class="line">/.deploy*</div><div class="line">/_config.yml</div><div class="line">node_modules/</div><div class="line">public/</div><div class="line">rtest.sh</div><div class="line">db.json</div></pre></td></tr></table></figure>
+
 
 			
             <section class="comment">
