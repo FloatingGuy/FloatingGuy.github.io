@@ -1,145 +1,154 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    
-    <meta name="author" content="FloatingGuy">
-    
-    
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="FloatingGuy">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="FloatingGuy&#39;s Blog"/>
+  <meta property="og:description" content="" />
+  <meta property="og:site_name" content="FloatingGuy&#39;s Blog"/>
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="http://yoursite.comundefined"/>
+  
+    <link rel="alternate" href="/atom.xml" title="FloatingGuy&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
 
-    
-    <link rel="alternative" href="YOUR_RSS_ADDRESS" title="FloatingGuy&#39;s Blog" type="application/atom+xml">
-    
-    
-    
+  <!-- Site Title -->
+  <title>FloatingGuy's Blog</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tag: Git | FloatingGuy&#39;s Blog</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  
+  <link rel="stylesheet" href="/css/style.light.css">
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+  
 
-    <!-- Javascript -->
-    <script src="/js/jquery-2.1.0.min.js"></script>
-    <script src="/js/jquery.backstretch.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/js/headroom.min.js"></script>
-    <script src="/js/jquery.headroom.min.js"></script> 
-    <script src="/js/common.js"></script>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
-<body>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="http://yoursite.com" title="FloatingGuy's Blog">FloatingGuy&#39;s Blog</a>
-            </div>
 
-            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
-                
+  <body>
+    <!-- Archive Header -->
+<!-- Page Header -->
 
-                <ul class="nav navbar-nav">
-                    
-                    <li id="nav-index"><a href="/">首页</a></li>
-                    
-                    <li id="nav-archives"><a href="/archives">归档</a></li>
-                    
-                    <li id="nav-categories"><a href="/categories">分类</a></li>
-                    
-                    <li id="nav-curriculumvitae"><a href="/about">关于</a></li>
-                    
-                    
-                    <li><a href="https://github.com/FloatingGuy" target="_blank">GitHub</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    
-    <script>
-    var backRoot = "/images/background/";
-    var backArray = [ "0.jpg", "1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg", "8.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg", "16.jpg", "17.jpg",  ];
-        
-    $(function() {
-        // page-id...
-        var pageId = "tags/Git/index.html";
-        pageId = pageId.substr(0, pageId.indexOf("/"));
-        if(pageId === "") pageId = "index";
-        
-        $("#nav-" + pageId).addClass("active");
-    });
-    </script>
 
-    
-<div class="container archive-body">
+<header class="site-header header-background" style="background-image: url(/img/2.jpg)">
+  <div class="container">
     <div class="row">
-        <div class="col-xs-3 well">
-            <div class="archive-title" >
-                <h2 class="tag-icon">Git</h2>
-                <div>
-                    <a href="/tags"><< 返回标签列表</a> 
-                </div>
-            </div>
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">Blog Archives</p>
+          <p class="subtitle"></p>
         </div>
-        
-        <div class="col-xs-9" id="tag-list-body">
+        <div class="site-menu with-background-image">
+          <ul>
             
-            <article class="post">
-                <div class="jumbotron">
-                    <h1><a href="/2017/01/22/配置hexo-github-page-个人Blog/" title="配置hexo + github page 个人Blog">配置hexo + github page 个人Blog</a></h1>
-
-                    
-                        <p>基础配置（一）工具安装1.install nodejs-v6.9.4
-下载zip package
-
-安装Nodejs ubuntu: 123sudo apt-get install nodejs#检查版本node -v
-
-
-如果nodejs 版本不是 v6.9.4,那么需要去官网</p>
-                    
-
-                    <p class="say-title">
-                        —— <img src="/images/china.gif" class="img-circle index-post-avatar" />
-                        <a href="http://yoursite.com" target="_blank" title="FloatingGuy">FloatingGuy</a>
-                        于2017-01-22自豪地以 <a class="article-tag-link" href="/tags/AppVeyor/">AppVeyor</a>, <a class="article-tag-link" href="/tags/CI/">CI</a>, <a class="article-tag-link" href="/tags/Git/">Git</a>, <a class="article-tag-link" href="/tags/Hexo/">Hexo</a> 唠嗑
-                    </p>
-                </div>
-            </article>
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
             
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
             
+              <li>
+                <a href="https://github.com/FloatingGuy">
+                  
+                  Github
+                  
+                </a>
+              </li>
             
+              <li>
+                <a href="mailto:levblanc@163.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
         </div>
+      </div>
     </div>
-        
-    <div class="col-xs-19 all-list-box">
-    </div>
+  </div>
+</header>
+
+
+<!-- Archive List -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      
+        <div class="archive-item">
+  <a href="/2017/01/22/配置hexo-github-page-个人Blog/" class="post-title">
+    配置hexo + github page 个人Blog
+  </a>
+  <div class="date text-muted">Posted on 2017-01-22 12:52:26</div>
 </div>
-    <footer id="footer">
-    <div id="bottom-tip">
-        FloatingGuy&#39;s Blog
+
+      
+
     </div>
-        <small>该博客由 <a href="https://hexo.io/" target="_blank">Hexo</a> 强力驱动，搭载 <a href="https://github.com/XadillaX/hexadillax" target="_blank">Hexadillax</a> 主题</small><br />
-        <small>&copy; 2014 FloatingGuy</small>
-    </footer>
+  </div>
+</div>
+<!-- Pagination -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-10 col-md-10 col-md-offset-1">
+      <ul class="pagination">
+          
+          
+      </ul>
+    </div>
+  </div>
+</div>
 
-    
 
 
-</body>
+    <!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          Theme By <a target="_blank" href="https://github.com/levblanc">Levblanc.</a>
+          Inspired By <a target="_blank" href="https://github.com/klugjo/hexo-theme-clean-blog">Clean Blog.</a>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- After Footer Scripts -->
+<script src="/js/highlight.pack.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+  </body>
 </html>
 
