@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-02-07T11:30:18.000Z</updated>
+  <updated>2017-02-09T07:25:15.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,169 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>iOS RoadMap</title>
+    <link href="http://yoursite.com/2017/02/08/iOS-roadMap/"/>
+    <id>http://yoursite.com/2017/02/08/iOS-roadMap/</id>
+    <published>2017-02-08T05:58:07.000Z</published>
+    <updated>2017-02-09T07:25:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>学习iOS安全的技术路线，分为：开发，工具，iOS安全模块，漏洞利用， 漏洞挖掘 5个模块。<br>(模块会发生变动)</p>
+<a id="more"></a>
+<p><img src="/include/img/iOS.jpg" alt="sdf"></p>
+<h3 id="开发篇"><a href="#开发篇" class="headerlink" title="开发篇"></a>开发篇</h3><ol>
+<li>语言 （swift, <a href="http://zh-google-styleguide.readthedocs.io/en/latest/google-objc-styleguide/contents/" target="_blank" rel="external">object-C</a>）</li>
+<li>tweak</li>
+<li>系统调用，开发模块(ioKit，消息响应等)</li>
+</ol>
+<h3 id="工具篇"><a href="#工具篇" class="headerlink" title="工具篇"></a>工具篇</h3><ol>
+<li>砸壳工具</li>
+<li>静态分析工具</li>
+<li>动态调试工具</li>
+<li>其他工具</li>
+<li>脚本</li>
+</ol>
+<h3 id="iOS安全摸块"><a href="#iOS安全摸块" class="headerlink" title="iOS安全摸块"></a>iOS安全摸块</h3><ol>
+<li>APP格式/组成</li>
+<li>静态分析方法 (Arm64)</li>
+<li><a href="http://bbs.iosre.com/t/debugserver-lldb-gdb/65" target="_blank" rel="external">动态调试方法</a><ol>
+<li>应用调试</li>
+<li>框架调试</li>
+<li>内核调试</li>
+</ol>
+</li>
+<li>重打包</li>
+<li>砸壳原理</li>
+</ol>
+<h3 id="系统漏洞模块"><a href="#系统漏洞模块" class="headerlink" title="系统漏洞模块"></a>系统漏洞模块</h3><ol>
+<li>提权</li>
+<li>远程</li>
+<li>越狱</li>
+</ol>
+<p>2017年春节后，蒸米在其 github 中发布一篇2016 iOS漏洞总结的文章，里面介绍的都是2016年的精华漏洞。<br><a href="/include/txt/2016年iOS公开可利用漏洞总结_CN.docx">2016年iOS公开可利用漏洞总结_CN</a></p>
+<p>Apple 漏洞奖励计划</p>
+<table>
+<thead>
+<tr>
+<th>赏金类型</th>
+<th>奖励金额</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>安全启动固件组件</td>
+<td>最高$200000</td>
+</tr>
+<tr>
+<td>保护机密材料提取的安全协议处理器</td>
+<td>最高$100000</td>
+</tr>
+<tr>
+<td>执行任意代码内核权限</td>
+<td>最高$50000</td>
+</tr>
+<tr>
+<td>在苹果服务器上未经授权擅自访问iCloud帐户数据</td>
+<td>最高$50000</td>
+</tr>
+<tr>
+<td>在沙箱外对沙箱内的用户数据进行访问</td>
+<td>最高$25000</td>
+</tr>
+</tbody>
+</table>
+<h3 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h3><h3 id="学习资源"><a href="#学习资源" class="headerlink" title="学习资源"></a>学习资源</h3><p><a href="http://resources.infosecinstitute.com/ios-application-security-part-1-setting-up-a-mobile-pentesting-platform/" target="_blank" rel="external">英文</a><br><a href="http://security.ios-wiki.com/" target="_blank" rel="external">iOS Security 中文</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;学习iOS安全的技术路线，分为：开发，工具，iOS安全模块，漏洞利用， 漏洞挖掘 5个模块。&lt;br&gt;(模块会发生变动)&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="研究" scheme="http://yoursite.com/categories/categories-research/"/>
+    
+    
+      <category term="熟悉" scheme="http://yoursite.com/tags/%E7%86%9F%E6%82%89/"/>
+    
+      <category term="ios" scheme="http://yoursite.com/tags/ios/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2016 Pwnie Awards</title>
+    <link href="http://yoursite.com/2017/02/08/2016-Pwnie-Awards/"/>
+    <id>http://yoursite.com/2017/02/08/2016-Pwnie-Awards/</id>
+    <published>2017-02-08T05:01:24.000Z</published>
+    <updated>2017-02-09T06:23:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>2016 Black Hat重点记录</p>
+<h3 id="精品漏洞"><a href="#精品漏洞" class="headerlink" title="精品漏洞"></a>精品漏洞</h3><a id="more"></a>
+<p>Pwnie Awards 2016获奖名单揭晓</p>
+<p>素有网络安全奥斯卡之称的Pwnie Awards正式公布各个奖项的归属。有关这个奖的分量就不必再多说了，我们直接来看获奖名单。</p>
+<p><strong>最佳服务器BUG奖</strong>（Pwnie for Best Server-Side Bug）：Cisco ASA IKEv1/IKEv2 Fragmentation Heap Buffer Overflow缓冲溢出（CVE-2016-1287）。传说中最有趣、技术上精制复杂的服务器端漏洞利用。</p>
+<p><strong>最佳客户端BUG奖</strong>（Pwnie for Best Client-Side Bug）：glibc getsddrinfo堆栈缓冲溢出（CVE-2015-7547）。</p>
+<p><strong>最佳提权BUG奖</strong>（Pwnie for Best Privilege Escalation Bug）：Widevine QSEE TrustZone Privilege Escalation（CVE-2015-6639），就是前一阵影响Android系统高通芯片TrustZone的漏洞。</p>
+<p><strong>最佳加密攻击奖</strong>（Pwnie for Best Crytographic Attack）：SSLv2 Crypto攻击（DROWN Attack）（CVE-2016-0800）。这个奖项是今年首度出现的，授予那些采用新奇的方式来打破加密系统的安全研究人员。</p>
+<p><strong>最炫Hack奖</strong>（Pwnie for Best Junk or Stunt Hack）：远程劫持高速公路上的Jeep——去年比较火热针对切诺基的远程攻击。这个奖的英文原名其实很有趣，各位可以体会以下，有关这个奖的描述是这样的：“授予研究人员，及他们的公关团队，还有参与其中的记者，为其产生的超高公众影响力，甚至可能致许多不懂技术的朋友和家人会惊慌失措打来电话的技术。”</p>
+<p><strong>最佳品牌奖</strong>（Pwnie for Best Branding）：Mousejack无线键盘注入BUG。这个奖授予话最大努力解释和宣传其发现的安全漏洞的企业。</p>
+<p><strong>史诗成就奖</strong>（Pwnie for Epic Achievement）：Tavis Ormandy（针对他去年侵入绝大部分反病毒程度而颁发）。又一个全新的奖项，听着都感觉很高端，这个奖专门颁给那些获得前所未有的“成绩”（notoriery）的研究人员。</p>
+<p><strong>最佳创新研究奖</strong>（Pwnie for Most Innovative Research）： Dedup Est Machina：Memory Deduplication as an Advanced Exploitation Vector（将内存重复数据删除作为高级利用向量，这是篇论文）。这个奖是颁给那些公布最有趣研究，即便研究还没实现的研究人员。</p>
+<p><strong>最过分夸大BUG奖</strong>（Pwnie for Most Over-hyped Bug）：Badlock（CVE-2016-0128）。这个奖颁给被媒体过分关注，但实际上根本就没那么危险的安全漏洞。</p>
+<p>最佳歌曲奖（Pwnie for Best Song）：Cyber-lair，来自Katie Moussouris。</p>
+<p><strong>史诗级0wnage奖</strong>（Pwnie for Epic 0wnage）：Juniper Backdoor后门。此奖授予对企业或产品产生极大危害的研究人员或安全漏洞。</p>
+<p><strong>终身成就奖</strong>：Mudge，Peiter C.Zatko。长期以来从事漏洞研究的教育专家、在安全行业有较大影响力，先前曾领导DARPA网络安全项目。</p>
+<h3 id="Apple-漏洞奖励计划"><a href="#Apple-漏洞奖励计划" class="headerlink" title="Apple 漏洞奖励计划"></a>Apple 漏洞奖励计划</h3><table>
+<thead>
+<tr>
+<th>赏金类型</th>
+<th>奖励金额</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>安全启动固件组件</td>
+<td>最高$200000</td>
+</tr>
+<tr>
+<td>保护机密材料提取的安全协议处理器</td>
+<td>最高$100000</td>
+</tr>
+<tr>
+<td>执行任意代码内核权限</td>
+<td>最高$50000</td>
+</tr>
+<tr>
+<td>在苹果服务器上未经授权擅自访问iCloud帐户数据</td>
+<td>最高$50000</td>
+</tr>
+<tr>
+<td>在沙箱外对沙箱内的用户数据进行访问</td>
+<td>最高$25000</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;2016 Black Hat重点记录&lt;/p&gt;
+&lt;h3 id=&quot;精品漏洞&quot;&gt;&lt;a href=&quot;#精品漏洞&quot; class=&quot;headerlink&quot; title=&quot;精品漏洞&quot;&gt;&lt;/a&gt;精品漏洞&lt;/h3&gt;
+    
+    </summary>
+    
+      <category term="漏洞" scheme="http://yoursite.com/categories/categories-exploit/"/>
+    
+    
+      <category term="blackhat-2016" scheme="http://yoursite.com/tags/blackhat-2016/"/>
+    
+  </entry>
+  
+  <entry>
     <title>yalu102 越狱</title>
     <link href="http://yoursite.com/2017/02/07/yalu102-%E8%B6%8A%E7%8B%B1/"/>
     <id>http://yoursite.com/2017/02/07/yalu102-越狱/</id>
     <published>2017-02-07T07:56:37.000Z</published>
-    <updated>2017-02-07T11:30:18.000Z</updated>
+    <updated>2017-02-09T06:23:30.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="基本信息："><a href="#基本信息：" class="headerlink" title="基本信息："></a>基本信息：</h3><p>luca 发布了ios 10.2 版本的开源越狱工具。<br>yalu 102 repo: <a href="https://github.com/kpwn/yalu102" target="_blank" rel="external">https://github.com/kpwn/yalu102</a><br>zhengmin repo:<a href="https://github.com/zhengmin1989/yalu102.git" target="_blank" rel="external">https://github.com/zhengmin1989/yalu102.git</a><br>CVE: CVE-2017-2370</p>
 <a id="more"></a>
@@ -94,6 +252,8 @@
       <category term="漏洞" scheme="http://yoursite.com/categories/categories-exploit/"/>
     
     
+      <category term="ios" scheme="http://yoursite.com/tags/ios/"/>
+    
       <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
     
   </entry>
@@ -119,10 +279,10 @@
     <link href="http://yoursite.com/2017/01/24/jeb-v2-2-7%E7%9C%9F%E6%9C%BA%E8%B0%83%E8%AF%95-APK-nodebug/"/>
     <id>http://yoursite.com/2017/01/24/jeb-v2-2-7真机调试-APK-nodebug/</id>
     <published>2017-01-23T16:31:49.000Z</published>
-    <updated>2017-02-03T19:05:44.000Z</updated>
+    <updated>2017-02-09T06:23:30.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="JEB2-2-7-调试阿里2016移动安全-第三题-app部分"><a href="#JEB2-2-7-调试阿里2016移动安全-第三题-app部分" class="headerlink" title="JEB2.2.7 调试阿里2016移动安全 第三题-app部分"></a>JEB2.2.7 调试阿里2016移动安全 第三题-app部分</h2><hr>
-<p>本文主要是用来记录在 动态调试 app 中 gif库解析漏洞是使用的工具 和 遇到的一些坑， 分析漏洞只是顺带一提不作为重点。</p>
+<p>记录 在动态调试 app 中 gif库解析漏洞是使用的工具 和 遇到的一些坑， 分析漏洞只是顺带一提不作为重点。</p>
 <a id="more"></a>
 <blockquote>
 <p>说明：</p>
@@ -162,11 +322,11 @@
     <summary type="html">
     
       &lt;h2 id=&quot;JEB2-2-7-调试阿里2016移动安全-第三题-app部分&quot;&gt;&lt;a href=&quot;#JEB2-2-7-调试阿里2016移动安全-第三题-app部分&quot; class=&quot;headerlink&quot; title=&quot;JEB2.2.7 调试阿里2016移动安全 第三题-app部分&quot;&gt;&lt;/a&gt;JEB2.2.7 调试阿里2016移动安全 第三题-app部分&lt;/h2&gt;&lt;hr&gt;
-&lt;p&gt;本文主要是用来记录在 动态调试 app 中 gif库解析漏洞是使用的工具 和 遇到的一些坑， 分析漏洞只是顺带一提不作为重点。&lt;/p&gt;
+&lt;p&gt;记录 在动态调试 app 中 gif库解析漏洞是使用的工具 和 遇到的一些坑， 分析漏洞只是顺带一提不作为重点。&lt;/p&gt;
     
     </summary>
     
-      <category term="research" scheme="http://yoursite.com/categories/research/"/>
+      <category term="研究" scheme="http://yoursite.com/categories/categories-research/"/>
     
     
       <category term="jeb" scheme="http://yoursite.com/tags/jeb/"/>
