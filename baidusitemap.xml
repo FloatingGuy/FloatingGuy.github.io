@@ -4,51 +4,8 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/02/08/iOS-roadMap/</loc>
-    <lastmod>2017-02-09T07:25:15.000Z</lastmod>
-    <data>
-        <display>
-        <title>iOS RoadMap</title>
-        <pubTime>2017-02-08T05:58:07.000Z</pubTime>
-        
-        <tag>熟悉</tag>
-         
-        <tag>ios</tag>
-         
-         
-           
-             
-              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
-  <url>
-    <loc>http://yoursite.com/2017/02/08/2016-Pwnie-Awards/</loc>
-    <lastmod>2017-02-09T06:23:30.000Z</lastmod>
-    <data>
-        <display>
-        <title>2016 Pwnie Awards</title>
-        <pubTime>2017-02-08T05:01:24.000Z</pubTime>
-        
-        <tag>blackhat-2016</tag>
-         
-         
-           
-             
-              <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/01/24/jeb-v2-2-7%E7%9C%9F%E6%9C%BA%E8%B0%83%E8%AF%95-APK-nodebug/</loc>
-    <lastmod>2017-02-09T06:23:30.000Z</lastmod>
+    <lastmod>2017-02-12T12:53:44.000Z</lastmod>
     <data>
         <display>
         <title>jeb-v2.2.7真机调试 APK(nodebug)</title>
@@ -70,6 +27,76 @@
     </url>
 
     
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/12/5-%E6%95%B4%E6%95%B0%E5%AE%89%E5%85%A8/</loc>
+    <lastmod>2017-02-12T12:49:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>5.整数安全</title>
+        <pubTime>2017-02-12T09:59:39.000Z</pubTime>
+        
+        <tag>熟悉</tag>
+         
+        <tag>读书笔记</tag>
+         
+         
+           
+             
+              <breadCrumb title="《C++安全编程》" url="http://yoursite.com/categories/%E3%80%8AC-%E5%AE%89%E5%85%A8%E7%BC%96%E7%A8%8B%E3%80%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/12/Android%E5%85%8DRoot%E7%8E%AF%E5%A2%83%E4%B8%8BHook%E6%A1%86%E6%9E%B6Legend%E5%BA%94%E7%94%A8/</loc>
+    <lastmod>2017-02-12T12:48:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android免Root环境下Hook框架Legend应用</title>
+        <pubTime>2017-02-12T10:32:59.000Z</pubTime>
+        
+        <tag>了解</tag>
+         
+        <tag>hook</tag>
+         
+        <tag>opensource-git</tag>
+         
+         
+           
+             
+              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/08/iOS-roadMap/</loc>
+    <lastmod>2017-02-09T09:39:39.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS RoadMap</title>
+        <pubTime>2017-02-08T05:58:07.000Z</pubTime>
+        
+        <tag>熟悉</tag>
+         
+        <tag>ios</tag>
+         
+         
+           
+             
+              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
   <url>
     <loc>http://yoursite.com/2017/02/07/yalu102-%E8%B6%8A%E7%8B%B1/</loc>
     <lastmod>2017-02-09T06:23:30.000Z</lastmod>
@@ -81,6 +108,26 @@
         <tag>ios</tag>
          
         <tag>了解</tag>
+         
+         
+           
+             
+              <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/08/2016-Pwnie-Awards/</loc>
+    <lastmod>2017-02-09T06:23:30.000Z</lastmod>
+    <data>
+        <display>
+        <title>2016 Pwnie Awards</title>
+        <pubTime>2017-02-08T05:01:24.000Z</pubTime>
+        
+        <tag>blackhat-2016</tag>
          
          
            
@@ -117,7 +164,6 @@
     </data>
     </url>
 
-    
     
   <url>
     <loc>http://yoursite.com/2017/02/04/happy-new-year/</loc>
