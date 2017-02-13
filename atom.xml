@@ -252,9 +252,9 @@
       <category term="漏洞" scheme="http://yoursite.com/categories/categories-exploit/"/>
     
     
-      <category term="ios" scheme="http://yoursite.com/tags/ios/"/>
-    
       <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
+    
+      <category term="ios" scheme="http://yoursite.com/tags/ios/"/>
     
   </entry>
   
