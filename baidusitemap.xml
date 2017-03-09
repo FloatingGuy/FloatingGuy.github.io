@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/03/09/%E7%AE%80%E6%B4%81%E4%B8%BB%E9%A2%98-Maupassant/</loc>
+    <lastmod>2017-03-09T16:45:55.000Z</lastmod>
+    <data>
+        <display>
+        <title>简洁主题--Maupassant</title>
+        <pubTime>2017-03-09T15:26:42.000Z</pubTime>
+        
+        <tag>Hexo</tag>
+         
+         
+           
+             
+              <breadCrumb title="捣鼓" url="http://yoursite.com/categories/categories-fiddle/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/01/22/%E9%85%8D%E7%BD%AEhexo-github-page-%E4%B8%AA%E4%BA%BABlog/</loc>
     <lastmod>2017-03-09T16:42:40.000Z</lastmod>
     <data>
@@ -173,26 +193,6 @@
            
              
               <breadCrumb title="生活" url="http://yoursite.com/categories/categories-life/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/03/09/%E7%AE%80%E6%B4%81%E4%B8%BB%E9%A2%98-Maupassant/</loc>
-    <lastmod>2017-03-09T16:02:50.000Z</lastmod>
-    <data>
-        <display>
-        <title>简洁主题--Maupassant</title>
-        <pubTime>2017-03-09T15:26:42.000Z</pubTime>
-        
-        <tag>Hexo</tag>
-         
-         
-           
-             
-              <breadCrumb title="捣鼓" url="http://yoursite.com/categories/categories-fiddle/"/>
           
         </display>
     </data>
