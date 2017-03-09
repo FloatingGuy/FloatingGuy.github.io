@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="FloatingGuy">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="漏洞基础--内存漏洞"/>
+  <meta property="og:description" content="" />
+  <meta property="og:site_name" content="FloatingGuy&#39;s Blog"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="http://yoursite.comundefined"/>
+  
+    <link rel="alternate" href="/atom.xml" title="FloatingGuy&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+  <!-- Site Title -->
+  <title>FloatingGuy's Blog</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  
+  <link rel="stylesheet" href="/css/style.light.css">
+
+  <!-- Google Analytics -->
+  
+
+</head>
+
+  <body>
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/2.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">漏洞基础--内存漏洞</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/FloatingGuy">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:1776880807@qq.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+            <!-- Author -->
+            <span class="author info">By FloatingGuy</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2017-02-28</span>
+            <span class="time">19:31:56</span>
+          </span>
+          
+          <!--  Categories  -->
+            <span class="categories info">Under 
+
+<a href="/categories/读书/">读书</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+          <div class="post-tags text-muted">
+            Tags: 
+
+<a class="tag" href="/tags/读书笔记/">#读书笔记</a> <a class="tag" href="/tags/熟悉/">#熟悉</a>
+
+
+          </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <blockquote>
+<p>《C++ 安全编程》 – 第 三 章：指针诡计<br><a id="more"></a></p>
+</blockquote>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>本章介绍内存漏洞，如何达到 劫持控制流 和 任意内存地址写。<br>两个典型的例子：</p>
+<ul>
+<li>覆盖函数指针：通过溢出操作，覆盖内存中的函数指针指向攻击者的 shellcode，达到劫持控制流的目的。如果是内核中劫持控制流应为有 PXN 的限制不能直接从内核跳转到用户态执行，所以需要 ROP 或者其他手段配合使用。（绕过 PXN 不属于本文介绍内容）</li>
+<li>修改指针对象：如果一个指针对象作为后继赋值操作的目的地址，那么攻击者就可以通过控制指针对象达到任意地址写。</li>
+</ul>
+<p>学习这部分内容，前置的知识是要 知道程序中的数据，指令在内存中的位置，所处的环境（内核、用户态）。</p>
+<p>数据包括：局部变量、参数、返回值、函数指针、全局变量、静态变量、类对象、类的成员、类的虚表 等等。<br>指令包括：用户代码、动态库、静态库、中断代码、系统调用、驱动+内核代码</p>
+<p>列表：</p>
+<ol>
+<li>函数指针</li>
+<li>对象指针</li>
+<li>修改指令指针</li>
+<li>全局偏移表 GOT</li>
+<li>.dtors 区</li>
+<li>虚指针</li>
+<li>longjmp 函数</li>
+</ol>
+<h3 id="函数指针安全-–-缓冲区溢出-控制流"><a href="#函数指针安全-–-缓冲区溢出-控制流" class="headerlink" title="函数指针安全 – 缓冲区溢出/控制流"></a>函数指针安全 – 缓冲区溢出/控制流</h3><blockquote>
+<p>3.2 函数指针</p>
+</blockquote>
+<h4 id="Case"><a href="#Case" class="headerlink" title="Case"></a>Case</h4><p>BSS段中的缓冲区溢出<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">good_function</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* str)</span> </span>&#123;...&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">char</span> buff[BUFFERSIZE];</div><div class="line">    <span class="function"><span class="keyword">static</span> <span class="title">void</span> <span class="params">(*funcPtr)</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str)</span></span>;</div><div class="line">    funcPtr = &amp;good_function;</div><div class="line">    srncpy(buff, argv[<span class="number">1</span>], <span class="built_in">strlen</span>(argv[<span class="number">1</span>]));   <span class="comment">// 有可能覆盖 funcPtr</span></div><div class="line">    (<span class="keyword">void</span>)(*funcPtr)(argv[<span class="number">2</span>]);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="对象指针-–-任意地址写-控制流"><a href="#对象指针-–-任意地址写-控制流" class="headerlink" title="对象指针 – 任意地址写/控制流"></a>对象指针 – 任意地址写/控制流</h3><blockquote>
+<p>3.3</p>
+</blockquote>
+<p>任意地址写任意数据<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">void</span> * arg, <span class="keyword">size_t</span> len)</span> </span>&#123;</div><div class="line">    <span class="keyword">char</span> buff[<span class="number">100</span>];</div><div class="line">    <span class="keyword">long</span> val = ..;</div><div class="line">    <span class="keyword">long</span> * ptr = ...;</div><div class="line"></div><div class="line">    <span class="built_in">memcpy</span>(buff, arg, len);</div><div class="line">    *ptr = val;</div><div class="line">    ..</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意：类型长度， x86-32位系统中 void* ，int， long都是 4字节</p>
+<h3 id="修改指令指针"><a href="#修改指令指针" class="headerlink" title="修改指令指针"></a>修改指令指针</h3><p>x86-32 架构，指令指针寄存器 eip，不可以直接修改。必须通过控制转移指令（jmp, jcc, call 和 ret等），中断，异常 间接修改。<br>(貌似 arm 上可以直接修改??)</p>
+<p>分析 call 指令：</p>
+<ol>
+<li>将返回值存储到栈中</li>
+<li>将控制权转到目标操作数 （立即数，通用寄存器，内存地址）</li>
+</ol>
+<h4 id="Case-1"><a href="#Case-1" class="headerlink" title="Case"></a>Case</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">good_function</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* str)</span> </span>&#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">static</span> <span class="title">void</span> <span class="params">(*funcPtr)</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* str)</span></span>;</div><div class="line">    funcPtr = &amp;good_function;</div><div class="line">    (<span class="keyword">void</span>)(*funcPtr)(<span class="string">"hi \n"</span>);      【<span class="number">1</span>】</div><div class="line">    good_function(<span class="string">"there!\n"</span>);      【<span class="number">2</span>】</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">x86 汇编</div><div class="line">_main   PROC</div><div class="line">        push     ebp</div><div class="line">        mov      ebp, esp</div><div class="line">        mov      DWORD PTR good_function OFFSET ?good_function@@YAXPBD@Z</div><div class="line">        <span class="comment">//[1]</span></div><div class="line">        push     OFFSET $SG5338</div><div class="line">        call     DWORD PTR ?funcPtr@?<span class="number">1</span>??main@@<span class="number">9</span>@<span class="number">4</span>P6AXPBD@ZA</div><div class="line">        add      esp, <span class="number">4</span></div><div class="line"></div><div class="line">        <span class="comment">//[2]</span></div><div class="line">        push     OFFSET $SG5339</div><div class="line">        call     good_function</div><div class="line">        add      esp, <span class="number">4</span></div><div class="line">        xor      eax, eax</div><div class="line">        pop      ebp</div><div class="line">        ret      <span class="number">0</span></div><div class="line">_main   ENDP</div><div class="line"></div><div class="line">good_function PROC</div><div class="line">        push     ebp</div><div class="line">        mov      ebp, esp</div><div class="line">        mov      eax, DWORD PTR _str$[ebp]</div><div class="line">        push     eax</div><div class="line">        push     OFFSET $SG5329</div><div class="line">        call     _printf</div><div class="line">        add      esp, <span class="number">8</span></div><div class="line">        pop      ebp</div><div class="line">        ret      <span class="number">0</span></div><div class="line">good_function ENDP</div></pre></td></tr></table></figure>
+<h3 id="全局偏移表-GOT-–-任意地址写-控制流"><a href="#全局偏移表-GOT-–-任意地址写-控制流" class="headerlink" title="全局偏移表 GOT – 任意地址写/控制流"></a>全局偏移表 GOT – 任意地址写/控制流</h3><p>任何 ELF 的二进制文件的进程空间中，都包含一个GOT 表。GOT 存放绝对地址，地址是有效的并且不影响 PIC/PIE。改变的内容和形式取决于处理器型号。</p>
+<p>程序首次使用一个外部模块的函数之前，先要跳入 plt中调用 _dl_runtime_resolve 函数完成符号解析和重定位，将函数的绝对地址写入对应的 GOT 表项。再次执行次函数时，就从 GOT 表中执行绝对地址。</p>
+<p>在函数中调用重定位函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">blx    func   ; 套转到 func@plt 中</div><div class="line">...</div><div class="line"></div><div class="line">PTL0:</div><div class="line">    push *(GOT+4) //保存的是当前模块的ID</div><div class="line">    jump *(GOT+8) //跳转到 _dl_runtime_resolve()完成符号解析和重定位</div><div class="line">......</div><div class="line">func@plt:</div><div class="line">    jmp *(func@GOT)     // 第一次 GOT 表项会跳转到下移行执行</div><div class="line">    push n      //对应 GOT 表中 func 函数的索引</div><div class="line">    jmp PLT0</div></pre></td></tr></table></figure></p>
+<p>攻击者可以利用，任意地址写漏洞覆盖 GOT 表中的函数地址为 shellcode 地址。<br>这一类攻击主要在用户态被使用。<br>一般C 程序最后都会调用 exit()函数，所以我们经常覆盖 exit 的 GOT 入口项。</p>
+<h4 id="Case-2"><a href="#Case-2" class="headerlink" title="Case"></a>Case</h4><h3 id="dtors-区-–-任意地址写-控制流"><a href="#dtors-区-–-任意地址写-控制流" class="headerlink" title=".dtors 区  – 任意地址写/控制流"></a>.dtors 区  – 任意地址写/控制流</h3><p>任意内存写覆盖 GCC 生成的可执行文件中.dtors 区中函数指针。</p>
+<p>GNU C 允许程序员利用<strong>attribute</strong>关键字给函数添加属性。属性包括constructor和 destructor。<br>constructor 在 main之前执行，在.ctors 区中。<br>destructor 在 exit之后执行，在 dtors 区中。<br>因为 constructor中的函数在 main 前执行完一次就不再执行，所以漏洞利用只考虑覆盖 destructor 中的函数指针。</p>
+<p>.dtors 区是可写的（不可写可以用 mprotect函数修改 prot）。其内容的格式：<br>0xffff ffff {函数地址1，函数地址2.、、} 0x0000 0x0000</p>
+<p>如果没有执行析构函数，.dtors 区中中包含头、尾标签而中间没有函数地址，一样可以将尾（0x0000 0000）覆盖为 shellcode 的地址。</p>
+<p><a href="http://blog.csdn.net/pillarbuaa/article/details/7800801" target="_blank" rel="external">通过覆盖.dtors进行缓冲区溢出攻击</a></p>
+<h4 id="Case-3"><a href="#Case-3" class="headerlink" title="Case"></a>Case</h4><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">static void create(void) __attribute__ ((constructor));</div><div class="line">static void destroy(void) __attribute__ ((destructor));</div><div class="line"></div><div class="line">int main(int argc, char const *argv[])</div><div class="line">&#123;</div><div class="line">    printf("create fptr: %p. \n", create);</div><div class="line">    printf("destroy fptr: %p. \n", destroy);</div><div class="line">    return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">static void create(void) &#123;</div><div class="line">    puts("create called.");</div><div class="line">&#125;</div><div class="line"></div><div class="line">static void destroy(void) &#123;</div><div class="line">    puts("destroy called.");</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="虚指针"><a href="#虚指针" class="headerlink" title="虚指针"></a>虚指针</h3><p>虚函数：用 virtual 定义的类成员函数。该函数可以被子类同名函数重写。 子类对象的指针可以被赋值给基类指针，使用该基类指针可以调用函数。</p>
+<ol>
+<li>调用非虚函数， 则调用的是基类的函数，因为和指针的静态类型相关联。</li>
+<li>调用虚函数，则是子类的函数，和动态类型相关联</li>
+</ol>
+<h4 id="Case-4"><a href="#Case-4" class="headerlink" title="Case"></a>Case</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> a &#123;</div><div class="line">    <span class="keyword">public</span>:</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"base f"</span> &lt;&lt; <span class="string">'\n'</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"base g"</span> &lt;&lt; <span class="string">"\n"</span>;</div><div class="line">        &#125;</div><div class="line">&#125;  <span class="comment">// end a</span></div><div class="line"></div><div class="line"><span class="keyword">class</span> b &#123;</div><div class="line">    <span class="keyword">public</span>:</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"subclass f"</span> &lt;&lt; <span class="string">'\n'</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"subclass g"</span> &lt;&lt; <span class="string">"\n"</span>;</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    a *my_b =  <span class="keyword">new</span> b();</div><div class="line">    my_b-&gt;f();</div><div class="line">    mt_b-&gt;g();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>任意地址写覆盖 虚表中的 g 函数地址，劫持控制流。虚表在 bss 段。</p>
+<h3 id="atexit-和-on-exit-函数"><a href="#atexit-和-on-exit-函数" class="headerlink" title="atexit() 和 on_exit() 函数"></a>atexit() 和 on_exit() 函数</h3><p>atexit() 是C 标准定义的一个通用工具函数。atexit 可以注册无参函数，在程序正常接受后调用该函数。</p>
+<h3 id="Case-5"><a href="#Case-5" class="headerlink" title="Case"></a>Case</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> *glob;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%s"</span>, glob);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">    atexit(test);</div><div class="line">    glob = <span class="string">"Exiting. \n"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过调试 可以知道其调用流程，然后分析源码：<br>Linux:<br><code>_start -&gt; __libc_start_main -&gt; __GI_exit -&gt; __run_exit_handlers</code></p>
+<p>OSX :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">thread #1: tid = 0x264c8, 0x0000000100000f10 at`test, queue = &apos;com.apple.main-thread&apos;, stop reason = breakpoint 1.1</div><div class="line"> * frame #0: 0x0000000100000f10 at`test</div><div class="line">   frame #1: 0x00007fffbcbaf17f libsystem_c.dylib`__cxa_finalize_ranges + 339</div><div class="line">   frame #2: 0x00007fffbcbaf4b2 libsystem_c.dylib`exit + 55</div><div class="line">   frame #3: 0x00007fffbcb1a25c libdyld.dylib`start + 8</div></pre></td></tr></table></figure></p>
+<p>现在 还没有找到 文章中说的 __exit_funcs 函数， linux 中有，但是 mac 上没有。</p>
+<p><a href="https://code.woboq.org/userspace/glibc/stdlib/exit.h.html" target="_blank" rel="external">https://code.woboq.org/userspace/glibc/stdlib/exit.h.html</a><br><a href="https://code.woboq.org/userspace/glibc/stdlib/exit.c.html#__run_exit_handlers" target="_blank" rel="external">https://code.woboq.org/userspace/glibc/stdlib/exit.c.html#__run_exit_handlers</a><br><a href="https://code.woboq.org/userspace/glibc/stdlib/exit.h.html#exit_function_list" target="_blank" rel="external">https://code.woboq.org/userspace/glibc/stdlib/exit.h.html#exit_function_list</a></p>
+<p>使用 gdb 调试：<br>p  initial   打印出 全局变量 initial 的内存结构 （ struct exit_function_list ）<br>注意：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line">xa_atexit.c</div><div class="line"><span class="keyword">static</span> <span class="keyword">struct</span> exit_function_list initial;</div><div class="line"><span class="keyword">struct</span> exit_function_list *__exit_funcs = &amp;initial;</div><div class="line">--------------</div><div class="line"><span class="built_in">exit</span>.c</div><div class="line"><span class="keyword">void</span></div><div class="line"><span class="number">103</span> <span class="built_in">exit</span> (<span class="keyword">int</span> status)</div><div class="line"><span class="number">104</span> &#123;</div><div class="line"><span class="number">105</span>   __run_exit_handlers (status, &amp;__exit_funcs, <span class="literal">true</span>, <span class="literal">true</span>);</div><div class="line"><span class="number">106</span> &#125;</div><div class="line">--------------</div><div class="line"><span class="keyword">void</span></div><div class="line"><span class="number">32</span>  attribute_hidden</div><div class="line"><span class="number">33</span>  __run_exit_handlers (<span class="keyword">int</span> status, <span class="keyword">struct</span> exit_function_list **listp,</div><div class="line"><span class="number">34</span>                       <span class="keyword">bool</span> run_list_atexit, <span class="keyword">bool</span> run_dtors)</div><div class="line"><span class="number">35</span>  &#123;</div><div class="line"></div><div class="line">        。。。。</div><div class="line"></div><div class="line"><span class="number">47</span>    <span class="keyword">while</span> (*listp != <span class="literal">NULL</span>)</div><div class="line"><span class="number">48</span>      &#123;</div><div class="line"><span class="number">49</span>        <span class="keyword">struct</span> exit_function_list *cur = *listp;</div><div class="line"><span class="number">50</span></div><div class="line"><span class="number">51</span>        <span class="keyword">while</span> (cur-&gt;idx &gt; <span class="number">0</span>)</div><div class="line"><span class="number">52</span>          &#123;</div><div class="line"><span class="number">53</span>            <span class="keyword">const</span> <span class="keyword">struct</span> exit_function *<span class="keyword">const</span> f =</div><div class="line"><span class="number">54</span>              &amp;cur-&gt;fns[--cur-&gt;idx];</div><div class="line"><span class="number">55</span>            <span class="keyword">switch</span> (f-&gt;flavor)</div><div class="line"><span class="number">56</span>              &#123;</div><div class="line"><span class="number">57</span>                <span class="keyword">void</span> (*atfct) (<span class="keyword">void</span>);</div><div class="line"><span class="number">58</span>                <span class="keyword">void</span> (*onfct) (<span class="keyword">int</span> status, <span class="keyword">void</span> *arg);</div><div class="line"><span class="number">59</span>                <span class="keyword">void</span> (*cxafct) (<span class="keyword">void</span> *arg, <span class="keyword">int</span> status);</div><div class="line"><span class="number">60</span></div><div class="line"><span class="number">61</span>              <span class="keyword">case</span> ef_free:</div><div class="line"><span class="number">62</span>              <span class="keyword">case</span> ef_us:</div><div class="line"><span class="number">63</span>                <span class="keyword">break</span>;</div><div class="line"><span class="number">64</span>              <span class="keyword">case</span> ef_on:</div><div class="line"><span class="number">65</span>                onfct = f-&gt;func.on.fn;</div><div class="line"><span class="number">66</span>  <span class="meta">#<span class="meta-keyword">ifdef</span> PTR_DEMANGLE</span></div><div class="line"><span class="number">67</span>                PTR_DEMANGLE (onfct);</div><div class="line"><span class="number">68</span>  <span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="number">69</span>                onfct (status, f-&gt;func.on.arg);</div><div class="line"><span class="number">70</span>                <span class="keyword">break</span>;</div><div class="line"><span class="number">71</span>              <span class="keyword">case</span> ef_at:     （<span class="number">3</span>）</div><div class="line"><span class="number">72</span>                atfct = f-&gt;func.at;</div><div class="line"><span class="number">73</span>  <span class="meta">#<span class="meta-keyword">ifdef</span> PTR_DEMANGLE</span></div><div class="line"><span class="number">74</span>                PTR_DEMANGLE (atfct);</div><div class="line"><span class="number">75</span>  <span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="number">76</span>                atfct ();</div><div class="line"><span class="number">77</span>                <span class="keyword">break</span>;</div><div class="line"><span class="number">78</span>              <span class="keyword">case</span> ef_cxa: （<span class="number">4</span>）</div><div class="line"><span class="number">79</span>                cxafct = f-&gt;func.cxa.fn;</div><div class="line"><span class="number">80</span>  <span class="meta">#<span class="meta-keyword">ifdef</span> PTR_DEMANGLE</span></div><div class="line"><span class="number">81</span>                PTR_DEMANGLE (cxafct);</div><div class="line"><span class="number">82</span>  <span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="number">83</span>                cxafct (f-&gt;func.cxa.arg, status);</div><div class="line"><span class="number">84</span>                <span class="keyword">break</span>;</div><div class="line"><span class="number">85</span>              &#125;</div><div class="line"><span class="number">86</span>          &#125;</div><div class="line"><span class="number">87</span></div><div class="line"><span class="number">88</span>        *listp = cur-&gt;next;</div><div class="line"><span class="number">89</span>        <span class="keyword">if</span> (*listp != <span class="literal">NULL</span>)</div><div class="line"><span class="number">92</span>          <span class="built_in">free</span> (cur);</div><div class="line"><span class="number">93</span>      &#125;</div><div class="line"><span class="number">94</span></div><div class="line"><span class="number">95</span>    <span class="keyword">if</span> (run_list_atexit)</div><div class="line"><span class="number">96</span>      RUN_HOOK (__libc_atexit, ());</div><div class="line"><span class="number">97</span></div><div class="line"><span class="number">98</span>    _exit (status);</div><div class="line"><span class="number">99</span>  &#125;</div></pre></td></tr></table></figure>
+<h3 id="longjmp-函数"><a href="#longjmp-函数" class="headerlink" title="longjmp 函数"></a>longjmp 函数</h3><h4 id="Case-6"><a href="#Case-6" class="headerlink" title="Case"></a>Case</h4><h3 id="Dictionary"><a href="#Dictionary" class="headerlink" title="Dictionary"></a>Dictionary</h3><h3 id="关联章节"><a href="#关联章节" class="headerlink" title="关联章节"></a>关联章节</h3><h3 id="Change-Log"><a href="#Change-Log" class="headerlink" title="Change Log"></a>Change Log</h3><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-02-28</td>
+<td>增加 3节</td>
+</tr>
+<tr>
+<td>2017-03-1</td>
+<td>89</td>
+</tr>
+<tr>
+<td>2017-03-1</td>
+<td>90</td>
+</tr>
+</tbody>
+</table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+    <!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          Theme By <a target="_blank" href="https://github.com/levblanc">Levblanc.</a>
+          Inspired By <a target="_blank" href="https://github.com/klugjo/hexo-theme-clean-blog">Clean Blog.</a>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- After Footer Scripts -->
+<script src="/js/highlight.pack.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+  </body>
+</html>
+
