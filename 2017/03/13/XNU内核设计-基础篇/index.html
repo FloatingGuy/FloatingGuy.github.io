@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>XNU内核设计--基础篇 | FloatingGuy's Blog</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">XNU内核设计--基础篇</h1><a id="logo" href="/.">FloatingGuy's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">XNU内核设计--基础篇</h1><div class="post-meta">Mar 13, 2017<span> | </span><span class="category"><a href="/categories/读书/">读书</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-thread-key="2017/03/13/XNU内核设计-基础篇/" href="/2017/03/13/XNU内核设计-基础篇/#comments" class="ds-thread-count"></a><div class="clear"><div id="toc" class="toc-article"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#重点知识"><span class="toc-number">1.</span> <span class="toc-text">重点知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSX-amp-iOS框架设计"><span class="toc-number">2.</span> <span class="toc-text">OSX & iOS框架设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件-模块"><span class="toc-number">3.</span> <span class="toc-text">组件/模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用户体验层"><span class="toc-number">3.1.</span> <span class="toc-text">用户体验层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Aqua-–-OSX-GUI"><span class="toc-number">3.1.1.</span> <span class="toc-text">Aqua – OSX GUI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Quick-look-–-预览"><span class="toc-number">3.1.2.</span> <span class="toc-text">Quick look – 预览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#spotlight-–-快速搜索工具"><span class="toc-number">3.1.3.</span> <span class="toc-text">spotlight – 快速搜索工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Darwin-–-UNIX-核心"><span class="toc-number">3.2.</span> <span class="toc-text">Darwin – UNIX 核心</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HFS-文件系统"><span class="toc-number">3.2.1.</span> <span class="toc-text">HFS+ 文件系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UNIX-系统目录"><span class="toc-number">3.3.</span> <span class="toc-text">UNIX 系统目录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OSX-中-UNIX-的目录"><span class="toc-number">3.3.1.</span> <span class="toc-text">OSX 中 UNIX 的目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OSX-中-特殊的目录"><span class="toc-number">3.3.2.</span> <span class="toc-text">OSX 中 特殊的目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iOS-中-目录-amp-与-OSX-的目录区别"><span class="toc-number">3.3.3.</span> <span class="toc-text">iOS 中 目录 & 与 OSX 的目录区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bundle"><span class="toc-number">3.4.</span> <span class="toc-text">bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用程序和-app"><span class="toc-number">3.5.</span> <span class="toc-text">应用程序和 app</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OSX-上的应用格式"><span class="toc-number">3.5.1.</span> <span class="toc-text">OSX 上的应用格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iOS-应用格式"><span class="toc-number">3.5.2.</span> <span class="toc-text">iOS 应用格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#info-plist-文件"><span class="toc-number">3.5.3.</span> <span class="toc-text">info.plist 文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他格式的文件"><span class="toc-number">3.5.4.</span> <span class="toc-text">其他格式的文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#加载默认应用程序"><span class="toc-number">3.5.5.</span> <span class="toc-text">加载默认应用程序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#框架"><span class="toc-number">3.6.</span> <span class="toc-text">框架</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#重要的框架"><span class="toc-number">3.6.1.</span> <span class="toc-text">重要的框架</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#库"><span class="toc-number">3.7.</span> <span class="toc-text">库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#系统调用"><span class="toc-number">3.8.</span> <span class="toc-text">系统调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XNU"><span class="toc-number">3.9.</span> <span class="toc-text">XNU</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Mach"><span class="toc-number">3.9.1.</span> <span class="toc-text">Mach　</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BSD"><span class="toc-number">3.9.2.</span> <span class="toc-text">BSD</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#libkern"><span class="toc-number">3.9.3.</span> <span class="toc-text">libkern</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I-O-kit"><span class="toc-number">3.9.4.</span> <span class="toc-text">I/O kit</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#个人总结"><span class="toc-number">3.10.</span> <span class="toc-text">个人总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Change-Log"><span class="toc-number">3.11.</span> <span class="toc-text">Change Log</span></a></li></ol></li></ol></div></div><div class="post-content"><p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<a id="more"></a>
+<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<blockquote>
+<p>《深入解析MAC OS X &amp; iOS 操作系统》- 第 二 章: 合众为一：OSX &amp; iOS 使用的技术</p>
+</blockquote>
+<!---more-->
+<h2 id="重点知识"><a href="#重点知识" class="headerlink" title="重点知识"></a>重点知识</h2><p>本章重点介绍 <strong>架构设计原则</strong> 和 <strong>基础模块构建</strong>。</p>
+<p><img src="/include/img/bk-xnu/arch1.png" alt=""></p>
+<p>架构采用4层架构: 用户体验层 –&gt; Darwin。<br>基础模块: 突出架构中的核心；会从4层架构中抽取来介绍的模块： Darwin、bundle、应用 APP、用户体验层–Aqua/QuickLook/Spotlight 等。</p>
+<h2 id="OSX-amp-iOS框架设计"><a href="#OSX-amp-iOS框架设计" class="headerlink" title="OSX &amp; iOS框架设计"></a>OSX &amp; iOS框架设计</h2><p><img src="/include/img/bk-xnu/arch2.png" alt=""><br>IOS/OSX 4层架构.</p>
+<p>上面3 层闭源，Darwin 是开源的。</p>
+<p>darwin 的层次 &amp;&amp; 架构</p>
+<ol>
+<li>层次</li>
+</ol>
+<p><img src="/include/img/bk-xnu/xnu-arch.jpg" alt=""></p>
+<p>darwin -&gt; xnu (混合内核) -&gt; bsd （POSIX标准） -&gt; mach (微内核) + iokit 组件</p>
+<ol>
+<li>架构<br><img src="/include/img/bk-xnu/arch3.png" alt=""></li>
+</ol>
+<p>Object-C 编写的 app 只需 要使用框架Cocoa的 接口。</p>
+<h2 id="组件-模块"><a href="#组件-模块" class="headerlink" title="组件/模块"></a>组件/模块</h2><p>组件中也包含了框架，因为每个组件自身存在框架，并且组件之间的联系也是系统框架（指 OSX/iOS系统）的一部分。</p>
+<h3 id="用户体验层"><a href="#用户体验层" class="headerlink" title="用户体验层"></a>用户体验层</h3><p>主要包括一下组件(介绍 osx+ios 对应的组件):</p>
+<ul>
+<li>Aqua</li>
+<li>Quick look</li>
+<li>spotlight</li>
+<li>Accessibility 选项</li>
+</ul>
+<h4 id="Aqua-–-OSX-GUI"><a href="#Aqua-–-OSX-GUI" class="headerlink" title="Aqua – OSX GUI"></a>Aqua – OSX GUI</h4><p>有2条流水线 （是顺序执行的关系）：<br>【1】开启GUI<br>由launchd 启动 -&gt; WindowServer -&gt; …-&gt; CGXServer fork 子进程</p>
+<p>【2】启动交互式登录<br>launchd -&gt; LoginWindow 进程</p>
+<p>模块所在 路径<br><code>/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework/Resources/WindowServer</code></p>
+<h4 id="Quick-look-–-预览"><a href="#Quick-look-–-预览" class="headerlink" title="Quick look – 预览"></a>Quick look – 预览</h4><p>采用插件扩展架构，大部分工作由插件完成。</p>
+<p>插件的文件格式 后缀<strong>.qlgenerator</strong>的 bundle.</p>
+<p>插件的组成：特殊编译的二进制程序 + 配置文件<br>特殊编译的二进制程序 的入口点不是 main 而是 QuickLookGeneratorPluginFactory 入口点。<br>配置文件：将 插件和对应的文件类型关联起来。</p>
+<p>文件类型 是什么？<br>UTI (Uniform Type Identifier)？ 逆 DNS 表示法？</p>
+<p>quicklookd “QuickLook 服务器”， 通过 /System/Library/。。。。/com.apple.quicklook.plist 文件在登录时启动。</p>
+<p>工具：<br>qlmanage 插件管理工具，控制后台服务。</p>
+<p>使用工具<br>qlmanage -m</p>
+<p><img src="/include/img/bk-xnu/qlmanage.png" alt="qlmanage"><br>qlmanage  显示 管理的插件（入口，文件，版本）</p>
+<h4 id="spotlight-–-快速搜索工具"><a href="#spotlight-–-快速搜索工具" class="headerlink" title="spotlight – 快速搜索工具"></a>spotlight – 快速搜索工具</h4><p>其核心是一个 mds 索引服务器，记录了系统所有文件（支持的文件类型）的 元数据。<br>在 创建、修改 和删除 事件发生时，内核通知 mds。 通知机制是 fsevents。</p>
+<p>mds 负责接受消息，具体干活的是 mdworker 进程，负责将各种元数据信息导入数据库。<br>mdworker 可以加载 spotlight importer 导入器从文件中 提取元数据。</p>
+<p>导入器 有系统提供的在 /System/Library/Spotlight 目录，也有用户自定义的在/Library/Spotlight/。</p>
+<p>演示 使用 xcode 创建 spotlight 导入器工程<br><img src="/include/img/bk-xnu/importer.png" alt="importer"><br><img src="/include/img/bk-xnu/importerdev.png" alt="importer"></p>
+<p>工具：</p>
+<ul>
+<li>mdutil</li>
+<li>mdfind</li>
+<li>mdimport</li>
+<li>mdls</li>
+<li>mdcheckschema</li>
+<li>mddiagnose</li>
+</ul>
+<h3 id="Darwin-–-UNIX-核心"><a href="#Darwin-–-UNIX-核心" class="headerlink" title="Darwin – UNIX 核心"></a>Darwin – UNIX 核心</h3><p>OSX 开启 ssh<br>通过修改 /System/Library/LaunchDaemons 中的 plist （ssh.plist），将 Disabled 设置为 false.<br>ios 需要越狱后 单独安装 ssh, 并且默认有2个用户，root 和 mobile 。 root 默认密码 alpine。</p>
+<h4 id="HFS-文件系统"><a href="#HFS-文件系统" class="headerlink" title="HFS+ 文件系统"></a>HFS+ 文件系统</h4><p> 此文件系统 可以细分为4个类型：</p>
+<ul>
+<li>大小写敏感：此时 采用 HFSX 文件系统，是 iOS 上默认的文件系统。</li>
+<li>不敏感：OSX 采用此类 文件系统</li>
+<li>支持日志功能：此时 采用 JHFS 文件系统，日志文件系统 通过一个日志记录文件 系统任务执行状态，相当于一个快照，文件系统挂载时 可以去查找 日志。</li>
+<li>不支持日志功能：</li>
+</ul>
+<p>从类型名称 就可以知道其区别，注意 大小写敏感文件系统显示 和 访问时的现象。</p>
+<p>显示：不管大小写是否 敏感，都采用创建时的方式显示。<br>访问：大小写不敏感就可以 随意使用 大小写 。比如 LS/ETC 。。命令， 铭感的文件系统 就要区分大小写。</p>
+<p>开发时是使用的 API 并不是 HFS+文件系统直接提供，而是由 虚拟文件交换系统 VFS 提供。VFS 是内核中使用的所有文件系统的统一接口。<br>VFS 的特性：同时支持 UNIX 文件系统和 外部文件系统。</p>
+<h3 id="UNIX-系统目录"><a href="#UNIX-系统目录" class="headerlink" title="UNIX 系统目录"></a>UNIX 系统目录</h3><h4 id="OSX-中-UNIX-的目录"><a href="#OSX-中-UNIX-的目录" class="headerlink" title="OSX 中 UNIX 的目录"></a>OSX 中 UNIX 的目录</h4><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/bin/</div><div class="line">/sbin/       系统程序</div><div class="line">/usr/        安装第三方软件</div><div class="line">/etc/</div><div class="line">/dev         BSD 设备文件</div><div class="line">/tmp         临时文件</div><div class="line">/var         杂项文件</div></pre></td></tr></table></figure>
+<h4 id="OSX-中-特殊的目录"><a href="#OSX-中-特殊的目录" class="headerlink" title="OSX 中 特殊的目录"></a>OSX 中 特殊的目录</h4><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Applications/</div><div class="line">Developer/</div><div class="line">Volumes/</div><div class="line">Library/</div><div class="line">System/         系统文件。包含了系统中所有重要的组件，如框架--/System/Library/Frameworks，内核模块--/System/Library/Extensions</div><div class="line">Users/</div><div class="line">/Core           核心转储文件。如果 ulimit() 命令允许创建 核心转储文件，那么当进程奔溃时会创建。包含了进程的核心虚拟内存镜像。</div></pre></td></tr></table></figure>
+<h4 id="iOS-中-目录-amp-与-OSX-的目录区别"><a href="#iOS-中-目录-amp-与-OSX-的目录区别" class="headerlink" title="iOS 中 目录 &amp; 与 OSX 的目录区别"></a>iOS 中 目录 &amp; 与 OSX 的目录区别</h4><hr>
+<p>iOS 内核镜像和 OSX 的区别：</p>
+<p>除了上面介绍的文件系统的区别，内核镜像上也存在差异。</p>
+<p>iOS 的内核以 kernelcache 的形式将内核扩展 打包在内核中。（kernelcache 在/System/Library/Caches/com.apple.kernelcaches中）。<br>iOS 内核缓存是加密的 Img3文件。</p>
+<p>相关章节：<br>5、18 章</p>
+<h3 id="bundle"><a href="#bundle" class="headerlink" title="bundle"></a>bundle</h3><p>bundle 在 OSX 中有多种解释，不再只是 一种文件格式类型，bundle 同时表示一种 <strong>目录结构</strong>（也称为”包 （package）”）。</p>
+<p>bundle 在 OSX 中应用在: 框架、插件、widget、内核扩展中，这些组件都被打包成 bundle。</p>
+<p>bundle 中包含了 代码、配置文件（plist）、资源文件。</p>
+<h3 id="应用程序和-app"><a href="#应用程序和-app" class="headerlink" title="应用程序和 app"></a>应用程序和 app</h3><p>GUID 目录名？？<br>在 iOS app 运行时会被 chroot 到自己的应用目录下 – 名字为GUID的目录–并且不能逃脱这个目录访问文件系统的其他目录。<br>应用程序会将  自己GUID名字的目录当做根目录，因此需要创建临时目录时，/tmp 指向 GUID/tmp.</p>
+<table>
+<thead>
+<tr>
+<th>ios app 标准目录下的文件/目录</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Documents</td>
+<td>应用数据</td>
+</tr>
+<tr>
+<td>iTunesArtwork</td>
+<td>app 的图标，一般是 JPG 文件</td>
+</tr>
+<tr>
+<td>iTunesMetaData.plist</td>
+<td>app的属性列表文件，二进制的 plist 文件</td>
+</tr>
+<tr>
+<td>Library/</td>
+<td>杂项文件，包括 Caches、Cookies、Preferences、WebKit</td>
+</tr>
+<tr>
+<td>tmp</td>
+<td>临时文件目录</td>
+</tr>
+</tbody>
+</table>
+<h4 id="OSX-上的应用格式"><a href="#OSX-上的应用格式" class="headerlink" title="OSX 上的应用格式"></a>OSX 上的应用格式</h4><p>非常标准的 bundle 格式存储文件</p>
+<h4 id="iOS-应用格式"><a href="#iOS-应用格式" class="headerlink" title="iOS 应用格式"></a>iOS 应用格式</h4><p>混乱的 app 格式。<br><code>ll ~/Music/iTunes/iTunes\ Media/Mobile\ Applications</code></p>
+<p>从 APP Store 下载应用时，应用以.ipa 文件的形式打包–实际就是 zip 文件。</p>
+<h4 id="info-plist-文件"><a href="#info-plist-文件" class="headerlink" title="info.plist 文件"></a>info.plist 文件</h4><p>首先 介绍这个最重要的文件， 此文件相当于 android apk 里的 Manifest.xml。<br>此文件 记录了 bundle 的配置信息、依赖关系和其他属性。</p>
+<p>plist 文件的格式，系统支持3种格式的 plist。分别是：XML/JSON/二进制格式–BPlists。<br>除了 JSON使用的较少，其他2种较常见。</p>
+<p>工具：plutil 可以将 plist 转换成 不同的格式。<br><code>plutil -convert xml1  --o - &lt;Info.plist&gt; output.Info.plist</code></p>
+<p>plist 的内容(p28)：</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>描述/Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CFBundleDisplayName</td>
+<td>显示给用户的 Bundle 名称</td>
+</tr>
+<tr>
+<td>。。</td>
+<td>。。</td>
+</tr>
+</tbody>
+</table>
+<p>列表中所有的 key 都是 CF 开发，表示这些 key 由 Core Foundation框架定义并处理。</p>
+<p>类似的：Cocoa app 包含 NS 开头的 key, NSxxx定义的功能包括：是否允许脚本操作、Java需要、系统偏好设置等等。大部分 NSxxx 只能用于 OSX 不能在 iOS上使用。</p>
+<h4 id="其他格式的文件"><a href="#其他格式的文件" class="headerlink" title="其他格式的文件"></a>其他格式的文件</h4><p>这些文件在 Resources 目录下。</p>
+<ol>
+<li>NIB 文件， 后缀是.nib。该文件是二进制的 plist 文件，其中保存了应用程序的 GUI 组件的位置和设置信息。</li>
+<li>lproj 文件， 后缀是.lproj。 支持国际化的文件，每种语言对应一个.lproj 的文件。</li>
+<li>icns 图标文件</li>
+<li>CodeResources文件，签过文件。 这是一个符号链接，指向_CodeSignature/CodeResources。此文件包含 bundle 中所有其他文件的列表。 key是文件名，valuse 是文件的 bash64.</li>
+</ol>
+<h4 id="加载默认应用程序"><a href="#加载默认应用程序" class="headerlink" title="加载默认应用程序"></a>加载默认应用程序</h4><p>当点击一个 文件时，系统会自动使用某个 APP 打开程序。实现文件类型 和默认应用程序的绑定是由 LaunchServices 框架实现（次框架和 launchd 没有关系），此框架是 CoreServices 框架的一部分。</p>
+<p><code>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/</code></p>
+<p>使用 LaunchServices 提供的工具 lsregister 可以查看文件类型的注册信息。<br><code>cd /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/</code><br><code>./lsregister -dump</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">➜  Support  ./lsregister -dump | more</div><div class="line">    Checking data integrity......done.</div><div class="line">    Status: Database is seeded.</div><div class="line">    Status: Preferences are loaded.</div><div class="line">    Seeded System Version: 10.12.3 (16D32)</div><div class="line">    CacheGUID: 9E923EE5-DAEF-44B8-8B13-3EAAFDB11DEF</div><div class="line">    CacheSequenceNum: 8712</div><div class="line">    Path: /var/folders/fj/5bqzvxbd15s86mvc3kc44ypw0000gn/0/com.apple.LaunchServices-175-v2.csstore</div><div class="line">    DB Object: <span class="tag">&lt;<span class="name">LSDatabase</span> <span class="attr">0x7fd904800000</span>&gt;</span> &#123; path = '/var/folders/fj/5bqzvxbd15s86mvc3kc44ypw0000gn/0/com.apple.LaunchServices-175-v2.csstore' &#125;</div><div class="line">    Store Object: <span class="tag">&lt;<span class="name">CSStore</span> <span class="attr">0x7fd902f00da0</span>&gt;</span> &#123; p = 0x10d800000, length = 6508544/6506368/6484712 &#125;</div><div class="line">    +++++++++++++++++++++ MEMORY USAGE +++++++++++++++++++++</div><div class="line">    sizeof(Data):                  100 ( 100 bytes) --------</div><div class="line">    sizeof(Table):                  80 (  80 bytes) --------</div><div class="line">    sizeof(Unit):                    8 (   8 bytes) --------</div><div class="line">    sizeof(IdentifierCache):         4 (   4 bytes) --------</div><div class="line">    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++</div><div class="line">    Data:                      2222152 (    2.2 MB)   8397 u</div><div class="line">    Container:                     288 ( 288 bytes)      8 u</div><div class="line">    HandlerPref:                  5000 (      5 KB)     50 u</div><div class="line">    BindableKeyMap:             130576 (    131 KB)      1 u</div><div class="line">    PluginProtocolBinding:        4096 (      4 KB)      1 u</div><div class="line">    Type:                       147288 (    147 KB)   1938 u</div><div class="line">    UTIBinding:                  32656 (     33 KB)      1 u</div><div class="line">    Bundle:                     449152 (    449 KB)   1276 u</div><div class="line">    Alias:                     1352372 (    1.4 MB)   1383 u</div><div class="line">    PluginUUIDBinding:            4096 (      4 KB)      1 u</div><div class="line">    Service:                      5616 (      6 KB)    108 u</div><div class="line">    ActivityTypeBinding:         32656 (     33 KB)      1 u</div><div class="line">    String:                     261136 (    261 KB)      1 u</div><div class="line"></div><div class="line">...</div><div class="line">    Container mount state: mounted</div><div class="line">bundle  id:            5164</div><div class="line">        Mach-O UUIDs:  75CF346E-BF45-3B11-A064-5A90985162E9</div><div class="line">        sequenceNum:   5164</div><div class="line">        FamilyID:      0</div><div class="line">        PurchaserID:   0</div><div class="line">        DownloaderID:  0</div><div class="line">        installType:   0</div><div class="line">        appContainer:  #</div><div class="line">        dataContainer: #</div><div class="line">        path:          /private/var/folders/fj/5bqzvxbd15s86mvc3kc44ypw0000gn/C/com.apple.DeveloperTools/All/Xcode/EmbeddedAppDeltas/HelloWorld-OC.app.xDWFUc/HelloWorld-OC.app_sparse.ipa/Payload/HelloWorld-OC.app</div><div class="line">        name:          HelloWorld-OC</div><div class="line">        displayName:   (null)</div><div class="line">        itemName:      (null)</div><div class="line">        teamID:        VYDSDANL33</div><div class="line">        staticSize:    0</div><div class="line">        storeFront:    0</div><div class="line">        versionID:     0</div><div class="line">        sourceAppID:   (null)</div><div class="line">        ratingLabel:   (null)</div><div class="line">        ratingRank:    0</div><div class="line">        category:      (null)</div><div class="line">        2ry category:  (null)</div><div class="line">        ....</div></pre></td></tr></table></figure>
+<h3 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h3><p>框架也是一种 bundle 格式。框架是不可移植的，是苹果系统特有的。大部分框架是闭源的，框架提供了完整的运行时接口，隐藏底层的系统和库。</p>
+<p>框架的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">CodeResources/</div><div class="line">Headers -&gt; Versions/Current/Headers</div><div class="line">IOKit -&gt; Versions/Current/IOKit</div><div class="line">Resources -&gt; Versions/Current/Resources</div><div class="line">Versions/</div><div class="line">XPCServices -&gt; Versions/Current/XPCServices</div><div class="line">module.map</div><div class="line">Current/                框架首选的版本的符号链接</div><div class="line">framework-name          框架首选的二进制文件的符号链接</div></pre></td></tr></table></figure></p>
+<p>OSX 和 iOS 的 GCC 支持 -framework 选项，此选项可以包含任何依赖的框架（第三方框架+系统框架）。<br>此选项 可以指向头文件 或者 库文件。</p>
+<p>框架搜索路的环境变量：</p>
+<p>框架保存的位置：</p>
+<ul>
+<li>/System/Library/Frameworks/  系统框架</li>
+<li>/Library/Frameworks   第三方框架</li>
+<li>~/Library/Frameworks  用户提供的框架</li>
+</ul>
+<h4 id="重要的框架"><a href="#重要的框架" class="headerlink" title="重要的框架"></a>重要的框架</h4><ol>
+<li>Cocoa: 首选的应用程序编程环境<br>支持的语言：Object-C, java, AppleSCript。</li>
+</ol>
+<p>位置： <code>/System/Library/Frameworks/Cocoa.framework/</code></p>
+<p>此框架依赖于：Foundation、AppKit、CoreData<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Versions/Current/Headers/Cocoa.h</div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;AppKit/AppKit.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;CoreData/CoreData.h&gt;</span></span></div></pre></td></tr></table></figure></p>
+<p>保护伞框架（umbrella）：封装了其他框架的框架。<br>封装有2种：</p>
+<ol>
+<li>只是 #import 。 如 Cocoa</li>
+<li>嵌套了其他框架。 如 Application Service</li>
+</ol>
+<p>2.Carbon: OS9 遗留编程接口的名称</p>
+<p>MAC OSX 和 iOS的公共框架列表</p>
+<blockquote>
+<p>表2-2 (p35)</p>
+</blockquote>
+<h3 id="库"><a href="#库" class="headerlink" title="库"></a>库</h3><p>Mac 包含多套 API 可用。<br>包括:</p>
+<ol>
+<li>BSD api 方便移植 unix的代码库 (库 Api)</li>
+<li>Mach Trap（Mach　陷阱) OSX 特有的 Api</li>
+<li>框架 Api</li>
+</ol>
+<p>1-2　可以使用C/C++ 开发<br>3 框架Api 有些必须使用OC开发，比如cocoa, 有些框架可以使用C/C++开发,比如 Carbon</p>
+<p>一般框架代码会同时支持ｃocoa和Carbon, 比如,访问语音合成器的SpeechSynthesis.Framework框架同时位于 ApplicationServices框架（Carbon,C/C++实现）和AppKit（对于Coacoa, OC实现）</p>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><p>OSX 的特殊之处在 OSX 的系统调用提供了２套调用接口。</p>
+<ul>
+<li>POSIX 调用</li>
+<li>mach 调用</li>
+</ul>
+<ol>
+<li>POSIX 调用</li>
+</ol>
+<p>这是一套　编程标准，专门负责定义API声明（具体到参数类型，格式，返回值，函数名等等）。<br>当前的POSIX主要分为四个部分：<a href="https://zh.wikipedia.org/wiki/POSIX" target="_blank" rel="external">Base Definitions、System Interfaces、Shell and Utilities和Rationale</a></p>
+<p>OSX提供的系统调用，在 <strong>系统调用原型</strong>继承了POSIX标准，但是 <strong>系统编号</strong>OSX和标准的编号不同。<br>在 unistd.h　定义了系统调用原型。</p>
+<p>如果系统调用原型和系统编号都一样，那么就可以在多台机型上移植二进制程序（机型必须要支持对应的二进制格式，OSX不支持ELF格式）<br>BSD 层对 mach做了一次封装。</p>
+<blockquote>
+<p>当前的BSD操作系统变种支持各种通用标准，包括IEEE、ANSI、ISO以及POSIX，同时保持传统BSD的良好风范。</p>
+</blockquote>
+<ol>
+<li>mach接口<br>32位，mach系统调用号　是负数, POSIX 的系统调用号时　非负数，所以２者共存。<br>64位，mach系统调用号　从0x2000000 开头，POSIX以　0x1000000　开头。</li>
+</ol>
+<p>总结BSD和mach的系统调用：<br>32位libSystem.B.dylib库,32位系统调用的指令是 sysenter, 负责系统调用的函数是 __sysenter_trap。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// mach系统调用</div><div class="line">movl  $0xffffffe5 , %eax        ；系统调用号（负数，　有符号)</div><div class="line">call __sysenter_trap                ；</div><div class="line"></div><div class="line">__sysenter_trap:</div><div class="line">pop %edx</div><div class="line">movl  %esp, %ecx</div><div class="line">sysenter　                   ；执行　系统调用　指令</div><div class="line">nopl (%eax)</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// BSD 系统调用</div><div class="line">movl  $0x000c0010, %eax   ; 系统调用号（非负）</div><div class="line">call  0x00000dd8        ;跳转到 __sysenter_trap </div><div class="line">jae  0x0005d36a         ;</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>64 位系统调用的指令是 syscall<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//  mach系统调用</div><div class="line">movq  %rcx, %r10</div><div class="line">movl  %0x0100001a, %eax         ;系统调用号</div><div class="line">syscall             ;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//  BSD系统调用</div><div class="line">movl  $0x02000010, %eax</div><div class="line">movq  %rcx, %r10</div><div class="line">syscall         ;</div></pre></td></tr></table></figure>
+<p>发现不管是32位还是64位除了系统调用号不同，其他的地方没有区别（寄存器使用　和　系统调用命令）</p>
+<p>系统调用指令　systenter　具体干什么事？</p>
+<h3 id="XNU"><a href="#XNU" class="headerlink" title="XNU"></a>XNU</h3><p>xnu　是一个混合内核，xnu由以下几部分构成：</p>
+<ul>
+<li>Mach微内核</li>
+<li>BSD 层</li>
+<li>libKern</li>
+<li>I/O Kit</li>
+</ul>
+<p>同时　内核允许动态加载　扩展插件（Kernel Extension , KExt)</p>
+<h4 id="Mach"><a href="#Mach" class="headerlink" title="Mach　"></a>Mach　</h4><p>提供了　系统的基本职责，　但是　Mach本身的Api很少。</p>
+<ul>
+<li>进程和线程的抽象</li>
+<li>虚拟内存</li>
+<li>任务调度</li>
+<li>IPC 和　消息传递的机制</li>
+</ul>
+<h4 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h4><p>这一层是对Mach　的封装，并且兼容POSIX 标准。包括的内容：</p>
+<ul>
+<li>UNIX　进程模型</li>
+<li>POSIX 线程模型 (Pthread)，　同步原语</li>
+<li>UNIX 用户和用户组</li>
+<li>网络协议栈</li>
+<li>文件系统访问</li>
+<li>设备访问　（/dev　下的驱动设备)</li>
+</ul>
+<h4 id="libkern"><a href="#libkern" class="headerlink" title="libkern"></a>libkern</h4><p>I/O Kit驱动程序　使用C++语言编写。　libkern　库负责提供C++运行时需要的基类。<br>libkern　是自包含的C++库，提供了C++特性，继承，重载，</p>
+<h4 id="I-O-kit"><a href="#I-O-kit" class="headerlink" title="I/O kit"></a>I/O kit</h4><p>I/O Kit　本身就是一套自包含的系统。</p>
+<h3 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h3><p>第二章结束了，对OSX 和iOS 的 <strong>架构</strong>和 <strong>关键组件</strong>有了基本认识。同时 对本书的结构有了大体的掌握。<br>通过分析上面２点已知的内容，可以快速定位　需要的知识，帮助完成突发的工作需求。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>第一部分（1-7章）</th>
+<th>第二部分（8-19章）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>描述 1</td>
+<td>分散的知识点</td>
+<td>系统的知识</td>
+</tr>
+<tr>
+<td>描述 2</td>
+<td>Apple系统的特色，比如:安全防护技术(3)，Mach-O　可执行格式(4)，引导过程(6)。</td>
+<td>内核特性。</td>
+</tr>
+<tr>
+<td>描述 3</td>
+<td>还有操作系统中　重要且必备的模块，比如: 进程，调试，启动进程init/Launchd。</td>
+<td>主要介绍构成　XNU 的４个部分。<strong>目前的重点　放在第二部分，重点放在　理解XNU　各部分的代码实现</strong></td>
+</tr>
+</tbody>
+</table>
+<p>学习的顺序，时间安排，记录的标准。这三个指标需要　动态调整。<br>注意：　记录重要的代码　位置，功能，函数<br><img src="/include/img/bk-xnu/kernel.png" alt="xmind"></p>
+<p>Todo:</p>
+<pre><code>1. 从xnu开源代码中梳理出这４个部分
+</code></pre><h3 id="Change-Log"><a href="#Change-Log" class="headerlink" title="Change Log"></a>Change Log</h3><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-3-13</td>
+<td>2.7 节</td>
+</tr>
+<tr>
+<td>2017-03-14</td>
+<td>第二章　结束</td>
+</tr>
+<tr>
+<td>2017-03-14</td>
+<td>制定 xnu 学习计划</td>
+</tr>
+</tbody>
+</table>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2017/03/13/XNU内核设计-基础篇/" data-id="cj0anhq1i000rjav2ujvy2lji" class="article-share-link">分享到</a><div class="tags"></div><div class="post-nav"><a href="/2017/03/15/3月逻辑思维/" class="pre">3月逻辑思维</a><a href="/2017/03/09/简洁主题-Maupassant/" class="next">简洁主题--Maupassant</a></div><div data-thread-key="2017/03/13/XNU内核设计-基础篇/" data-title="XNU内核设计--基础篇" data-url="http://yoursite.com/2017/03/13/XNU内核设计-基础篇/" class="ds-share flat"><div class="ds-share-inline"><ul class="ds-share-icons-16"><li data-toggle="ds-share-icons-more"><a href="javascript:void(0);" class="ds-more">分享到：</a></li><li><a href="javascript:void(0);" data-service="weibo" class="ds-weibo">微博</a></li><li><a href="javascript:void(0);" data-service="qzone" class="ds-qzone">QQ空间</a></li><li><a href="javascript:void(0);" data-service="qqt" class="ds-qqt">腾讯微博</a></li><li><a href="javascript:void(0);" data-service="wechat" class="ds-wechat">微信</a></li></ul><div class="ds-share-icons-more"></div></div></div><div data-thread-key="2017/03/13/XNU内核设计-基础篇/" data-title="XNU内核设计--基础篇" data-url="http://yoursite.com/2017/03/13/XNU内核设计-基础篇/" data-author-key="1" class="ds-thread"></div></div></div></div><div class="pure-u-1 pure-u-md-1-4"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/categories-fiddle/">捣鼓</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/categories-exploit/">漏洞</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/categories-life/">生活</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/categories-research/">研究</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书/">读书</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/blackhat-2016/" style="font-size: 15px;">blackhat-2016</a> <a href="/tags/了解/" style="font-size: 15px;">了解</a> <a href="/tags/ios/" style="font-size: 15px;">ios</a> <a href="/tags/读书笔记/" style="font-size: 15px;">读书笔记</a> <a href="/tags/熟悉/" style="font-size: 15px;">熟悉</a> <a href="/tags/逻辑思维/" style="font-size: 15px;">逻辑思维</a> <a href="/tags/jeb/" style="font-size: 15px;">jeb</a> <a href="/tags/动态调试/" style="font-size: 15px;">动态调试</a> <a href="/tags/Armv8-64/" style="font-size: 15px;">Armv8-64</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/ios-osx/" style="font-size: 15px;">ios/osx</a> <a href="/tags/AppVeyor/" style="font-size: 15px;">AppVeyor</a> <a href="/tags/CI/" style="font-size: 15px;">CI</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/03/15/XNU内核设计-Kext内核扩展/">XNU内核设计--Kext内核扩展</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/15/3月逻辑思维/">3月逻辑思维</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/13/XNU内核设计-基础篇/">XNU内核设计--基础篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/09/简洁主题-Maupassant/">简洁主题--Maupassant</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/浅谈CVE-2016-4625-exploit/">浅谈 CVE-2016-4625 exploit</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/28/内存漏洞/">漏洞基础--内存漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/27/mach-port-names-函数分析/">mach_port_names 函数分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/08/iOS-roadMap/">iOS RoadMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/08/2016-Pwnie-Awards/">2016 Pwnie Awards</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/04/happy-new-year/">happy new year</a></li></ul></div><div class="widget"><div class="comments-title"><i class="fa fa-comment-o"> 最近评论</i></div><div data-num-items="5" data-show-avatars="0" data-show-time="1" data-show-admin="0" data-excerpt-length="32" data-show-title="1" class="ds-recent-comments"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 资源链接</i></div><ul></ul><a href="http://bbs.pediy.com/" title="看雪论坛" target="_blank">看雪论坛</a><ul></ul><a href="http://ddeville.me/" title="Damien DeVille" target="_blank">Damien DeVille</a><ul></ul><a href="http://nirvan.360.cn/blog/?cat=2" title="360Nirvan Team" target="_blank">360Nirvan Team</a><ul></ul><a href="https://googleprojectzero.blogspot.jp/" title="Project Zero" target="_blank">Project Zero</a><ul></ul><a href="http://shell-storm.org/blog/Triton-under-the-hood/" title="Jonathan Salwan" target="_blank">Jonathan Salwan</a><ul></ul><a href="http://cocoahuke.com/" title="Cocoa ‘for iOS/Mac’" target="_blank">Cocoa ‘for iOS/Mac’</a><ul></ul><a href="http://whereisk0shl.top/" title="whereisk0shl" target="_blank">whereisk0shl</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">FloatingGuy's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script>var duoshuoQuery = {short_name:'floatingguy'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?0550af547bfca45329cbf2afcc9fde43";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

