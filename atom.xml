@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-03-15T04:05:10.000Z</updated>
+  <updated>2017-03-15T04:50:21.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,53 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>XNU内核设计--Kext内核扩展</title>
-    <link href="http://yoursite.com/2017/03/15/XNU%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1-Kext%E5%86%85%E6%A0%B8%E6%89%A9%E5%B1%95/"/>
-    <id>http://yoursite.com/2017/03/15/XNU内核设计-Kext内核扩展/</id>
-    <published>2017-03-15T03:52:11.000Z</published>
-    <updated>2017-03-15T04:05:10.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
-<hr>
-<blockquote>
-<p>《深入解析MAC OS X &amp; iOS 操作系统》- 第 十八 章: 内核扩展模块</p>
-</blockquote>
-<a id="more"></a>
-<h3 id="重点知识"><a href="#重点知识" class="headerlink" title="重点知识"></a>重点知识</h3><h3 id="设计框架"><a href="#设计框架" class="headerlink" title="设计框架"></a>设计框架</h3><h4 id="源代码分析"><a href="#源代码分析" class="headerlink" title="源代码分析"></a>源代码分析</h4><h3 id="Case"><a href="#Case" class="headerlink" title="Case"></a>Case</h3><h3 id="相关工具"><a href="#相关工具" class="headerlink" title="相关工具"></a>相关工具</h3><p>kextstat 查看系统当前加载的 kext。（/System/Library/Extensions下的 kext 不一定全部加载了）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">blog git:(master) ✗ kextstat</div><div class="line">Index Refs Address            Size       Wired      Name (Version) UUID &lt;Linked Against&gt;</div><div class="line">    1   94 0xffffff7f80a46000 0x9d30     0x9d30     com.apple.kpi.bsd (16.4.0) 548007FE-B217-4499-8640-238BC24F4A17</div><div class="line">    2    8 0xffffff7f80e59000 0x3940     0x3940     com.apple.kpi.dsep (16.4.0) 38FEF282-1288-42F3-8E55-EDD04053B20B</div><div class="line">    3  119 0xffffff7f80a04000 0x21040    0x21040    com.apple.kpi.iokit (16.4.0) EA3A39EE-499F-44C3-88F2-334FEB308226</div><div class="line">    4  126 0xffffff7f80a26000 0xd200     0xd200     com.apple.kpi.libkern (16.4.0) 677B5452-B294-43D3-A562-F13502C04C54</div><div class="line">    5  114 0xffffff7f80a00000 0x3dd0     0x3dd0     com.apple.kpi.mach (16.4.0) 2A128386-C535-4026-B9D7-E91D3360CEF4</div><div class="line">    6   62 0xffffff7f80a34000 0xba10     0xba10     com.apple.kpi.private (16.4.0) F8C31C2F-2831-4680-90DF-97A2EA6DE9F0</div><div class="line">    7   76 0xffffff7f80a40000 0x5890     0x5890     com.apple.kpi.unsupported (16.4.0) C8C39C9E-83FE-4274-BA90-9535845EFF9C</div><div class="line">    8    7 0xffffff7f80e60000 0xa9000    0xa9000    com.apple.kec.corecrypto (1.0) 25C67059-A2B6-328F-BCCF-F81CC7FFC10F &lt;7 6 5 4 3 1&gt;</div><div class="line">    9    0 0xffffff7f80fbb000 0xf000     0xf000     com.apple.kec.pthread (1) 479F2E9E-1F15-3D76-A407-DB04C1277527 &lt;7 6 5 4 1&gt;</div><div class="line">   10    1 0xffffff7f80ff1000 0xb000     0xb000     com.apple.kec.Libm (1) 51D82C5F-0248-334D-ADC6-5861BBB83C97 &lt;4&gt;</div><div class="line">   11   27 0xffffff7f80ffc000 0x9000     0x9000     com.apple.iokit.IOACPIFamily (1.4) 4F7FB6AD-2498-3F71-827C-ED7AA4BF2511 &lt;7 6 4 3&gt;</div><div class="line">   12   30 0xffffff7f80b32000 0x34000    0x34000    com.apple.iokit.IOPCIFamily (2.9) 57960DC6-4099-31BC-9B47-52CD647779C7 &lt;7 6 5 4 3&gt;</div><div class="line">   13    2 0xffffff7f831d7000 0x60000    0x60000    com.apple.driver.AppleACPIPlatform (5.0) 867C81BE-EA01-3A65-89F4-06D78E6514CA &lt;12 11 7 6 5 4 3 1&gt;</div><div class="line">   14    1 0xffffff7f812ae000 0xb000     0xb000     com.apple.driver.AppleFDEKeyStore (28.30) EA5D0966-E8EA-337A-98EB-195806E8F723 &lt;8 7 6 5 4 3 1&gt;</div><div class="line">   15    4 0xffffff7f816a9000 0x7000     0x7000     com.apple.iokit.IOReportFamily (31) B14DC3D3-7250-3DA3-BF50-C666EBEDAF4C &lt;5 4 3&gt;</div><div class="line">   16    7 0xffffff7f80a50000 0x27000    0x27000    com.apple.iokit.IOStorageFamily (2.1) 3238C6A2-A948-378E-9C53-3883089C1B52 &lt;7 6 5 4 3 1&gt;</div><div class="line">   17    0 0xffffff7f81779000 0x190</div></pre></td></tr></table></figure></p>
-<p>第1列 Index是 kext 在表中的索引<br>第2列 Refs 显示当前 kext 依赖的 kext 的个数，每一项末尾尖括号&lt;&gt;内是依赖的 kext 的index。</p>
-<p>从依赖关系树状图可以看出，树根部是1-7这7个 kext（kpi.*）</p>
-<h3 id="关联章节"><a href="#关联章节" class="headerlink" title="关联章节"></a>关联章节</h3><h3 id="Dictionary"><a href="#Dictionary" class="headerlink" title="Dictionary"></a>Dictionary</h3><h3 id="Change-Log"><a href="#Change-Log" class="headerlink" title="Change Log"></a>Change Log</h3><table>
-<thead>
-<tr>
-<th>Time</th>
-<th>Change</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2017-xx-xx</td>
-<td>增加5.5 节</td>
-</tr>
-</tbody>
-</table>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;《深入解析MAC OS X &amp;amp; iOS 操作系统》- 第 十八 章: 内核扩展模块&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="读书" scheme="http://yoursite.com/categories/%E8%AF%BB%E4%B9%A6/"/>
-    
-    
-  </entry>
   
   <entry>
     <title>3月逻辑思维</title>
@@ -102,17 +55,14 @@
     <link href="http://yoursite.com/2017/03/13/XNU%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E7%A1%80%E7%AF%87/"/>
     <id>http://yoursite.com/2017/03/13/XNU内核设计-基础篇/</id>
     <published>2017-03-13T05:47:55.000Z</published>
-    <updated>2017-03-15T07:33:11.000Z</updated>
+    <updated>2017-03-15T07:37:01.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
-<hr>
-<a id="more"></a>
-<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
 <hr>
 <blockquote>
 <p>《深入解析MAC OS X &amp; iOS 操作系统》- 第 二 章: 合众为一：OSX &amp; iOS 使用的技术</p>
 </blockquote>
-<!---more-->
+<a id="more"></a>
 <h2 id="重点知识"><a href="#重点知识" class="headerlink" title="重点知识"></a>重点知识</h2><p>本章重点介绍 <strong>架构设计原则</strong> 和 <strong>基础模块构建</strong>。</p>
 <p><img src="/include/img/bk-xnu/arch1.png" alt=""></p>
 <p>架构采用4层架构: 用户体验层 –&gt; Darwin。<br>基础模块: 突出架构中的核心；会从4层架构中抽取来介绍的模块： Darwin、bundle、应用 APP、用户体验层–Aqua/QuickLook/Spotlight 等。</p>
@@ -392,6 +342,9 @@
     
       &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;《深入解析MAC OS X &amp;amp; iOS 操作系统》- 第 二 章: 合众为一：OSX &amp;amp; iOS 使用的技术&lt;/p&gt;
+&lt;/blockquote&gt;
     
     </summary>
     
