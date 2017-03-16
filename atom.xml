@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-03-15T04:50:21.000Z</updated>
+  <updated>2017-03-16T06:35:41.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,120 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>逆向分析 cocoa App</title>
+    <link href="http://yoursite.com/2017/03/16/%E9%80%86%E5%90%91%E5%88%86%E6%9E%90-cocoa-App/"/>
+    <id>http://yoursite.com/2017/03/16/逆向分析-cocoa-App/</id>
+    <published>2017-03-16T05:50:01.000Z</published>
+    <updated>2017-03-16T06:35:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>Title:【技术分享】Cocoa应用逆向工程简介<br>Url: <a href="http://bobao.360.cn/learning/detail/3601.html" target="_blank" rel="external">http://bobao.360.cn/learning/detail/3601.html</a></p>
+<p>Core Skill:<br>逆向分析 Object-C APP基础。</p>
+<ol>
+<li>如何使用 IDA 逆向Object-C编译得到的 C 代码</li>
+<li>Cocoa App 的代码入口点</li>
+<li>分析界面<a id="more"></a>
+</li>
+</ol>
+<p>FLARE团队将会介绍两款小工具</p>
+<p>我们会解释Objective-C的Runtime特性如何使得代码分析在诸如IDA Pro工具中变得复杂</p>
+<p>如何在一份Cocoa应用程序的代码中找到开始分析的入口点。</p>
+<h3 id="Objective-C"><a href="#Objective-C" class="headerlink" title="Objective-C"></a>Objective-C</h3><p>在编译时，Objective-C编写的程序会被转化为C，<br>由于Objective-C的动态特性，method一般不是被直接调用的。而是通过一个发给对象的消息。一个method的名字称为一个selector，真正执行的函数被称为一个实现（implementation）。<br>在Objective-C应用中最常用的发送消息方式就是objc_msgSend函数。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> __objc2_meth &#123;</div><div class="line">    SEL NAME;       <span class="comment">// selector</span></div><div class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* types;  <span class="comment">//type encoding</span></div><div class="line">    IMP  imp;       <span class="comment">//implementation</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>该结构的第一个值是指向method的selector。该值的cross-references中的一项将我们带到了可执行文件__objc_selrefs 节，这个节中你可以找到selector reference。跟随该selector reference的cross-references我们可以在代码中找到任何selector被使用的位置。该结构的第三个值指向selector的实现，就是我们想要分析的函数。剩下要做的就是利用这个数据生成cross-references。</p>
+<p>静态分析 OC 对应的汇编<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">__text:0000287E ; 32:   v9 = objc_msgSend(&amp;OBJC_CLASS___AppDelegate, &quot;class&quot;);</div><div class="line">__text:0000287E                 MOV             R0, #(selRef_class - 0x2892)</div><div class="line">__text:00002886                 MOV             R2, #(classRef_AppDelegate - 0x2894)</div><div class="line">__text:0000288E                 ADD             R0, PC ; selRef_class</div><div class="line">__text:00002890                 ADD             R2, PC ; classRef_AppDelegate</div><div class="line">__text:00002892                 LDR             R1, [R0] ; &quot;class&quot;    //select</div><div class="line">__text:00002894                 LDR             R0, [R2] ;</div><div class="line">__text:00002896                 BLX             _objc_msgSend</div><div class="line">_OBJC_CLASS_$_AppDelegate</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">__objc_selrefs:000057B8                 AREA __objc_selrefs, DATA</div><div class="line">__objc_selrefs:000057B8                 ; ORG 0x57B8</div><div class="line">__objc_selrefs:000057B8 selRef_class    DCD sel_class           ; DATA XREF: start+26o</div><div class="line">__objc_selrefs:000057B8                                         ; start+36o ...</div><div class="line">__objc_selrefs:000057B8                                         ; &quot;class&quot;</div><div class="line">__objc_selrefs:000057BC selRef_alloc    DCD sel_alloc           ; DATA XREF: -[AppDelegate application:didFinishLaunchingWithOptions:]+1Eo</div><div class="line">__objc_selrefs:000057BC                                         ; -[AppDelegate application:didFinishLaunchingWithOptions:]+36o ...</div><div class="line">__objc_selrefs:000057BC                                         ; &quot;alloc&quot;</div><div class="line">__objc_selrefs:000057C0 selRef_mainScreen DCD sel_mainScreen    ; DATA XREF: -[AppDelegate application:didFinishLaunchingWithOptions:]+70o</div><div class="line">__objc_selrefs:000057C0                                         ; -[AppDel</div></pre></td></tr></table></figure>
+<p>从<strong>text 段跟踪到了objc_selrefs段。发现 在</strong>objc_selrefs 段中，key-value 名称的对应关系是 selRef_xxx - sel_xxx。</p>
+<p>我们在 __objc_const 段中查看 select列表, 只有部分 select 名称中包含 sel 前缀。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">__objc_const:00005098 _OBJC_INSTANCE_METHODS_NSObject __objc2_meth_list &lt;0xC, 0x13&gt;</div><div class="line">__objc_const:00005098                                         ; DATA XREF: __data:_OBJC_PROTOCOL_$_NSObjecto</div><div class="line">__objc_const:000050A0                 __objc2_meth &lt;aIsequal, aC12048, 0&gt; ; &quot;isEqual:&quot;</div><div class="line">__objc_const:000050AC                 __objc2_meth &lt;aHash, aI804, 0&gt; ; &quot;hash&quot;</div><div class="line">__objc_const:000050B8                 __objc2_meth &lt;aSuperclass, a804_0, 0&gt; ; &quot;superclass&quot;</div><div class="line">__objc_const:000050C4                 __objc2_meth &lt;sel_class, a804_0, 0&gt; ; &quot;class&quot;</div><div class="line">__objc_const:000050D0                 __objc2_meth &lt;aSelf, a804, 0&gt; ; &quot;self&quot;</div><div class="line">__objc_const:000050DC                 __objc2_meth &lt;aZone, a_nszone804, 0&gt; ; &quot;zone&quot;</div><div class="line">__objc_const:000050E8                 __objc2_meth &lt;aPerformselecto, a12048, 0&gt; ; &quot;performSelector:&quot;</div><div class="line">__objc_const:000050F4                 __objc2_meth &lt;aPerformselec_0, a1604812, 0&gt; ; &quot;performSelector:withObject:&quot;</div><div class="line">__objc_const:00005100                 __objc2_meth &lt;aPerformselec_1, a200481216_0, 0&gt; ; &quot;performSelector:withObject:withObject:&quot;</div><div class="line">__objc_const:0000510C                 __objc2_meth &lt;aIsproxy, aC804, 0&gt; ; &quot;isProxy&quot;</div><div class="line">__objc_const:00005118                 __objc2_meth &lt;aIskindofclass, aC12048_0, 0&gt; ; &quot;isKindOfClass:&quot;</div><div class="line">__objc_const:00005124                 __objc2_meth &lt;aIsmemberofclas, aC12048_0, 0&gt; ; &quot;isMemberOfClass:&quot;</div><div class="line">__objc_const:00005130                 __objc2_meth &lt;aConformstoprot, aC12048, 0&gt; ; &quot;conformsToProtocol:&quot;</div><div class="line">__objc_const:0000513C                 __objc2_meth &lt;sel_respondsToSelector_, aC12048_1, 0&gt; ; &quot;respondsToSelector:&quot;</div><div class="line">__objc_const:00005148                 __objc2_meth &lt;aRetain, a804, 0&gt; ; &quot;retain&quot;</div><div class="line">__objc_const:00005154                 __objc2_meth &lt;aRelease, aVv804, 0&gt; ; &quot;release&quot;</div><div class="line">__objc_const:00005160                 __objc2_meth &lt;aAutorelease, a804, 0&gt; ; &quot;autorelease&quot;</div><div class="line">__objc_const:0000516C                 __objc2_meth &lt;aRetaincount, aI804, 0&gt; ; &quot;retainCount&quot;</div><div class="line">__objc_const:00005178                 __objc2_meth &lt;aDescription, a804, 0&gt; ; &quot;description&quot;</div><div class="line">__objc_const:00005184 _OBJC_INSTANCE_METHODS_NSObject_1 __objc2_meth_list &lt;0xC, 1&gt;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>额，看不懂 Mach-O的各种段的含义，需要 正向开发 和分析 Mach-O文件格式了。。。<br><img src="/include/img/rev-ios.png" alt="rev-ios"></p>
+</blockquote>
+<p>继续。。。</p>
+<p><a href="https://github.com/fireeye/flare-ida" target="_blank" rel="external">objc2_xrefs_helper.py</a> 脚本针对可执行文件中的每一个定义的Objective-C method都会进行处理<br>这个工具有一个显著的缺点，如果几个类使用同一个名字来定义method，那么只会有一个selector在可执行文件中显示。现在，该工具会忽略这些不明确的selector。</p>
+<h3 id="Cocoa应用－从哪里开始着手？"><a href="#Cocoa应用－从哪里开始着手？" class="headerlink" title="Cocoa应用－从哪里开始着手？"></a>Cocoa应用－从哪里开始着手？</h3><p>整体来说，NSApplicationMain执行三个重要步骤：构建NSApplication对象，加载主要的storyboard或nib文件，开始事件循环。NSApplication对象在程序运行时扮演重要的事件和通知协调者的角色。</p>
+<p>NSApplication对象可以定位的一个重要的通知就是NSApplicationDidFinishLaunchingNotification。这个通知用来让程序员可以在合适的时候运行应用特殊的初始化代码。为了处理这个通知，应用程序需要指定根据NSApplicationDelegate协议来指定一个委托类。在这个协议中包含初始化代码的对应method就是applicationDidFinishLaunching.Xcode默认为你创建这个委托类，名叫AppDelegate。</p>
+<p>那么最好的寻找大多数Cocoa应用的初始化代码的地方就是applicationDidFinishLaunching</p>
+<h3 id="接口构建器（Interface-Builder）和Nib文件"><a href="#接口构建器（Interface-Builder）和Nib文件" class="headerlink" title="接口构建器（Interface Builder）和Nib文件"></a>接口构建器（Interface Builder）和Nib文件</h3><p>界面生成器<br><a href="https://github.com/i-o-s/macOS-tools" target="_blank" rel="external">nib_parse.py</a>使用ccl_bplist来解码和反序列化一个nib文件，打印出里面定义的连接关系列表。对于每个连接，它将会打印出连接的标签（一般是一个方法或者变量名字），源对象的类，目标对象的类。每一个对象都被NSKeyedArchiver编码，并分配一个唯一的数字标识符，该标识符输出在圆括号里面。对于某些GUI组件还会一起打印出文本信息，比如按键标签，文本信息输出在方括号中。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Title:【技术分享】Cocoa应用逆向工程简介&lt;br&gt;Url: &lt;a href=&quot;http://bobao.360.cn/learning/detail/3601.html&quot;&gt;http://bobao.360.cn/learning/detail/3601.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Core Skill:&lt;br&gt;逆向分析 Object-C APP基础。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;如何使用 IDA 逆向Object-C编译得到的 C 代码&lt;/li&gt;
+&lt;li&gt;Cocoa App 的代码入口点&lt;/li&gt;
+&lt;li&gt;分析界面
+    
+    </summary>
+    
+      <category term="逆向" scheme="http://yoursite.com/categories/%E9%80%86%E5%90%91/"/>
+    
+    
+      <category term="public intelligence" scheme="http://yoursite.com/tags/public-intelligence/"/>
+    
+      <category term="cocoa app" scheme="http://yoursite.com/tags/cocoa-app/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OSX FirstExtension 开发</title>
+    <link href="http://yoursite.com/2017/03/16/OSX-FirstExtension-%E5%BC%80%E5%8F%91/"/>
+    <id>http://yoursite.com/2017/03/16/OSX-FirstExtension-开发/</id>
+    <published>2017-03-16T05:34:03.000Z</published>
+    <updated>2017-03-16T05:48:31.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>第一个 OSX 上的 Kernel Extension demo</p>
+<a id="more"></a>
+<p>参考：<a href="http://www.jianshu.com/p/f76bdfbc6779" target="_blank" rel="external">iOS架构-内核开发</a></p>
+<p>从10.11开始Apple 对Kext 的安装变得更为严格。<br>从kext安装历史来看，10.11 之前可以通过<br><code>sudo nvram kext-dev-mode=1 and reboot(重启电脑).</code><br>这种方式来加载 非开发者证书签名的 kext。</p>
+<p>但是之后 只有2条路了（上面的方式相对 更不安全）：</p>
+<ol>
+<li>购买 Apple 开发者证书</li>
+<li>完全关闭 SIP</li>
+</ol>
+<p>关闭 SIP的方法:</p>
+<ol>
+<li>重启电脑,重启过程中一直按着command + R 直到进入startup界面</li>
+<li>打开Terminal输入csrutil disable</li>
+<li>reboot</li>
+</ol>
+<h3 id="开发测试："><a href="#开发测试：" class="headerlink" title="开发测试："></a>开发测试：</h3><p>在 10.12 上开发，然后拿到 10.11 关闭 SIP 的机器上测试。</p>
+<p>注意 kext 的 info.plist 中<code>OSBundleLibraries -&gt;com.apple.kpi.libkern</code> 对应的版本号 是测试机上的libkern 的版本(uname -a)</p>
+<p><img src="/include/img/kext/xcode.png" alt="xcode"></p>
+<p><img src="/include/img/kext/mini.png" alt="mini"></p>
+<p>果然是关闭了 SIP 就可以 安装 kext, 已经显示 ‘allowing invalid signature xxx’<br><img src="/include/img/kext/kextstat.png" alt="kextstat"></p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>如何查看 kext 的输入（日志）？</p>
+<p>Todo:</p>
+<ol>
+<li>git 项目 提取 kext</li>
+<li>fuzz osx kernel — kext</li>
+</ol>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://www.tanhao.me/pieces/1515.html/" target="_blank" rel="external">初探Mac OSX内核开发(一)——创建内核扩展</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;说明&quot;&gt;&lt;a href=&quot;#说明&quot; class=&quot;headerlink&quot; title=&quot;说明&quot;&gt;&lt;/a&gt;说明&lt;/h3&gt;&lt;p&gt;第一个 OSX 上的 Kernel Extension demo&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="开发" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="kext" scheme="http://yoursite.com/tags/kext/"/>
+    
+      <category term="c" scheme="http://yoursite.com/tags/c/"/>
+    
+  </entry>
   
   <entry>
     <title>3月逻辑思维</title>
@@ -55,7 +169,7 @@
     <link href="http://yoursite.com/2017/03/13/XNU%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E7%A1%80%E7%AF%87/"/>
     <id>http://yoursite.com/2017/03/13/XNU内核设计-基础篇/</id>
     <published>2017-03-13T05:47:55.000Z</published>
-    <updated>2017-03-15T07:37:01.000Z</updated>
+    <updated>2017-03-15T07:41:16.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
 <hr>
@@ -350,6 +464,10 @@
     
       <category term="读书" scheme="http://yoursite.com/categories/%E8%AF%BB%E4%B9%A6/"/>
     
+    
+      <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
+    
+      <category term="xnu" scheme="http://yoursite.com/tags/xnu/"/>
     
   </entry>
   
@@ -736,9 +854,9 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
       <category term="开发" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
     
     
-      <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
-    
       <category term="ios" scheme="http://yoursite.com/tags/ios/"/>
+    
+      <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
     
   </entry>
   
