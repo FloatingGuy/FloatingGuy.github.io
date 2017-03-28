@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-03-20T06:50:47.000Z</updated>
+  <updated>2017-03-28T15:13:47.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,345 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android ELF 文件加壳</title>
+    <link href="http://yoursite.com/2017/03/28/Android-ELF-%E6%96%87%E4%BB%B6%E5%8A%A0%E5%A3%B3/"/>
+    <id>http://yoursite.com/2017/03/28/Android-ELF-文件加壳/</id>
+    <published>2017-03-28T14:38:01.000Z</published>
+    <updated>2017-03-28T15:13:47.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>测试，给 ELF 可执行文件的 特定section 加密。。。<br><a id="more"></a></p>
+<p>目前需要对 某个工具做加密处理，但是没有发现公开的可以对 elf 可执行文件加壳的本地工具。于是参照网上 的文章修改了一个自己的加固工具，非常的菜-入门级的。</p>
+<p>参考文章：<br><a href="http://burningcodes.net/so%E5%8A%A0%E5%9B%BA%E7%B3%BB%E5%88%97%E4%B9%8B%E7%90%86%E8%A7%A3elf%E6%A0%BC%E5%BC%8F/" target="_blank" rel="external">SO加固系列之理解ELF格式</a><br><a href="http://burningcodes.net/so%E5%8A%A0%E5%9B%BA%E7%B3%BB%E5%88%97%E4%B9%8B%E5%8A%A0%E5%A3%B3%E5%8E%9F%E7%90%86%E5%8F%8Apython%E5%AE%9E%E7%8E%B0/" target="_blank" rel="external">SO加固系列之加壳原理及Python实现</a><br><a href="http://burningcodes.net/so%E5%8A%A0%E5%9B%BA%E7%B3%BB%E5%88%97%E4%B9%8B%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%AF%86/" target="_blank" rel="external">SO加固系列之运行时解密</a></p>
+<h3 id="第一版-ELF-可执行文件加密"><a href="#第一版-ELF-可执行文件加密" class="headerlink" title="第一版 ELF 可执行文件加密"></a>第一版 ELF 可执行文件加密</h3><h4 id="修改的地方"><a href="#修改的地方" class="headerlink" title="修改的地方"></a>修改的地方</h4><p>不能再用 head 中的 e_entry 和 e_shoff 保存加密段的长度和偏移信息了。因为 可执行文件的加载时会跳到这个入口地址去执行。</p>
+<p>尝试了 head 中的几个字段发现都不能被修改。于是最快的办法就是 手动测试 偏移地址和 size ，然后在解密代码中 硬编码 偏移量和 size（这个方法很愚蠢）。</p>
+<p>具体对 文章代码做的修改:<br>1.手动 修改 源码，中 【1】mAddr, 【2】size, 【3】name /<em> maps 中的 app name</em>/<br><strong>修改 mAddr 和 size 是需要借助010 工具</strong>，对比 patch 前后的二进制文件。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exp</span>.c 文件。</div><div class="line"></div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> name[] = <span class="string">"被加壳 app 的名字"</span>;    <span class="comment">//patch1</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">new_init</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">//printf("[+] decrypt\n");</span></div><div class="line">    <span class="comment">// getchar();</span></div><div class="line"></div><div class="line">    Elf32_Ehdr *elfhdr;</div><div class="line">    Elf32_Shdr *shdr;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> size, base, offset;</div><div class="line">    <span class="keyword">int</span> n, i;</div><div class="line"></div><div class="line">    <span class="comment">//从maps中读取elf文件在内存中的起始地址</span></div><div class="line">    base = GetLibAddr();</div><div class="line">    <span class="comment">//printf("%x\n", base);</span></div><div class="line">    elfhdr = (Elf32_Ehdr *) base;</div><div class="line">    <span class="comment">//获取要被解密的section的内存地址</span></div><div class="line">    offset = elfhdr-&gt;e_shoff + base;</div><div class="line">    <span class="comment">// lk patch</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> mAddr = <span class="number">0x23b4</span>;            <span class="comment">//patch2</span></div><div class="line">    offset = mAddr + base;</div><div class="line">    <span class="comment">//section大小</span></div><div class="line">    size = elfhdr-&gt;e_entry;</div><div class="line">    <span class="comment">// lk patch</span></div><div class="line">    size = <span class="number">0x3d4</span>;               <span class="comment">//patch3</span></div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>每次修改代码都要重修  上面的几个地方</strong></p>
+<ol>
+<li>手动 修改 加固脚本 中 【1】文件名,  【2】自定义段名<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">so-encrypt.py 文件</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    df = SO(<span class="string">"libs/armeabi-v7a/xxx"</span>)        <span class="comment">#patch1</span></div><div class="line">    df.EncrySection(<span class="string">"strings"</span>)          <span class="comment">#patch2</span></div><div class="line">    df.Close()</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>###Todo List</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>完成情况</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. 优化代码，提高自动化</td>
+<td></td>
+</tr>
+<tr>
+<td>2. 添加反调试代码</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;测试，给 ELF 可执行文件的 特定section 加密。。。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="研究" scheme="http://yoursite.com/categories/categories-research/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>dirtycow vDSO exploit</title>
+    <link href="http://yoursite.com/2017/03/24/dirtycow-vDSO-exploit/"/>
+    <id>http://yoursite.com/2017/03/24/dirtycow-vDSO-exploit/</id>
+    <published>2017-03-24T15:47:05.000Z</published>
+    <updated>2017-03-26T16:44:58.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>最近利用业余时间研究了一下 dirtycow 的 exploit代码。目前看到了2种方法各有优缺点，不存在特别完美的一个。不过这两种方法结合一下应该可以在稳定性上得到进一步的提高。<br>第一种方法：向文件系统中的/system/bin/run-as文件中写入一个攻击者的 su 文件<br>第二种方法：使用 vDSO 修改系统调用。。。    补充。。</p>
+<a id="more"></a>
+<p>第一种方法比较简单，这里不再专门的介绍，会在分析 dirtycow 原理时介绍。<br>在 <a href="https://github.com/scumjr/dirtycow-vdso" target="_blank" rel="external">dirtycow-vdso</a> 项目的 ReadMe中，作者对 vdso 方法的优缺做了评述：</p>
+<blockquote>
+<p>此方法 是基于 ptrace 去 patch vDSO. 比起修改文件系统 有如下 <strong>优点</strong>：</p>
+<ul>
+<li>不需要 setuid 二进制文件 （可以补充 M1， 当没有 run-as 或者 没有执行权限时）</li>
+<li>绕过 SELinux</li>
+<li>容器逃逸</li>
+<li>不会因为文件系统写返回导致内核 crash</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>依赖手机架构（应为 payload 使用汇编写）</li>
+<li>针对部分 linux 版本</li>
+<li>受 vDSO 变化的影响</li>
+</ul>
+</blockquote>
+<p>学习本篇 exploit 主要参考了2篇文章：<br><a href="https://jaq.alibaba.com/community/art/show?articleid=434" target="_blank" rel="external">[翻译] getauxval() and the auxiliary vector</a><br><a href="https://0xax.gitbooks.io/linux-insides/content/SysCall/syscall-2.html" target="_blank" rel="external">vsyscalls and vDSO</a></p>
+<p>第一篇介绍了如何通getauxval()函数 获取 vDSO 创建的页地址。<br><code>getauxval(AT_SYSINFO_EHDR)</code>, 以及 getauxval()函数的由来;这部分内容我只是了解一下，和 exploit 关系不大。</p>
+<p>第二篇介绍了 vdso 的原理，vdso 从内核映射到用户空间的1页内存的地址就可以通过<code>getauxval(AT_SYSINFO_EHDR)</code>函数获得。</p>
+<hr>
+<h4 id="什么是-vDSO"><a href="#什么是-vDSO" class="headerlink" title="什么是 vDSO?"></a>什么是 vDSO?</h4><p>2个概念：</p>
+<ul>
+<li>vsyscall</li>
+<li>vdso</li>
+</ul>
+<p>我们已经知道，系统调用就是中断当前用户进程然后跳转到内核模式，系统调用句柄完成工作以后再通过一系列的跳转返回用户空间。</p>
+<p>vsyscall 和 vdso 机制是用来加速用户态进程调用系统调用的过程，下面来介绍这个机制是如何工作的？</p>
+<h4 id="vsyscall"><a href="#vsyscall" class="headerlink" title="vsyscall"></a>vsyscall</h4><p>此机制是Linux 内核中最先出现也是最老的被用来加速执行调用的机制。<br>该机制的原理就是 将内核映射到用户空间的1页内存中，这1页内存包含了一些变量和系统调用的实现。<br>相当于在用户空间实现系统调用， 这样避免了内存切换。<br>x86_64 linux 设备中查看 vsyscall 占据的1页内存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">~$ sudo cat /proc/1/maps | grep vsyscall</div><div class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</div></pre></td></tr></table></figure></p>
+<p><code>map_vsyscall</code> 函数负责映射 <code>vsyscall</code>页到用户空间，此函数定义在<code>[arch/x86/entry/vsyscall/vsyscall_64.c](https://github.com/torvalds/linux/blob/master/arch/x86/entry/vsyscall/vsyscall_64.c)</code>文件中。<br><code>map_vsyscall</code>函数在内核初始化时 被 <code>setup_arch</code>调用，次函数在文件<a href="https://github.com/torvalds/linux/blob/master/arch/x86/kernel/setup.c" target="_blank" rel="external">arch/x86/kernel/setup.c</a></p>
+<p>…<br>…</p>
+<hr>
+<h4 id="vDSO"><a href="#vDSO" class="headerlink" title="vDSO"></a>vDSO</h4><p>模块所在位置：<code>arch/x86/entry/vdso/</code><br>入口：<code>vma.c :: init_vdso()</code></p>
+<p>vsyscall 已经被 vDSO 或者  <code>virtual dynamic shared object</code> 取代了。<code>vsyscall</code> 和 <code>vDSO</code> 最大的不同是 vDSO 映射内存页到每一个进程以共享对象的格式，但是 vsyscall 在内存中是静态地址并且每次都在相同的地址。 例如 x86_64 架构 对应的文件是 vdso.so.1。<br>所有的用户进程都通过 glibc 链接到这个共享库。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">~$ ldd /bin/uname</div><div class="line">    linux-vdso.so.1 (0x00007ffe014b7000)</div><div class="line">    libc.so.6 =&gt; /lib64/libc.so.6 (0x00007fbfee2fe000)</div><div class="line">    /lib64/ld-linux-x86-64.so.2 (0x00005559aab7c000)</div><div class="line"></div><div class="line">or</div><div class="line">~$ sudo cat /proc/1/maps | grep vdso</div><div class="line">7fff39f73000-7fff39f75000 r-xp 00000000 00:00 0       [vdso]</div></pre></td></tr></table></figure>
+<p>初始化 vDSO – init_vdso()  此函数 开始就初始化 vdso 镜像。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">int</span> __<span class="function">init <span class="title">init_vdso</span><span class="params">(<span class="keyword">void</span>)</span></span></div><div class="line">&#123;</div><div class="line">    init_vdso_image(&amp;vdso_image_64);</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_X86_X32_ABI</span></div><div class="line">    init_vdso_image(&amp;vdso_image_x32);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">..</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>init_vdso_image()  初始化 vdso_image 结构体。<br>结构体定义：</p>
+<p>vdso_image_64 的结构体定义如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">struct</span> vdso_image vdso_image_64 = &#123;</div><div class="line">    .data = raw_data,</div><div class="line">    .size = <span class="number">8192</span>,</div><div class="line">    .text_mapping = &#123;</div><div class="line">        .name = <span class="string">"[vdso]"</span>,</div><div class="line">        .pages = pages,</div><div class="line">    &#125;,</div><div class="line">    .alt = <span class="number">3145</span>,</div><div class="line">    .alt_len = <span class="number">26</span>,</div><div class="line">    .sym_vvar_start = <span class="number">-8192</span>,</div><div class="line">    .sym_vvar_page = <span class="number">-8192</span>,</div><div class="line">    .sym_hpet_page = <span class="number">-4096</span>,</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>vdso2c 程序从其他文件生成 so。</p>
+<p>关于 images 的全部设置都依赖于内核 配置文件。</p>
+<p>如果内核配置为 x86  架构或者 x86_64 和通用模式，我们可以使用 <code>int 0x80</code>中断 发起系统调用。<br>如果设置为通用模式，我们可以使用 syscall 指令或者 sysenter 指令 发出系统调用。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">if</span> defined CONFIG_X86_32 || defined CONFIG_COMPAT</span></div><div class="line">  <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">struct</span> vdso_image vdso_image_32_int80;</div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_COMPAT</span></div><div class="line">  <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">struct</span> vdso_image vdso_image_32_syscall;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"> <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">struct</span> vdso_image vdso_image_32_sysenter;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure></p>
+<p>pages 映射的地址由内核决定，当内核加载二进制文件到内存中时。<br>内核调用 <code>arch_setup_additional_pages</code>函数(vma.c)检查 vDSO 可以在 x86_64 架构上使用并且调用 map_vdso 函数<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">arch_setup_additional_pages</span><span class="params">(<span class="keyword">struct</span> linux_binprm *bprm, <span class="keyword">int</span> uses_interp)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (!vdso64_enabled)</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> map_vdso(&amp;vdso_image_64, <span class="literal">true</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>当前使用<code>map_vdso_randomized</code>函数替换 <code>map_vdso</code>。</p>
+<h4 id="getauxval-AT-SYSINFO-EHDR-获取内核地址"><a href="#getauxval-AT-SYSINFO-EHDR-获取内核地址" class="headerlink" title="getauxval(AT_SYSINFO_EHDR) 获取内核地址"></a>getauxval(AT_SYSINFO_EHDR) 获取内核地址</h4><h4 id="APIs"><a href="#APIs" class="headerlink" title="APIs"></a>APIs</h4><p>###ChangeLog<br>|time| desc|<br>|————–|————–|<br>|2017-3-27 | <a href="https://0xax.gitbooks.io/linux-insides/content/SysCall/syscall-2.html" target="_blank" rel="external">1</a> 文章 分析 vdso 的初始化流程， 页映射，数据结构。  下一步 构思 文章结构。ß|</p>
+<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;最近利用业余时间研究了一下 dirtycow 的 exploit代码。目前看到了2种方法各有优缺点，不存在特别完美的一个。不过这两种方法结合一下应该可以在稳定性上得到进一步的提高。&lt;br&gt;第一种方法：向文件系统中的/system/bin/run-as文件中写入一个攻击者的 su 文件&lt;br&gt;第二种方法：使用 vDSO 修改系统调用。。。    补充。。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="漏洞" scheme="http://yoursite.com/categories/categories-exploit/"/>
+    
+    
+      <category term="root" scheme="http://yoursite.com/tags/root/"/>
+    
+      <category term="android" scheme="http://yoursite.com/tags/android/"/>
+    
+      <category term="exploit" scheme="http://yoursite.com/tags/exploit/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>分析Kext管理框架 OSKext class</title>
+    <link href="http://yoursite.com/2017/03/21/%E5%88%86%E6%9E%90Kext%E7%AE%A1%E7%90%86%E6%A1%86%E6%9E%B6-OSKext-class/"/>
+    <id>http://yoursite.com/2017/03/21/分析Kext管理框架-OSKext-class/</id>
+    <published>2017-03-21T03:15:28.000Z</published>
+    <updated>2017-03-24T15:31:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<blockquote>
+<p>《深入解析MAC OS X &amp; iOS 操作系统》- 第 x 章: xxx</p>
+</blockquote>
+<p>本篇是[《XNU内核设计–Kext内核扩展》][1]的姊妹篇，上一篇 零零洒洒的从书上看到了 kext的全面介绍，这一篇注重 代码实现(意思就是我们纯分析源码)，分析 Kext 管理框架。</p>
+<blockquote>
+<p>代码是 XNU 10.12版本。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="重点知识"><a href="#重点知识" class="headerlink" title="重点知识"></a>重点知识</h3><p>分析 OSKext 实现代码。首先从OSKext 框架的开始initialize()函数分析，然后分析 kextd 发送的9条 Predicate。</p>
+<ul>
+<li>Load</li>
+<li>Start</li>
+<li>Stop</li>
+<li>Unload</li>
+<li>Get Kernel Requests</li>
+<li>Get Loaded Kext Info</li>
+<li>Get Kernel Image</li>
+<li>Get Kernel Load Address</li>
+<li>Get All Load Requests</li>
+</ul>
+<p>上面的 Predicate 列表前5条都会检查 kext_request 的第一个参数 <code>hostPriv</code>, 所以都是需要有 root 权限的（/usr/libexec/kextd就是 root 用户所有），剩下4条不需要特权意思是 普通用户也能调用。</p>
+<h3 id="设计框架"><a href="#设计框架" class="headerlink" title="设计框架"></a>设计框架</h3><p>kext 管理框架是接触 XNU 内核的第一个模块，如果单独谈次框架就非常简单了，因为我观察貌似几乎 Kext 相关的功能都在 OSKext class 中就完成了。</p>
+<p>所以 分析完本篇准备，按照逆推的顺序向前分析，具体来说就是看看是 谁调用的 OSKext::initialize(void) 上层调用前后如何处理？！</p>
+<h4 id="源代码分析"><a href="#源代码分析" class="headerlink" title="源代码分析"></a>源代码分析</h4><p><img src="/include/img/bk-xnu/mach-o.jpg" alt="mach-o"><br><img src="/include/img/bk-xnu/OSKext-initialize.png" alt="OSKext::initialize"><br>// 初始化<br>void<br>OSKext::initialize(void)<br>{</p>
+<pre><code>// 几个重要的 变量-- 和所有的 kext 都相关 ，后面要用
+sKextsByID = OSDictionary::withCapacity(kOSKextTypicalLoadCount);   //150
+sLoadedKexts = OSArray::withCapacity(kOSKextTypicalLoadCount);  //记录所有加载的 kext （包括内核）， 修改这个结构体 可以做到 影藏 kext
+sUnloadedPrelinkedKexts = OSArray::withCapacity(kOSKextTypicalLoadCount / 10);
+sKernelRequests = OSArray::withCapacity(0);   // 这应该 能说明 内核是闭包的不需要别的 kext （狭义的闭包）
+sPostedKextLoadIdentifiers = OSSet::withCapacity(0);
+sAllKextLoadIdentifiers = OSSet::withCapacity(kOSKextTypicalLoadCount);
+sRequestCallbackRecords = OSArray::withCapacity(0);
+assert(sKextsByID &amp;&amp; sLoadedKexts &amp;&amp; sKernelRequests &amp;&amp;
+    sPostedKextLoadIdentifiers &amp;&amp; sAllKextLoadIdentifiers &amp;&amp;
+    sRequestCallbackRecords &amp;&amp; sUnloadedPrelinkedKexts);
+</code></pre><p>//—————</p>
+<pre><code>// 首先要初始化  内核自身的 OSKext
+/* Set up an OSKext instance to represent the kernel itself.
+*/
+sKernelKext = new OSKext;
+
+sKernelKext-&gt;loadTag = sNextLoadTag++;  // the kernel is load tag 0
+sKernelKext-&gt;bundleID = OSSymbol::withCString(kOSKextKernelIdentifier);    //&apos;__kernel__&apos;
+
+sKernelKext-&gt;version = OSKextParseVersionString(osrelease);
+sKernelKext-&gt;compatibleVersion = sKernelKext-&gt;version;
+sKernelKext-&gt;linkedExecutable = kernelExecutable;
+
+//OSKext-&gt;flags
+sKernelKext-&gt;flags.hasAllDependencies = 1;
+sKernelKext-&gt;flags.kernelComponent = 1;
+sKernelKext-&gt;flags.prelinked = 0;
+sKernelKext-&gt;flags.loaded = 1;
+sKernelKext-&gt;flags.started = 1;
+sKernelKext-&gt;flags.CPPInitialized = 0;
+sKernelKext-&gt;flags.jettisonLinkeditSeg = 0;
+</code></pre><p>//—————<br>    // kernel 的 kmod_info 对象<br>    sKernelKext-&gt;kmod_info = &amp;g_kernel_kmod_info;<br>    strlcpy(g_kernel_kmod_info.version, osrelease,<br>        sizeof(g_kernel_kmod_info.version));<br>    g_kernel_kmod_info.size = kernelLength;<br>    g_kernel_kmod_info.id = sKernelKext-&gt;loadTag;</p>
+<p>//—————</p>
+<pre><code>//OSKext-&gt;infoDict  设置 kernel 的 Bundle 信息
+/**
+ * kenel 定义的CFBundle(一共 5个)
+ *  #define kCFBundleIdentifierKey                  &quot;CFBundleIdentifier&quot;
+    #define kCFBundleVersionKey                     &quot;CFBundleVersion&quot;
+    #define kCFBundleNameKey                        &quot;CFBundleName&quot;
+    #define kCFBundleExecutableKey                  &quot;CFBundleExecutable&quot;
+ */
+sKernelKext-&gt;infoDict = OSDictionary::withCapacity(5);
+assert(sKernelKext-&gt;infoDict);
+setResult = sKernelKext-&gt;infoDict-&gt;setObject(kCFBundleIdentifierKey,
+    sKernelKext-&gt;bundleID);
+assert(setResult);
+setResult = sKernelKext-&gt;infoDict-&gt;setObject(kOSKernelResourceKey,
+    kOSBooleanTrue);
+assert(setResult);
+
+scratchString = OSString::withCStringNoCopy(osrelease);
+assert(scratchString);
+setResult = sKernelKext-&gt;infoDict-&gt;setObject(kCFBundleVersionKey,
+    scratchString);
+assert(setResult);
+OSSafeReleaseNULL(scratchString);
+
+
+scratchString = OSString::withCStringNoCopy(&quot;mach_kernel&quot;);
+assert(scratchString);
+setResult = sKernelKext-&gt;infoDict-&gt;setObject(kCFBundleNameKey,
+    scratchString);
+assert(setResult);
+OSSafeReleaseNULL(scratchString);
+</code></pre><p>//—————</p>
+<pre><code>setResult = sKextsByID-&gt;setObject(sKernelKext-&gt;bundleID, sKernelKext);
+assert(setResult);
+setResult = sLoadedKexts-&gt;setObject(sKernelKext);
+assert(setResult);
+sKernelKext-&gt;release();         // sKernelKext 引用计数 -1
+</code></pre><p>//—————<br>    registryRoot = IORegistryEntry::getRegistryRoot();<br>    kernelCPUType = OSNumber::withNumber(<br>        (long long unsigned int)_mh_execute_header.cputype,<br>        8 <em> sizeof(_mh_execute_header.cputype));<br>    kernelCPUSubtype = OSNumber::withNumber(<br>        (long long unsigned int)_mh_execute_header.cpusubtype,<br>        8 </em> sizeof(_mh_execute_header.cpusubtype));<br>    assert(registryRoot &amp;&amp; kernelCPUSubtype &amp;&amp; kernelCPUType);</p>
+<pre><code>registryRoot-&gt;setProperty(kOSKernelCPUTypeKey, kernelCPUType);
+registryRoot-&gt;setProperty(kOSKernelCPUSubtypeKey, kernelCPUSubtype);
+
+OSSafeReleaseNULL(kernelCPUType);
+OSSafeReleaseNULL(kernelCPUSubtype);
+
+timestamp = __OSAbsoluteTimePtr(&amp;last_loaded_timestamp);
+*timestamp = 0;
+timestamp = __OSAbsoluteTimePtr(&amp;last_unloaded_timestamp);
+*timestamp = 0;
+timestamp = __OSAbsoluteTimePtr(&amp;sLastWakeTime);
+*timestamp = 0;
+
+OSKextLog(/* kext */ NULL,
+    kOSKextLogProgressLevel |
+    kOSKextLogGeneralFlag,
+    &quot;Kext system initialized.&quot;);
+
+notifyKextLoadObservers(sKernelKext, sKernelKext-&gt;kmod_info);
+
+return;
+</code></pre><p>}</p>
+<p>/*</p>
+<ul>
+<li><p>@class OSKext<br><em>/<br>/<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></em>/<br>class OSKext : public OSObject<br>{<br> …</p>
+<p> //<br> virtual OSReturn start(bool startDependenciesFlag = true);</p>
+<p> …<br>}</p>
+</li>
+</ul>
+<p>OSReturn<br>OSKext::start(bool startDependenciesFlag)<br>{<br>    OSReturn                            result = kOSReturnError;<br>    kern_return_t                       (<em> startfunc)(kmod_info_t </em>, void <em>);      // 指向 kext 模块中的入口函数<br>    unsigned int                        i, count;<br>    void                              </em> kmodStartData = NULL;</p>
+<pre><code>if (isStarted() || isInterface() || isKernelComponent()) {
+    result = kOSReturnSuccess;
+    goto finish;
+}
+
+//
+if (!isLoaded()) {
+    OSKextLog(this,
+        kOSKextLogErrorLevel |
+        kOSKextLogLoadFlag,
+        &quot;Attempt to start nonloaded kext %s.&quot;,
+        getIdentifierCString());
+    result = kOSKextReturnInvalidArgument;
+    goto finish;
+}
+
+if (!sLoadEnabled) {
+    OSKextLog(this,
+        kOSKextLogErrorLevel |
+        kOSKextLogLoadFlag,
+        &quot;Kext loading is disabled (attempt to start kext %s).&quot;,
+        getIdentifierCString());
+    result = kOSKextReturnDisabled;
+    goto finish;
+}
+
+result = validateKextMapping(/* start? */ true);
+if (result != kOSReturnSuccess) {
+    goto finish;
+}
+
+// 从 kmod_info 是 OSKext 成员
+startfunc = kmod_info-&gt;start;
+
+
+...
+</code></pre><p>}</p>
+<h3 id="Case"><a href="#Case" class="headerlink" title="Case"></a>Case</h3><h3 id="相关工具"><a href="#相关工具" class="headerlink" title="相关工具"></a>相关工具</h3><h3 id="关联章节"><a href="#关联章节" class="headerlink" title="关联章节"></a>关联章节</h3><h3 id="Dictionary"><a href="#Dictionary" class="headerlink" title="Dictionary"></a>Dictionary</h3><h3 id="Change-Log"><a href="#Change-Log" class="headerlink" title="Change Log"></a>Change Log</h3><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-xx-xx</td>
+<td>增加5.5 节</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;《深入解析MAC OS X &amp;amp; iOS 操作系统》- 第 x 章: xxx&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;本篇是[《XNU内核设计–Kext内核扩展》][1]的姊妹篇，上一篇 零零洒洒的从书上看到了 kext的全面介绍，这一篇注重 代码实现(意思就是我们纯分析源码)，分析 Kext 管理框架。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;代码是 XNU 10.12版本。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="XNU 内核源码" scheme="http://yoursite.com/categories/XNU-%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81/"/>
+    
+    
+      <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
+    
+      <category term="xnu" scheme="http://yoursite.com/tags/xnu/"/>
+    
+  </entry>
   
   <entry>
     <title>java ArrayList&lt;String&gt;(){{add();}}; 用法说明</title>
@@ -221,9 +560,9 @@
       <category term="开发" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
     
     
-      <category term="kext" scheme="http://yoursite.com/tags/kext/"/>
-    
       <category term="xnu" scheme="http://yoursite.com/tags/xnu/"/>
+    
+      <category term="kext" scheme="http://yoursite.com/tags/kext/"/>
     
       <category term="c" scheme="http://yoursite.com/tags/c/"/>
     
@@ -234,7 +573,7 @@
     <link href="http://yoursite.com/2017/03/15/XNU%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1-Kext%E5%86%85%E6%A0%B8%E6%89%A9%E5%B1%95/"/>
     <id>http://yoursite.com/2017/03/15/XNU内核设计-Kext内核扩展/</id>
     <published>2017-03-15T03:52:11.000Z</published>
-    <updated>2017-03-20T16:31:30.000Z</updated>
+    <updated>2017-03-21T03:14:18.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
 <hr>
@@ -363,10 +702,16 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#define kMKEXTInfoDictionariesKey             &quot;_MKEXTInfoDictionaries&quot;</div><div class="line"></div><div class="line">#define kMKEXTBundlePathKey                   &quot;_MKEXTBundlePath&quot;</div><div class="line">#define kMKEXTExecutableRelativePathKey       &quot;_MKEXTExecutableRelativePath&quot;</div><div class="line">#define kMKEXTExecutableKey                   &quot;_MKEXTExecutable&quot;</div><div class="line"></div><div class="line">#define kMKEXTLoadRequestKey                  &quot;_MKEXTLoadRequest&quot;</div><div class="line">#define kMKEXTLoadRequestLoadKey              &quot;Load Kext&quot;</div><div class="line">#define kMKEXTLoadRequestStartKey             &quot;Start Kext&quot;</div><div class="line">#define kMKEXTLoadRequestAddPersonalitiesKey  &quot;Add Personalities&quot;</div><div class="line">#define kMKEXTLoadRequestDisableAutounloadKey &quot;Disable Autounload&quot;</div><div class="line"></div><div class="line">#define kKextRequestPredicateLoad                  &quot;Load&quot;</div></pre></td></tr></table></figure>
 <p>总结一番：</p>
 <ol>
-<li>kext load时 requestIn 接受到的是 mkext, start/stop/…其他命令时,requestIn 接受到的是 XML格式</li>
-<li>mkext Load 需要2个过程，L1 阶段是从 mkext 中获取 Plist 以后就创建 OSKext 对象，并保存在 sKextsByID 字典中。L2 阶段从sKextsByID 中取出 OSKext，并调用 OSKext-&gt;load 方法</li>
-<li>OSKext::initialize 中加载  kernel， 并给 kernel 创建 OSKext</li>
-<li>当kext_request 发送 Start 时， 最终调用到OSKext::start 函数内会将控制权交给 kext的 xxx_start方法。</li>
+<li><p>kext_request 的参数 requestIn的类型</p>
+<ul>
+<li>当 kextd 发出 load请求时, 向kext_request 发送一个 mkext文件</li>
+<li>当 kextd 发出start/stop/…其他请求时,向kext_request 发送一个 XML文件</li>
+</ul>
+</li>
+<li><p>mkext <code>Load</code> 需要2个过程，L1 阶段是从 mkext 中获取 Plist 以后就创建 OSKext 对象，并保存在 sKextsByID 字典中。L2 阶段从sKextsByID 中取出 OSKext，并调用 <code>OSKext-&gt;load</code> 方法</p>
+</li>
+<li><code>OSKext::initialize</code> 中给 kernel 创建 OSKext, 并初始化kext 全局管理对象（<code>sKextsByID, g_kernel_kmod_info, sLoadedKexts 等</code>）</li>
+<li>当kext_request 发送 <code>Start</code> 时， 最终调用到<code>OSKext::start</code> 函数内, 会将控制权交给 kext的 xxx_start方法</li>
 </ol>
 <p>3/4 条会在下一篇中 给出代码分析。<br><img src="/include/img/bk-xnu/OSKext-initialize.png" alt="OSKext::initialize"></p>
 <h4 id="调试-kext-request"><a href="#调试-kext-request" class="headerlink" title="调试 kext_request"></a>调试 kext_request</h4><p>这里调试的是 libsystem_kernel.dylib 中的kext_request 代码通过 mach msg 发送消息给上一节分析的是 xnu 内核中的 kext_request 代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">第一次请求</div><div class="line">0x7fe4e2805400: &quot;&lt;dict&gt;&lt;key&gt;Kext Request Predicate&lt;/key&gt;&lt;string&gt;Get Loaded Kext Info&lt;/string&gt;&lt;key&gt;Kext Request Arguments&lt;/key&gt;&lt;dict&gt;&lt;key&gt;Kext Request Info Keys&lt;/key&gt;&lt;array&gt;&lt;string&gt;CFBundleIdentifier&lt;/string&gt;&lt;string&gt;CFBundleVersion&lt;/string&gt;&lt;string&gt;OSBundleCompatibleVersion&lt;/string&gt;&lt;string&gt;OSBundleIsInterface&lt;/string&gt;&lt;string&gt;OSKernelResource&lt;/string&gt;&lt;string&gt;OSBundleCPUType&lt;/string&gt;&lt;string&gt;OSBundleCPUSubtype&lt;/string&gt;&lt;string&gt;OSBundlePath&lt;/string&gt;&lt;string&gt;OSBundleUUID&lt;/string&gt;&lt;string&gt;OSBundleStarted&lt;/string&gt;&lt;string&gt;OSBundleLoadTag&lt;/string&gt;&lt;string&gt;OSBundleLoadAddress&lt;/string&gt;&lt;string&gt;OSBundleLoadSize&lt;/string&gt;&lt;string&gt;OSBundleWiredSize&lt;/string&gt;&lt;string&gt;OSBundlePrelinked&lt;/string&gt;&lt;string&gt;OSBundleDependencies&lt;/string&gt;&lt;string&gt;OSBundleRetainCount&lt;/string&gt;&lt;/array&gt;&lt;key&gt;CFBundleIdentifier&lt;/key&gt;&lt;array&gt;&lt;string&gt;com.apple.driver.KextExcludeList&lt;/string&gt;&lt;/array&gt;&lt;/dict&gt;&lt;/dict&gt;&quot;</div></pre></td></tr></table></figure></p>
