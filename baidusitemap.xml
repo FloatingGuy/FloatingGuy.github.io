@@ -22,52 +22,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/03/24/dirtycow-vDSO-exploit/</loc>
-    <lastmod>2017-03-26T16:44:58.000Z</lastmod>
-    <data>
-        <display>
-        <title>dirtycow vDSO exploit</title>
-        <pubTime>2017-03-24T15:47:05.000Z</pubTime>
-        
-        <tag>root</tag>
-         
-        <tag>android</tag>
-         
-        <tag>exploit</tag>
-         
-         
-           
-             
-              <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/03/21/%E5%88%86%E6%9E%90Kext%E7%AE%A1%E7%90%86%E6%A1%86%E6%9E%B6-OSKext-class/</loc>
-    <lastmod>2017-03-24T15:31:15.000Z</lastmod>
-    <data>
-        <display>
-        <title>分析Kext管理框架 OSKext class</title>
-        <pubTime>2017-03-21T03:15:28.000Z</pubTime>
-        
-        <tag>了解</tag>
-         
-        <tag>xnu</tag>
-         
-         
-           
-             
-              <breadCrumb title="XNU 内核源码" url="http://yoursite.com/categories/XNU-%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/03/15/XNU%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1-Kext%E5%86%85%E6%A0%B8%E6%89%A9%E5%B1%95/</loc>
     <lastmod>2017-03-21T03:14:18.000Z</lastmod>
     <data>
@@ -260,6 +214,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/02/08/iOS-roadMap/</loc>
+    <lastmod>2017-03-09T16:42:40.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS RoadMap</title>
+        <pubTime>2017-02-08T05:58:07.000Z</pubTime>
+        
+        <tag>熟悉</tag>
+         
+        <tag>ios</tag>
+         
+         
+           
+             
+              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/01/22/%E9%85%8D%E7%BD%AEhexo-github-page-%E4%B8%AA%E4%BA%BABlog/</loc>
     <lastmod>2017-03-09T16:42:40.000Z</lastmod>
     <data>
@@ -299,28 +275,6 @@
            
              
               <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/02/08/iOS-roadMap/</loc>
-    <lastmod>2017-03-09T16:42:40.000Z</lastmod>
-    <data>
-        <display>
-        <title>iOS RoadMap</title>
-        <pubTime>2017-02-08T05:58:07.000Z</pubTime>
-        
-        <tag>熟悉</tag>
-         
-        <tag>ios</tag>
-         
-         
-           
-             
-              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
           
         </display>
     </data>
