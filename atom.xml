@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-03-28T15:13:47.000Z</updated>
+  <updated>2017-04-19T09:13:44.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,424 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>《三体》</title>
+    <link href="http://yoursite.com/2017/04/19/%E3%80%8A%E4%B8%89%E4%BD%93%E3%80%8B/"/>
+    <id>http://yoursite.com/2017/04/19/《三体》/</id>
+    <published>2017-04-19T08:05:17.000Z</published>
+    <updated>2017-04-19T09:13:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>人类对抗挫折，再强大的对手都有解决的办法。解决不了就说明有 思维的局限，就类似三体-1中举得栗子，农场主假说 &amp; 射手理论, 说明自然界的个体 容易被 经验 和 自身的认知 带入陷阱中。<br><a id="more"></a></p>
+<p>扯会蛋。。。</p>
+<p><code>三体-I-基石</code>，看完以后感觉良好。但是从 I 过渡到 <code>II-黑暗森林 上部(面壁者)</code>的时候突然出现了几个人，而且文章的内容也突然变换了场景感觉很不适应。<br>这可能就是 资生读者口中的”牛逼科幻”, 据说这样的书还有很多比如：攻壳(qiao)机动队。</p>
+<p>于是 再次将那个80多分钟的视频剪辑看了一遍，看完 <code>黑暗森林</code>就不敢继续向下看了，已经开始看不懂了。</p>
+<p>看完了大概30分钟的剧情，最后到 “罗辑给自己挖好坟墓，然后做出了竟然的举动，他要挟三体人要炸太阳将太阳系的坐标发送到全宇宙。”这<br>里就是小说的第一个高潮部分，这是人类第一<br>总结一下我印象最深刻的感受：</p>
+<blockquote>
+<p>人类对抗挫折，再强大的对手都有解决的办法。解决不了就说明有 思维的局限，就类似三体-1中举得栗子，农场主假说 &amp; 射手理论, 说明自然界的个体 容易被 经验 和 自身的认知 带入陷阱中。</p>
+</blockquote>
+<p><a href="https://www.zhihu.com/question/31245113" target="_blank" rel="external">https://www.zhihu.com/question/31245113</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;人类对抗挫折，再强大的对手都有解决的办法。解决不了就说明有 思维的局限，就类似三体-1中举得栗子，农场主假说 &amp;amp; 射手理论, 说明自然界的个体 容易被 经验 和 自身的认知 带入陷阱中。&lt;br&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>玩转 android 虚拟机</title>
+    <link href="http://yoursite.com/2017/04/19/%E7%8E%A9%E8%BD%AC-android-%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    <id>http://yoursite.com/2017/04/19/玩转-android-虚拟机/</id>
+    <published>2017-04-19T07:38:47.000Z</published>
+    <updated>2017-04-19T07:51:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>Title: <a href="https://calebfenton.github.io/2017/04/14/calling_jni_functions_with_java_object_arguments_from_the_command_line/" target="_blank" rel="external">Calling JNI Functions with Java Object Arguments from the Command Line</a></p>
+<p>Core Skill: 在 native 层创建 Android 虚拟机，并调用 jni 方法。</p>
+<p><a href="https://calebfenton.github.io/" target="_blank" rel="external">Caleb Fenton’s Blog</a>中包含很多关于 android 开发的技术，特别是虚拟机相关的技术。<strong>介绍的非常详细</strong></p>
+<a id="more"></a>
+<p>这里介绍 <a href="https://calebfenton.github.io" target="_blank" rel="external">Caleb Fenton’s Blog</a>中关于 Android 虚拟机的系列文章，对文章中的技术做汇总和实验。</p>
+<p>目前作者给出了 如下2篇文章：</p>
+<ul>
+<li><a href="https://calebfenton.github.io/2017/04/05/creating_java_vm_from_android_native_code/" target="_blank" rel="external">Creating a Java VM from Android Native Code</a><br>介绍如何通过编写 Native 可执行文件，创建Android VM；本质就是调用 libdvm.so 中未开放的代码。</li>
+<li><a href="https://calebfenton.github.io/2017/04/14/calling_jni_functions_with_java_object_arguments_from_the_command_line/" target="_blank" rel="external">Calling JNI Functions with Java Object Arguments from the Command Line</a></li>
+</ul>
+<p>重点介绍第二篇 文章， 因为第一篇只是一个技术基础。第二篇包含了一些案例 更有价值一些。</p>
+<h1 id="从-navice-层创建-Android-VM"><a href="#从-navice-层创建-Android-VM" class="headerlink" title="从 navice 层创建 Android VM"></a>从 navice 层创建 Android VM</h1><p>在介绍第二篇之前先将第一篇公布的完整代码公布出来。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span> <span class="params">(*JNI_CreateJavaVM_t)</span><span class="params">(<span class="keyword">void</span> *, <span class="keyword">void</span> *, <span class="keyword">void</span> *)</span></span>;</div><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">jint</span> <span class="params">(*registerNatives_t)</span><span class="params">(JNIEnv* env, jclass clazz)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">init_jvm</span><span class="params">(JavaVM **p_vm, JNIEnv **p_env)</span> </span>&#123;</div><div class="line">    <span class="comment">// https://android.googlesource.com/platform/frameworks/native/+/ce3a0a5/services/surfaceflinger/DdmConnection.cpp</span></div><div class="line">    JavaVMOption opt[<span class="number">4</span>];</div><div class="line">    opt[<span class="number">0</span>].optionString = <span class="string">"-Djava.class.path=/data/local/tmp/shim_app.apk"</span>;</div><div class="line">    opt[<span class="number">1</span>].optionString = <span class="string">"-agentlib:jdwp=transport=dt_android_adb,suspend=n,server=y"</span>;</div><div class="line">    opt[<span class="number">2</span>].optionString = <span class="string">"-Djava.library.path=/data/local/tmp"</span>;</div><div class="line">    opt[<span class="number">3</span>].optionString = <span class="string">"-verbose:jni"</span>; <span class="comment">// may want to remove this, it's noisy</span></div><div class="line">    JavaVMInitArgs args;</div><div class="line">    args.version = JNI_VERSION_1_6;</div><div class="line">    args.options = opt;</div><div class="line">    args.nOptions = <span class="number">4</span>;</div><div class="line">    args.ignoreUnrecognized = JNI_FALSE;</div><div class="line">    <span class="keyword">void</span> *libdvm_dso = dlopen(<span class="string">"libdvm.so"</span>, RTLD_NOW);</div><div class="line">    <span class="keyword">void</span> *libandroid_runtime_dso = dlopen(<span class="string">"libandroid_runtime.so"</span>, RTLD_NOW);</div><div class="line">    <span class="keyword">if</span> (!libdvm_dso || !libandroid_runtime_dso) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line">    JNI_CreateJavaVM_t JNI_CreateJavaVM;</div><div class="line">    JNI_CreateJavaVM = (JNI_CreateJavaVM_t) dlsym(libdvm_dso, <span class="string">"JNI_CreateJavaVM"</span>);</div><div class="line">    <span class="keyword">if</span> (!JNI_CreateJavaVM) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">-2</span>;</div><div class="line">    &#125;</div><div class="line">    registerNatives_t registerNatives;</div><div class="line">    registerNatives = (registerNatives_t) dlsym(libandroid_runtime_dso, <span class="string">"Java_com_android_internal_util_WithFramework_registerNatives"</span>);</div><div class="line">    <span class="keyword">if</span> (!registerNatives) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">-3</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (JNI_CreateJavaVM(&amp;(*p_vm), &amp;(*p_env), &amp;args)) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">-4</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (registerNatives(*p_env, <span class="number">0</span>)) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">-5</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="在命令行调用-JNI-函数（参数可以包括-Java-对象）"><a href="#在命令行调用-JNI-函数（参数可以包括-Java-对象）" class="headerlink" title="在命令行调用 JNI 函数（参数可以包括 Java 对象）"></a>在命令行调用 JNI 函数（参数可以包括 Java 对象）</h1><p>当破解或者分析恶意代码时，可能关键的值（字符串）是在 Native层计算出来的，这时候我们有几种办法获取native 函数的返回值。</p>
+<ol>
+<li>hook native函数   [简单、不稳定、不方便]</li>
+<li>静态分析 native 函数算法，重写方法    [复杂]</li>
+<li>动态调试     [更不方便]</li>
+<li>插桩         [不方便、校验完整性的防护]</li>
+<li>创建一个可执行文件，加载目标 so 调用目标函数。通过命令行传递参数给目标函数。     [简单、有局限（无法创建 JNIEnv参数）]</li>
+<li>….</li>
+</ol>
+<p>下面我们会介绍 本文的技术来解决这个调用 jni 函数的问题。</p>
+<p>首先下载我们的<a href="https://github.com/CalebFenton/native-harness-target" target="_blank" rel="external">实验app</a>, 使用下面的方法编译 apk.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/CalebFenton/native-harness-target.git</div><div class="line">cd native-harness-target</div><div class="line">echo &apos;ndk.dir=$ANDROID_NDK&apos; &gt; local.properties</div><div class="line">echo &apos;sdk.dir=$ANDROID_SDK&apos; &gt;&gt; local.properties</div><div class="line">./gradlew build</div></pre></td></tr></table></figure></p>
+<p>APKs 输出目录：<code>app/build/outputs/apk/</code>。</p>
+<p>实验的设备：Nexus5<br>系统版本：android 6.0.1</p>
+<h2 id="Harness-服务端工具"><a href="#Harness-服务端工具" class="headerlink" title="Harness 服务端工具"></a>Harness 服务端工具</h2><p>Harness的灵感来自 shim项目，shim 的功能是加载 library 并调用其 JNI_OnLoad 函数。这样就简化了调试工作，现在只需要让调试器去启动 shim 并通过参数传递要目标 library，然后使用调试器下断点并 绕过 JNI_OnLoad。</p>
+<p>首先我们需要使用上一节介绍的技术，在 native 层创建 java vm，并将 JavaVM 实例传递给 JNI_OnLoad 函数。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">printf</span>(<span class="string">" [+] Initializing JavaVM Instance\n"</span>);</div><div class="line">JavaVM *vm = <span class="literal">NULL</span>;</div><div class="line">JNIEnv *env = <span class="literal">NULL</span>;</div><div class="line"><span class="keyword">int</span> status = init_jvm(&amp;vm, &amp;env);</div><div class="line"><span class="keyword">if</span> (status == <span class="number">0</span>) &#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">" [+] Initialization success (vm=%p, env=%p)\n"</span>, vm, env);</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">" [!] Initialization failure (%i)\n"</span>, status);</div><div class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">printf</span>(<span class="string">" [+] Calling JNI_OnLoad\n"</span>);</div><div class="line">onLoadFunc(vm, <span class="literal">NULL</span>);</div></pre></td></tr></table></figure></p>
+<p>最终在代码中开启一个 socket， 通过这个 socket 读取参数作为目标函数的参数。使用 python 脚本可以很容易与它进行交互。</p>
+<p>python 脚本就是 在PC 上执行的 <strong>客户端</strong>了。</p>
+<h2 id="逆向-Dex"><a href="#逆向-Dex" class="headerlink" title="逆向 Dex"></a>逆向 Dex</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">.local v1, "encryptedStringBytes":[B</div><div class="line">invoke-static &#123;&#125;, Lorg/cf/nativeharness/Cryptor;-&gt;getInstance()Lorg/cf/nativeharness/Cryptor;</div><div class="line">move-result-object v0</div><div class="line"></div><div class="line">.line 21</div><div class="line">.local v0, "c":Lorg/cf/nativeharness/Cryptor;</div><div class="line"></div><div class="line"># v3 contains a String made from encrypted bytes</div><div class="line">new-instance v3, Ljava/lang/String;</div><div class="line">invoke-direct &#123;v3, v1&#125;, Ljava/lang/String;-&gt;&lt;init&gt;([B)V</div><div class="line"></div><div class="line"># Call the decryption method, move result back to v3</div><div class="line">invoke-virtual &#123;v0, v3&#125;, Lorg/cf/nativeharness/Cryptor;-&gt;decryptString(Ljava/lang/String;)Ljava/lang/String;</div><div class="line"></div><div class="line">move-result-object v3</div></pre></td></tr></table></figure>
+<p>注意：这里调用 native 函数的指令是<code>invoke-virtual</code>, 这个指令一般用来调用实例方法，虚方法等。指令的第一个参数就是 class 实例。</p>
+<p>注意：native 方法 和 <code>invoke-virtual</code> 没有直接联系。存在 static native 的方法，这时候使用<code>invoke-static</code>，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">private static native void post_arm64Load0(Library this, long arg1) &#123;</div><div class="line">    &#125;</div><div class="line">.method private static native post_arm64Load0(J)V</div><div class="line">.end method</div><div class="line"></div><div class="line"></div><div class="line">调用代码</div><div class="line">00000060  iget-wide               v2, v0, Library-&gt;a:J</div><div class="line">00000064  invoke-static           Library-&gt;post_arm64Load0(J)V, v2, v3</div></pre></td></tr></table></figure></p>
+<hr>
+<p>下一步 我们要查看目标 jni 函数的签名，两种方法：</p>
+<ol>
+<li>通过反编译 so</li>
+<li>但是方法1有可能 so 做了加固，查看不到函数签名；所以要使用 javah 生成头文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ d2j-dex2jar.sh app-universal-debug.apk</div><div class="line">dex2jar app-universal-debug.apk -&gt; ./app-universal-debug-dex2jar.jar</div><div class="line">$ javah -cp app-universal-debug-dex2jar.jar:$ANDROID_SDK/platforms/android-19/android.jar org.cf.nativeharness.Cryptor</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>jni 函数前2个参数是固定的，从第3个参数开始是应用的参数。<br>这个 jobject 参数应该是 <code>org.cf.nativeharness.Cryptor</code>实例，实际的函数签名：<br><code>JNIEXPORT jstring JNICALL Java_org_cf_nativeharness_Cryptor_decryptString (JNIEnv *, jobject, jstring);</code></p>
+<p>定义目标函数类型：<br><code>typedef jstring(*decryptString_t)(JNIEnv *, jobject, jstring);</code></p>
+<h2 id="定义一个-server-socket"><a href="#定义一个-server-socket" class="headerlink" title="定义一个 server socket"></a>定义一个 server socket</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<h3 id="准备："><a href="#准备：" class="headerlink" title="准备："></a>准备：</h3><pre><code>1. 将目标 apk（或者 Dex、Jar）放在`/data/local/tmp/target-app.apk`,创建 VM 时的参数(`-Djava.class.path=/data/local/tmp/target-app.apk`)
+2. 将需要的 native 库放在 `/data/local/tmp` (`-Djava.library.path=/data/local/tmp`)
+3. 使用客户端  python 脚本时，需要 adb forward tcp:5001 tcp:5001
+</code></pre><p>harness.c 文件主要负责：</p>
+<ol>
+<li>加载目标native 动态库</li>
+<li>调用 native 中的 JNI_OnLoad 函数</li>
+<li>创建 VM 虚拟机，加载目标 Dex 和 libs</li>
+<li>[可选] 如果不是 <code>static native</code> 方法，需要创建实例对象 jobject, 如果是 static 方法可以给 jobject 传递 NULL.</li>
+<li>开启 TCP socket server （5001端口）</li>
+</ol>
+<p>server.c 文件功能：</p>
+<ol>
+<li>绑定 TCP 服务到5001 端口， 负责从客户端接受 参数传递个解密函数。</li>
+</ol>
+<h3 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h3><p>harness  <libxx.so>   开启服务<br>decrypt_string.py</libxx.so></p>
+<p>介绍完整个使用流程，第一感觉就是复杂,每次添加目标函数都要重新编译 harness,还不如 直接 frida-hook。确实，这种方法的好处是 适合解密量较大的情况。</p>
+<p>如果要是换个 apk 破解，需要修改流程：</p>
+<ol>
+<li>找到要调用的 jni 函数，参看签名信息（是否需要创建 jobject）</li>
+<li>[可选]在 harness.c 中 创建 class 实例</li>
+<li>server.c 中修改 调用目标函数的代码。<br>注释不要删。。</li>
+</ol>
+<p>测试阶段：</p>
+<ol>
+<li>编译 apk 。。。</li>
+</ol>
+<h3 id="ChangeLog"><a href="#ChangeLog" class="headerlink" title="ChangeLog"></a>ChangeLog</h3><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-4-19</td>
+<td>创建</td>
+</tr>
+<tr>
+<td></td>
+<td>测试 art 模式</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Title: &lt;a href=&quot;https://calebfenton.github.io/2017/04/14/calling_jni_functions_with_java_object_arguments_from_the_command_line/&quot;&gt;Calling JNI Functions with Java Object Arguments from the Command Line&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Core Skill: 在 native 层创建 Android 虚拟机，并调用 jni 方法。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://calebfenton.github.io/&quot;&gt;Caleb Fenton’s Blog&lt;/a&gt;中包含很多关于 android 开发的技术，特别是虚拟机相关的技术。&lt;strong&gt;介绍的非常详细&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="public intelligence" scheme="http://yoursite.com/tags/public-intelligence/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Andorid 添加系统证书</title>
+    <link href="http://yoursite.com/2017/04/10/Andorid-%E6%B7%BB%E5%8A%A0%E7%B3%BB%E7%BB%9F%E8%AF%81%E4%B9%A6/"/>
+    <id>http://yoursite.com/2017/04/10/Andorid-添加系统证书/</id>
+    <published>2017-04-10T09:45:01.000Z</published>
+    <updated>2017-04-10T11:16:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>在 Android 上抓 HTTPs 的数据包，即使手动导入了证书还是无法 潇洒的抓包，应为手动导入的证书是用户证书，而不是系统证书。<br><a id="more"></a></p>
+<p>因为没有 逆向分析 证书管理 apk 的代码，所以我只能推测 用户态证书会被递归检测 CA 颁发机构，如果根证书不是 系统证书中标准 CA 颁发的，那么在设置代理的环境下访问 https 服务就会一直谈窗提醒证书不可信。</p>
+<h3 id="正题-–-导入系统证书"><a href="#正题-–-导入系统证书" class="headerlink" title="正题 – 导入系统证书"></a>正题 – 导入系统证书</h3><p>1.下载证书 <a href="https://www.charlesproxy.com/assets/legacy-ssl/charles.crt" target="_blank" rel="external">charles.crt</a></p>
+<p>2.push 证书到 <code>/system/etc/security/cacerts/</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#pc 上操作</span></div><div class="line">adb push  xx/xx/charles.crt  /data/<span class="built_in">local</span>/tmp</div><div class="line"></div><div class="line"><span class="comment">#mobile   上操作</span></div><div class="line">adb shell</div><div class="line">su     <span class="comment">#获取 root</span></div><div class="line">mount -o remount,rw /system</div><div class="line">cp  /data/<span class="built_in">local</span>/tmp/charles.crt   /system/etc/security/cacerts</div></pre></td></tr></table></figure></p>
+<p>3.修改文件权限<br>chmod  777 /system/etc/security/cacerts/charles.crt</p>
+<p>最后 在手机的证书管理工具中查看就 OK 了</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;在 Android 上抓 HTTPs 的数据包，即使手动导入了证书还是无法 潇洒的抓包，应为手动导入的证书是用户证书，而不是系统证书。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="捣鼓" scheme="http://yoursite.com/categories/categories-fiddle/"/>
+    
+    
+      <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
+    
+      <category term="抓包" scheme="http://yoursite.com/tags/%E6%8A%93%E5%8C%85/"/>
+    
+      <category term="https" scheme="http://yoursite.com/tags/https/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Frida Hook 操作手册</title>
+    <link href="http://yoursite.com/2017/04/10/frida%20hook%20%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C/"/>
+    <id>http://yoursite.com/2017/04/10/frida hook 操作手册/</id>
+    <published>2017-04-10T09:45:01.000Z</published>
+    <updated>2017-04-17T16:31:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>Frida 支持的系统包括：Android(root/非 root), iOS(越狱/非越狱), MacOS(关闭 SIP), Linux, Windows等<br>Frida 开发语言：JavaScript+python/C/objc<br>支持的系统版本：Android(&lt;7.1)</p>
+<p>目前除了不是很稳定外，不存在不能 hook 的函数。java/native/系统库等均可以 hook。</p>
+<a id="more"></a>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><blockquote>
+<p>adb push frida-server /data/local/tmp/<br>adb shell<br>su<br>cd /data/local/tmp/<br>chmod 777 frida-server<br>./frida-server &amp;</p>
+<p>adb forward tcp:27042 tcp:27042<br>adb forward tcp:27043 tcp:27043</p>
+</blockquote>
+<h1 id="python-amp-amp-js-开发Api"><a href="#python-amp-amp-js-开发Api" class="headerlink" title="python &amp;&amp; js 开发Api"></a>python &amp;&amp; js 开发Api</h1><p><code>import frida</code><br>导入 python 模块</p>
+<h2 id="获取-USB-设备"><a href="#获取-USB-设备" class="headerlink" title="获取 USB 设备"></a>获取 USB 设备</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">    dev = frida.get_usb_device()</div><div class="line"><span class="keyword">except</span>:</div><div class="line">    errlog(<span class="string">'没有设备'</span>)</div></pre></td></tr></table></figure>
+<p>返回 frida.core.Device 对象。<br><code>Device(id=&quot;emulator-5554&quot;, name=&quot;Android Emulator 5554&quot;, type=&#39;tether&#39;)</code></p>
+<p>还可以获取 -R(Remote设备), -D (根据设备 ID 获取)。。</p>
+<h2 id="获取进程信息（Andorid）"><a href="#获取进程信息（Andorid）" class="headerlink" title="获取进程信息（Andorid）"></a>获取进程信息（Andorid）</h2><p>命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">frida-ps -U     查看usb设备进程列表</div><div class="line">frida-ps -R     远程 frida-server 进程列表</div><div class="line">frida-ps -Ua    运行中APP 应用列表（系统 app/用户 app）</div><div class="line">frida-ps -Uai   所有已安装的 App 应用列表（系统 app/用户 app）</div></pre></td></tr></table></figure></p>
+<p>API<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">当前最前端Activity所在的进程</div><div class="line"></div><div class="line">front_app = dev.get_frontmost_application()</div><div class="line"></div><div class="line"></div><div class="line">手机所有的进程</div><div class="line"></div><div class="line">processes = dev.enumerate_processes()</div><div class="line"></div><div class="line">枚举手机所有已安装的android APP应用</div><div class="line"></div><div class="line">apps = dev.enumerate_applications()</div><div class="line"><span class="keyword">for</span> app <span class="keyword">in</span> apps:</div><div class="line">    <span class="keyword">print</span> app</div></pre></td></tr></table></figure></p>
+<h2 id="枚举某进程的模块及模块中导出的函数"><a href="#枚举某进程的模块及模块中导出的函数" class="headerlink" title="枚举某进程的模块及模块中导出的函数"></a>枚举某进程的模块及模块中导出的函数</h2><ul>
+<li>session.enumerate_modules()</li>
+<li>module.enumerate_exports()<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">枚举某个进程加载的所有模块以及模块中的导出函数，dex 中没有导出函数</div><div class="line"></div><div class="line">session = dev.attach(<span class="string">"com.tencent.mm"</span>)</div><div class="line">modules = session.enumerate_modules()</div><div class="line"><span class="keyword">for</span> module <span class="keyword">in</span> modules:</div><div class="line">    <span class="keyword">print</span> module</div><div class="line">    export_funcs = module.enumerate_exports()</div><div class="line">    <span class="keyword">print</span> <span class="string">"\tfunc_name\tRVA"</span></div><div class="line">    <span class="keyword">for</span> export_func <span class="keyword">in</span> export_funcs:</div><div class="line">        <span class="keyword">print</span> <span class="string">"\t%s\t%s"</span>%(export_func.name,hex(export_func.relative_address))</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><span id="api"></span></p>
+<h2 id="JavaScript-API-补充"><a href="#JavaScript-API-补充" class="headerlink" title="JavaScript API [补充]"></a>JavaScript API [补充]</h2><p>这里只介绍我用过的 API，详情请看<a href="https://www.frida.re/docs/javascript-api/" target="_blank" rel="external">官方文档</a></p>
+<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><p>Hook Java 虚拟机，比如 Dalvik 或者 ART</p>
+<ul>
+<li>Java.perform(fn) 只要frida 附加到目标进程的 VM 就会执行 fn 函数 (fn 是 js 函数)<br>  Java.perform(function() {…})</li>
+<li>Java.enumerateLoadedClasses(callbacks) 枚举已经加载的 Classes<br>  Java.enumerateLoadedClasses({<br>  “onMatch”: function (className) {…},<br>  “onComplete”:function(){… }<br>  })</li>
+<li>Java.use(“package.xxx.className”)     动态获取 className 对象</li>
+<li>Java.choose(“className”, callbacks)    枚举所有存活的 className 对象，并调用 callbacks 函数<br>  Java.choose(“className”, {<br>  “onMatch”: function(instance) {…},<br>  “onComplete”:function(){… }<br>  }</li>
+</ul>
+<h3 id="Interceptor"><a href="#Interceptor" class="headerlink" title="Interceptor"></a>Interceptor</h3><p>hook so/dylib native 函数</p>
+<ul>
+<li>Interceptor.attach(target, callbacks)  附加到目标函数，当target 执行到时自动调用 callbacks 中的函数<br>Interceptor.attach(target, {<br>  “onEnter”: function (args) {…},<br>  “onLeave”: function(retval){…}<br>})</li>
+</ul>
+<h3 id="全局函数"><a href="#全局函数" class="headerlink" title="全局函数"></a>全局函数</h3><ul>
+<li>setImmediate(fn)  远程附加到进程时防止超时，可以先执行脚本（等待进程启动）<br>setImmediate({<br>  console.log(“[*] Starting script”);<br>  Java.perform(function () {…}<br>})<br>测试发现 这个方法好像不起作用。。</li>
+</ul>
+<h1 id="hook-Native"><a href="#hook-Native" class="headerlink" title="hook Native"></a>hook Native</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> frida</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line"><span class="comment">#1. 获取Device 对象</span></div><div class="line">rdev = frida.get_remote_device()</div><div class="line"></div><div class="line"><span class="comment">#2. 附加到设备中指定的进程</span></div><div class="line">session = rdev.attach(<span class="string">"com.tencent.mm"</span>)</div><div class="line"></div><div class="line"><span class="comment"># 设置要 hook 的模块和 导出的函数（上一步介绍了获取方法）,然后注册 2个 hook 函数:onEnter,onLeave</span></div><div class="line">scr = <span class="string">"""</span></div><div class="line">Interceptor.attach(Module.findExportByName("libc.so" , "open"), &#123;</div><div class="line">    onEnter: function(args) &#123;</div><div class="line">        send("open("+Memory.readCString(args[0])+","+args[1]+")");</div><div class="line">    &#125;,</div><div class="line">    onLeave:function(retval)&#123;</div><div class="line">    </div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line">"""</div><div class="line"><span class="comment">#3. 创建hook 脚本</span></div><div class="line">script = session.create_script(scr)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_message</span><span class="params">(message ,data)</span>:</span></div><div class="line">    <span class="keyword">print</span> message</div><div class="line"></div><div class="line"><span class="comment">#4. 设置回掉函数</span></div><div class="line">script.on(<span class="string">"message"</span> , on_message)</div><div class="line"></div><div class="line"><span class="comment">#5. 加载 hook 脚本</span></div><div class="line">script.load()</div><div class="line"></div><div class="line"><span class="comment">#6. 终端用户交互</span></div><div class="line">sys.stdin.read()</div></pre></td></tr></table></figure>
+<h1 id="hook-Java"><a href="#hook-Java" class="headerlink" title="hook Java"></a>hook Java</h1><p>hook java 同 hook native的代码(1-6步)完全一样，只是 javascript 部分不同，下面只列出 js 部分代码。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">//设置要 hook 的 class, 重新实现 hook method,保证程序正常执行 并调用hook 前的 method.</div><div class="line"></div><div class="line">jscode = """</div><div class="line">Java.perform(function () &#123;</div><div class="line">    // Function to hook is defined here</div><div class="line">    var MainActivity = Java.use('com.example.seccon2015.rock_paper_scissors.MainActivity');</div><div class="line"></div><div class="line">    // Whenever button is clicked</div><div class="line">    MainActivity.onClick.implementation = function (v) &#123;</div><div class="line">        // Show a message to know that the function got called</div><div class="line">        send('onClick');</div><div class="line"></div><div class="line">        // Call the original onClick handler</div><div class="line">        this.onClick(v);</div><div class="line"></div><div class="line">        // Set our values after running the original onClick handler</div><div class="line">        this.m.value = 0;</div><div class="line">        this.n.value = 1;</div><div class="line">        this.cnt.value = 999;</div><div class="line"></div><div class="line">        // Log to the console that it's done, and we should have the flag!</div><div class="line">        console.log('Done:' + JSON.stringify(this.cnt));</div><div class="line">    &#125;;</div><div class="line">&#125;);</div><div class="line">"""</div></pre></td></tr></table></figure></p>
+<h1 id="使用Frida-cli-Hook-推荐"><a href="#使用Frida-cli-Hook-推荐" class="headerlink" title="使用Frida-cli Hook [推荐]"></a>使用Frida-cli Hook [推荐]</h1><p>上面是通过编写 python &amp;&amp; js 混合脚本进行 hook, 下面介绍 frida 命令(js 函数)通过 CLI hook。 这种方法更 cool， 而且使用的命令就是上面的<a href="#api">Api</a>。</p>
+<p>这里分2种情况:</p>
+<ol>
+<li>先启动一个应用，然后再让 Frida 进行附加</li>
+<li>使用 <code>-f &lt;包名&gt;</code> 参数，让 Frida 自动生成进程</li>
+</ol>
+<p><img src="/include/img/hook/frida-help.png" alt="help"></p>
+<h2 id="Frida附加进程"><a href="#Frida附加进程" class="headerlink" title="Frida附加进程"></a>Frida附加进程</h2><ol>
+<li><p>在设备上开启进程</p>
+</li>
+<li><p>执行命令load 脚本（提前编写好 js 脚本）<br><code>frida -U -l xxx.js com.tencent.mm</code><br>-l 注入脚本</p>
+</li>
+</ol>
+<p>如果进程不存在会显示BUG: <code>Failed to attach: unable to find process with name ‘com.tencent.mm’</code></p>
+<p><img src="/include/img/hook/frida-load.png" alt="frida -U -l onCreate.js com.tencent.mm"></p>
+<h3 id="hook-Taobao-android-view-View-class"><a href="#hook-Taobao-android-view-View-class" class="headerlink" title="hook Taobao android.view.View class"></a>hook Taobao android.view.View class</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">setImmediate(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"[*] Starting script"</span>);</div><div class="line">    Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        Java.choose(<span class="string">"android.view.View"</span>, &#123;</div><div class="line">             <span class="string">"onMatch"</span>:<span class="function"><span class="keyword">function</span>(<span class="params">instance</span>)</span>&#123;</div><div class="line">                  <span class="built_in">console</span>.log(<span class="string">"[*] Instance found: "</span> + instance.toString());</div><div class="line">             &#125;,</div><div class="line">             <span class="string">"onComplete"</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                  <span class="built_in">console</span>.log(<span class="string">"[*] Finished heap search"</span>)</div><div class="line">             &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p><img src="/include/img/hook/taobao.png" alt="hook View Class"></p>
+<h2 id="Frida启动应用"><a href="#Frida启动应用" class="headerlink" title="Frida启动应用"></a>Frida启动应用</h2><p>以微信为例。<br><img src="/include/img/hook/cli-2.png" alt="frida -U --no-pause -f com.tencent.mm"><br>目标应用已经启动</p>
+<p>测试<a href="https://www.frida.re/docs/javascript-api/#java" target="_blank" rel="external">文档</a>中的几个命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[USB::LGE AOSP on HammerHead::com.tencent.mm]-&gt; Java</div><div class="line">&#123;</div><div class="line">    &quot;androidVersion&quot;: &quot;6.0.1&quot;,</div><div class="line">    &quot;available&quot;: true</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Hook-android-app-Activity-的-onCreate-android-os-Bundle"><a href="#Hook-android-app-Activity-的-onCreate-android-os-Bundle" class="headerlink" title="Hook android.app.Activity 的 onCreate(android.os.Bundle)"></a>Hook android.app.Activity 的 onCreate(android.os.Bundle)</h3><ul>
+<li>overload(params)  当要 hook 的函数有多个重载函数时，使用 overload 指定函数参数</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> Activity = Java.use(<span class="string">"android.app.Activity"</span>);</div><div class="line">    Activity.onCreate.overload(<span class="string">'android.os.Bundle'</span>).implementation = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">"onCreate() got called! Let's call the original implementation"</span>);</div><div class="line">        <span class="keyword">this</span>.onCreate(<span class="built_in">arguments</span>[<span class="number">0</span>]);</div><div class="line">    &#125;;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>重写  android.app.Activity::onCreate(android.os.Bundle)函数,  overload 指定具体的 onCreate 版本。</p>
+<p><img src="/include/img/hook/oncreate.png" alt="frida cli hook onCreate"></p>
+<h3 id="列出已加载的类"><a href="#列出已加载的类" class="headerlink" title="列出已加载的类"></a>列出已加载的类</h3><p>（警告：此处会输出很多内容，后面我会解释代码的意思。）：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Java.perform(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    Java.enumerateLoadedClasses(&#123;</div><div class="line">        <span class="string">"onMatch"</span>:<span class="function"><span class="keyword">function</span>(<span class="params">className</span>)</span>&#123;</div><div class="line">             <span class="built_in">console</span>.log(className) &#125;,</div><div class="line">        <span class="string">"onComplete"</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div></pre></td></tr></table></figure></p>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><p><a href="http://bobao.360.cn/learning/detail/3634.html" target="_blank" rel="external">【技术分享】利用FRIDA攻击Android应用程序（二）</a><br>java 层破解题。</p>
+<p><a href="https://www.frida.re/docs/examples/android/" target="_blank" rel="external">Example tool built for an Android CTF</a><br><a href="https://koz.io/using-frida-on-android-without-root/" target="_blank" rel="external">非 Root 条件下，如何在 Android 上使用 Frida 框架</a><br>frida-gadget.so<br><a href="http://blog.mdsec.co.uk/2015/04/instrumenting-android-applications-with.html" target="_blank" rel="external">instrumenting-android-applications-with-frida</a><br><a href="https://github.com/frida/frida-presentations/tree/master/NLUUG2015" target="_blank" rel="external">frida-presentations</a><br><a href="https://rotlogix.com/2016/03/20/objective-c-instrumentation-with-frida/" target="_blank" rel="external">基于 Frida 框架的 Objective-C 插桩方法</a></p>
+<h1 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h1><p>介绍 javascript 之前没接触过这门语言，看 Frida 之前学习了一下语法。<br>在知乎上搜索了一些资料，最后选择了2个学习的网站：</p>
+<ul>
+<li><a href="http://weizhifeng.net/javascript-the-core.html" target="_blank" rel="external">JavaScript核心</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/javascript/operators.html" target="_blank" rel="external">极客学院 JavaScript 开发</a></li>
+</ul>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="1-对象"><a href="#1-对象" class="headerlink" title="1.对象"></a>1.对象</h4><ul>
+<li>原型对象</li>
+</ul>
+<p><code>一个对象就是一个属性集合，并拥有一个独立的prototype（原型）对象。这个prototype可以是一个对象或者null。</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var foo = &#123;</div><div class="line">  x: 10,</div><div class="line">  y: 20</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>我们拥有一个这样的结构，两个明显的自身属性和一个隐含的<strong>proto</strong>属性，这个属性是对foo原型对象的引用</p>
+<h4 id="2-变量"><a href="#2-变量" class="headerlink" title="2.变量"></a>2.变量</h4><p>有如下三类基础数据类型：</p>
+<ul>
+<li>数值类型：比如 123,120.50 等。</li>
+<li>字符串类型：比如“This text string”。</li>
+<li><p>布尔类型：比如 true or false。</p>
+</li>
+<li><p>另外两个常用类型：null 和 undefined，这两个类型均仅限定一个单一的值。</p>
+</li>
+</ul>
+<p>还支持上面介绍的 对象类型.<br><strong>注意</strong>：JAVA语言并区分整数类型与浮点类型。JavaScript 中的数值均使用浮点值来表示。同时，按照 IEEE754 标准，JavaScript 用64位浮点格式来表示数。</p>
+<p>在 JavaScript 编程过程中，必须先声明一个变量，这个变量才能被使用。<br>此外，变量是通过 “var” 来声明的，例子如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    &lt;!--</div><div class="line">    var money, type;</div><div class="line">    var name;</div><div class="line">    name = "Ali";</div><div class="line">    //--&gt;</div><div class="line">&lt;\/script&gt;</div></pre></td></tr></table></figure></p>
+<p>JavaScript 是一种无类型语言。这就是说， JavaScript 变量可以存储任何类型的值。与其他语言不同的是，我们不需要在变量声明阶段告诉变量其要存储的数据类型是什么。</p>
+<p><strong>JavaScript变量作用域</strong></p>
+<ul>
+<li>全局变量：全局变量具有全部整体范围的作用域，这意味着它可以在 JavaScript 代码任何地方定义。</li>
+<li>局部变量：局部变量仅在定义它的函数体内可以访问到。函数参数对于函数来说就是局部变量。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    &lt;!--</div><div class="line">    var myVar = "global"; // Declare a global variable</div><div class="line">    function checkscope( ) &#123;</div><div class="line">       var myVar = "local";  // Declare a local variable</div><div class="line">       document.write(myVar);</div><div class="line">    &#125;</div><div class="line">    //--&gt;</div><div class="line">&lt;\/script&gt;</div><div class="line"></div><div class="line"><span class="comment">// 输出：</span></div><div class="line"><span class="comment">//      Local</span></div></pre></td></tr></table></figure>
+<p><strong>JavaScript 保留的关键字</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abstract</td>
+<td>else</td>
+<td>instanceof</td>
+<td>switch</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>enum</td>
+<td>int</td>
+<td>synchronized</td>
+</tr>
+<tr>
+<td>break</td>
+<td>export</td>
+<td>interface</td>
+<td>this</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>extends</td>
+<td>long</td>
+<td>throw</td>
+</tr>
+<tr>
+<td>case</td>
+<td>FALSE</td>
+<td>native</td>
+<td>throws</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>final</td>
+<td>new</td>
+<td>transient</td>
+</tr>
+<tr>
+<td>char</td>
+<td>finally</td>
+<td>null</td>
+<td>TRUE</td>
+</tr>
+<tr>
+<td>class</td>
+<td>float</td>
+<td>package</td>
+<td>try</td>
+</tr>
+<tr>
+<td>const</td>
+<td>for</td>
+<td>private</td>
+<td>typeof</td>
+</tr>
+<tr>
+<td>continue</td>
+<td>function</td>
+<td>protected</td>
+<td>var</td>
+</tr>
+<tr>
+<td>debugger</td>
+<td>goto</td>
+<td>public</td>
+<td>void</td>
+</tr>
+<tr>
+<td>default</td>
+<td>if</td>
+<td>return</td>
+<td>volatile</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>implements</td>
+<td>short</td>
+<td>while</td>
+</tr>
+<tr>
+<td>do</td>
+<td>import</td>
+<td>static</td>
+<td>with</td>
+</tr>
+<tr>
+<td>double</td>
+<td>in</td>
+<td>super</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-运算符"><a href="#3-运算符" class="headerlink" title="3.运算符"></a>3.运算符</h4><ul>
+<li><p>&lt;&lt;  称为按位左移运算符。它把第一个运算数的所有二进制位向左移动第二个运算数指定的位数，而新的二进制位补0。将一个数向左移动一个二进制位相当于将该数乘以2，向左移动两个二进制位相当于将该数乘以4，以此类推。    A &lt;&lt; 1 = 4.</p>
+</li>
+<li><p>‘&gt;&gt;’  称为按位右移运算符。它把第一个运算数的所有二进制位向右移动第二个运算数指定的位数。为了保持运算结果的符号不变，左边二进制位补0或1取决于原参数的符号位。如果第一个运算数是正的，运算结果最高位补0；如果第一个运算数是负的，运算结果最高位补1。将一个数向右移动一位相当于将该数乘以2，向右移动两位相当于将该数乘以4，以此类推。   A &gt;&gt; 1 = 1.</p>
+</li>
+<li><p>‘&gt;&gt;&gt;’ 称为0补最高位无符号右移运算符。这个运算符与&gt;&gt;运算符相像，除了位移后左边总是补0.  A &gt;&gt;&gt; = 1.</p>
+</li>
+</ul>
+<h4 id="4-函数"><a href="#4-函数" class="headerlink" title="4.函数"></a>4.函数</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">* 定义函数：</div><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    &lt;!--</div><div class="line">    function functionname(parameter-list)</div><div class="line">    &#123;</div><div class="line">        statements</div><div class="line">    &#125;</div><div class="line">    //--&gt;</div><div class="line">&lt;\/script&gt;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>知识的搬运工今天都当到这里，剩下的就是 Coding</p>
+</blockquote>
+<p>Reference:</p>
+<p><a href="http://zhiwei.li/text/2016/03/22/frida-hook%E9%87%8D%E8%BD%BD%E5%87%BD%E6%95%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E5%86%99%E6%B3%95/" target="_blank" rel="external">overload 用法</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Frida 支持的系统包括：Android(root/非 root), iOS(越狱/非越狱), MacOS(关闭 SIP), Linux, Windows等&lt;br&gt;Frida 开发语言：JavaScript+python/C/objc&lt;br&gt;支持的系统版本：Android(&amp;lt;7.1)&lt;/p&gt;
+&lt;p&gt;目前除了不是很稳定外，不存在不能 hook 的函数。java/native/系统库等均可以 hook。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="研究" scheme="http://yoursite.com/categories/categories-research/"/>
+    
+    
+      <category term="hook" scheme="http://yoursite.com/tags/hook/"/>
+    
+      <category term="frida" scheme="http://yoursite.com/tags/frida/"/>
+    
+  </entry>
   
   <entry>
     <title>Android ELF 文件加壳</title>
@@ -208,9 +626,9 @@
       <category term="逆向" scheme="http://yoursite.com/categories/%E9%80%86%E5%90%91/"/>
     
     
-      <category term="ios" scheme="http://yoursite.com/tags/ios/"/>
-    
       <category term="public intelligence" scheme="http://yoursite.com/tags/public-intelligence/"/>
+    
+      <category term="ios" scheme="http://yoursite.com/tags/ios/"/>
     
       <category term="cocoa app" scheme="http://yoursite.com/tags/cocoa-app/"/>
     
@@ -274,9 +692,9 @@
       <category term="开发" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
     
     
-      <category term="xnu" scheme="http://yoursite.com/tags/xnu/"/>
-    
       <category term="kext" scheme="http://yoursite.com/tags/kext/"/>
+    
+      <category term="xnu" scheme="http://yoursite.com/tags/xnu/"/>
     
       <category term="c" scheme="http://yoursite.com/tags/c/"/>
     
@@ -983,12 +1401,12 @@
     <link href="http://yoursite.com/2017/03/06/%E6%B5%85%E8%B0%88CVE-2016-4625-exploit/"/>
     <id>http://yoursite.com/2017/03/06/浅谈CVE-2016-4625-exploit/</id>
     <published>2017-03-06T06:54:26.000Z</published>
-    <updated>2017-03-09T16:29:18.000Z</updated>
+    <updated>2017-03-31T09:18:49.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
 <hr>
 <p>(本人第一次接触 OSX 系统，这篇文章对我来说难度还是比较大的，本人水平有限文章难免有错，请路过的大牛多多指点，轻拍)</p>
-<p>本文是为分析 yalu102越狱工具做铺垫，这个漏洞并没有在 yalu越狱中被使用，因为这个漏洞是 macOS 中的。<br>分析本文是为了学习 XNU 中 task 结构体存在的分险并且结合 port 来实现提权的原理。</p>
+<p>本文是为分析 yalu102越狱工具做铺垫，这个漏洞并没有在 yalu越狱中被使用，因为这个漏洞是 macOS 中的。<br>分析本文是为了学习 XNU 中 task 结构体存在的分险并且结合 port 来实现提权的原理。<br>文中的 exploit 提权代码来自 <a href="/include/code/surfacer00t.c">surfacer00t</a></p>
 <a id="more"></a>
 <p>预备知识：</p>
 <ul>
@@ -1073,9 +1491,15 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
 <li>还有就是资料中用 IDA反编译 IOSurface.text 时怎么获取的结构体信息，这个模块是没有源代码的，有什么逆向的技巧吗？</li>
 </ul>
 <h4 id="CVE-2016-4625-的前途："><a href="#CVE-2016-4625-的前途：" class="headerlink" title="CVE-2016-4625 的前途："></a>CVE-2016-4625 的前途：</h4><p>由于除了root以外，这个bug也允许我们获得其他任何权限，所以很容易利用它来绕过OS X上的内核代码签名，并加载一个未签名的内核扩展<a href="https://googleprojectzero.blogspot.jp/2016/03/race-you-to-kernel.html" target="_blank" rel="external">4</a></p>
+<h4 id="补上一张图（本应该手绘的，但是手太笨）"><a href="#补上一张图（本应该手绘的，但是手太笨）" class="headerlink" title="补上一张图（本应该手绘的，但是手太笨）"></a>补上一张图（本应该手绘的，但是手太笨）</h4><p><img src="/include/img/4625/surfacer00t.png" alt="surfacer00t"></p>
+<h4 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h4><p>继续深入学习以下几点的 源代码：</p>
+<ul>
+<li>mach port</li>
+<li>IOKit 驱动框架代码 &amp;&amp; 开发 （IOSurfaceRoot 案例）</li>
+<li>IOSurfaceRoot 建立内存映射，最后返回的地址所指内存是哪里？<br>下一篇文章《深入学习 CVE-2016-4625》</li>
+</ul>
 <h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>测试机：Mac Mini<br>系统版本：OS X EI capitan 10.11.2</p>
 <p><img src="/include/img/4625/test.jpg" alt="test"></p>
-<h3 id="snippet"><a href="#snippet" class="headerlink" title="snippet"></a>snippet</h3><p>…</p>
 <h3 id="ChangeLog"><a href="#ChangeLog" class="headerlink" title="ChangeLog"></a>ChangeLog</h3><table>
 <thead>
 <tr>
@@ -1102,7 +1526,7 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
       &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;(本人第一次接触 OSX 系统，这篇文章对我来说难度还是比较大的，本人水平有限文章难免有错，请路过的大牛多多指点，轻拍)&lt;/p&gt;
-&lt;p&gt;本文是为分析 yalu102越狱工具做铺垫，这个漏洞并没有在 yalu越狱中被使用，因为这个漏洞是 macOS 中的。&lt;br&gt;分析本文是为了学习 XNU 中 task 结构体存在的分险并且结合 port 来实现提权的原理。&lt;/p&gt;
+&lt;p&gt;本文是为分析 yalu102越狱工具做铺垫，这个漏洞并没有在 yalu越狱中被使用，因为这个漏洞是 macOS 中的。&lt;br&gt;分析本文是为了学习 XNU 中 task 结构体存在的分险并且结合 port 来实现提权的原理。&lt;br&gt;文中的 exploit 提权代码来自 &lt;a href=&quot;/include/code/surfacer00t.c&quot;&gt;surfacer00t&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
@@ -1539,163 +1963,6 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
       <category term="动态调试" scheme="http://yoursite.com/tags/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95/"/>
     
       <category term="Armv8-64" scheme="http://yoursite.com/tags/Armv8-64/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>配置hexo + github page 个人Blog</title>
-    <link href="http://yoursite.com/2017/01/22/%E9%85%8D%E7%BD%AEhexo-github-page-%E4%B8%AA%E4%BA%BABlog/"/>
-    <id>http://yoursite.com/2017/01/22/配置hexo-github-page-个人Blog/</id>
-    <published>2017-01-22T04:52:26.000Z</published>
-    <updated>2017-03-09T16:42:40.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
-<hr>
-<h2 id="基础配置（一）"><a href="#基础配置（一）" class="headerlink" title="基础配置（一）"></a>基础配置（一）</h2><h3 id="工具安装"><a href="#工具安装" class="headerlink" title="工具安装"></a>工具安装</h3><a id="more"></a>
-<p>1.install nodejs-v6.9.4</p>
-<pre><code>下载zip package
-</code></pre><ol>
-<li>安装Nodejs<br> ubuntu: <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install nodejs</div><div class="line"><span class="comment">#检查版本</span></div><div class="line">node -v</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>如果nodejs 版本不是 <strong>v6.9.4</strong>,那么需要去官网下载按照包：</p>
-<p>安装release版 <a href="http://www.ctolib.com/topics-106467.html" target="_blank" rel="external">Nodejs</a></p>
-<blockquote>
-<p>如果命令行下载不了 nodejs:<br>安装过程 官网下载好，解压。终端 mv node-v6.9.4-linux-x64 /opt/ 输入命令：sudo chmod 777 /etc/profile，进入目录下，备份一下，这里我是用 sublime text 打<br>开的，在末尾添加以下三行：</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> NODE_HOME=/opt/node-v6.9.4-linux-x64</div><div class="line"><span class="built_in">export</span> PATH=PATH:PATH:NODE_HOME/bin</div><div class="line"><span class="built_in">export</span> NODE_PATH=<span class="variable">$NODE_HOME</span>/lib/node_modules</div></pre></td></tr></table></figure>
-<blockquote>
-<p>之后按保存退出 在命令行输入：source /etc/profile，然后在命令行输入：node -v，返回版本信息v6.9.4，说明环境变量配置就生效了；但，你会发现进入root账户，改配置并没有生效 在命令行输入：sudo chmod 777 /root/.bashrc,进入所在目录，备份好文件，并在文件末尾加入一行source /etc/profile命令，保存。这样就大功告成了。 操作完后记得将权限改回去。</p>
-</blockquote>
-<p>3.install nodejs-legacy</p>
-<pre><code>sudo apt-get install nodejs-legacy
-</code></pre><p>4.install hexo</p>
-<pre><code>sudo npm install -g hexo-cli --registry=https://registry.npm.taobao.org
-</code></pre><h3 id="配置Hexo"><a href="#配置Hexo" class="headerlink" title="配置Hexo"></a>配置Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir <span class="variable">$Blog</span>-name &amp;&amp; <span class="built_in">cd</span> <span class="variable">$Blog</span>-name</div><div class="line">hexo init <span class="variable">$blog</span></div><div class="line"><span class="built_in">cd</span> <span class="variable">$blog</span></div></pre></td></tr></table></figure>
-<h3 id="Hexo-用法"><a href="#Hexo-用法" class="headerlink" title="Hexo 用法"></a>Hexo 用法</h3><ol>
-<li><p>常用命令列表：</p>
-<ol>
-<li><strong>~ generate <g>        #生成静态文件</g></strong></li>
-<li><strong>~ server <s>          #本地预览环境</s></strong></li>
-<li><strong>~ new “paper name”    #创建博文</strong></li>
-<li><strong>~ deploy <d>          #部署</d></strong></li>
-<li>~ new page “page name”  #创建页面<br>本地测试在浏览器中打开 localhost:4000</li>
-</ol>
-</li>
-<li><p>Hexo根目录结构</p>
-</li>
-</ol>
-<ul>
-<li><p>需要上传到 source repo 的文件</p>
-<p>  #全局配置文件，站点基本信息(title/subtitle/author/..), 主题 …<br>  -rw-rw-r–  1 floatg floatg 1.5K  1月 21 16:51 _config.yml</p>
-<p>  #所有博文都在source/目录下<br>  drwxrwxr-x  3 floatg floatg 4.0K  1月 21 16:51 source<br>  drwxrwxr-x  2 floatg floatg 4.0K  1月 21 16:51 scaffolds<br>  -rw-rw-r–  1 floatg floatg  448  1月 21 17:07 package.json</p>
-<p>  #所有可以使用的主题都在这个目录下，每个主题对应一个文件夹<br>  drwxrwxr-x  4 floatg floatg 4.0K  1月 21 17:17 themes<br>  -rw-r–r–  1 floatg floatg  77B  1 23 15:39 .gitignore</p>
-</li>
-<li><p>.gitignore 过滤的文件</p>
-<p>  -rw-rw-r–  1 floatg floatg  24K  1月 21 17:07 db.json<br>  drwxrwxr-x 12 floatg floatg 4.0K  1月 21 16:53 node_modules<br>  drwxrwxr-x  7 floatg floatg 4.0K  1月 21 17:07 public<br>  drwxr-xr-x   17 floatg  floatg   578B  1 23 15:16 .deploy_git</p>
-</li>
-</ul>
-<p>#本地测试脚本<br>    -rwxr-xr-x    1 floatg  floatg    91B  1 23 14:38 rtest.sh<br>    -rw-r–r–@   1 floatg  floatg   6.0K  1 23 14:55 .DS_Store</p>
-<h3 id="切换主题"><a href="#切换主题" class="headerlink" title="切换主题"></a>切换主题</h3><p>目前 我找到的主题比较少，只有默认的landscape 和huno，较喜欢huno。</p>
-<ol>
-<li><p>下载主题</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> themes</div><div class="line">git <span class="built_in">clone</span> git@github.com:someus/huno.git</div></pre></td></tr></table></figure>
-</li>
-<li><p>分析主题</p>
-<ol>
-<li>cyanstyle 可以设置背景图片,并且page主体是一个半透明的theme, 建议背景图片搞一个深色的图</li>
-<li>huno  左右布局，极简风格，category,目录等基本功能齐全</li>
-<li>landscape 上下布局</li>
-<li>icarus  感觉是设计，艺术风，推荐给@Alian。 这个主体还有一些<a href="https://github.com/ppoffice/hexo-theme-icarus/issues" target="_blank" rel="external">bug</a>,测试的时候存在显示<a href="https://github.com/ppoffice/hexo-theme-icarus/wiki" target="_blank" rel="external">问题</a></li>
-<li>aero-dual  上下布局，喜欢配色</li>
-<li>yelee    很喜欢， 冬天显示列表+目录</li>
-<li>xnew      目录+归档–按日期排列</li>
-<li>GhoSadillaX  使用中</li>
-</ol>
-</li>
-</ol>
-<h2 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h2><p>(更多内容)[<a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">http://ibruce.info/2013/11/22/hexo-your-blog/</a>]<br>(统计)[<a href="http://busuanzi.ibruce.info/" target="_blank" rel="external">http://busuanzi.ibruce.info/</a>]</p>
-<p>hexo config review<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">hexo: 3.2.2</div><div class="line">hexo-cli: 1.0.2</div><div class="line">os: Linux 4.x.x-xx-generic linux xxx</div><div class="line">http_parser: 1.0</div><div class="line">node: 0.10.25</div><div class="line">v8: 3.xx.5.9</div><div class="line">ares: 1.10.0</div><div class="line">uv: 0.10.23</div><div class="line">zlib: 1.2.8</div><div class="line">modules: 11</div><div class="line">openssl: x.x.xf</div></pre></td></tr></table></figure></p>
-<h2 id="夸主机同步-Blog"><a href="#夸主机同步-Blog" class="headerlink" title="夸主机同步 Blog"></a>夸主机同步 Blog</h2><h3 id="CI辅助自动部署"><a href="#CI辅助自动部署" class="headerlink" title="CI辅助自动部署"></a>CI辅助自动部署</h3><p>参考文章:<br><a href="http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/" target="_blank" rel="external">http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/</a><br><a href="https://formulahendry.github.io/2016/12/04/hexo-ci/" target="_blank" rel="external">https://formulahendry.github.io/2016/12/04/hexo-ci/</a></p>
-<p>我首先尝试了使用appveyor 做CI的办法，效果不尽如人意。主要的问题在：</p>
-<pre><code>1. nodejs, hexo的版本和我本地不同，导致命令 解析都不一样。解决办法：可以在yml中下载制定版本
-2. 使用作者的yml, 直接把我content repo下的内容删除了连site都打不开了。
-3. 执行速度很慢，push完成以后貌似要到[appveyor管理页面](https://ci.appveyor.com/project/FloatingGuy/floatingguy-github-io)去点击 **new build** 才能执行下去。
-</code></pre><p>虽然有一些bug，不过还是蛮有趣的产品。先说下原理，再说下大概的步骤：</p>
-<ol>
-<li><p>原理：CI工具(这里是appveyor)会监控代码管理(github)中指定repo的commit记录, 发现有新的commit 就会将代码拉取到CI主机上，然后去执行repo根目录下的appveyor.yml中的命令。</p>
-</li>
-<li><p>步骤:</p>
-<ol>
-<li>open appveyor <a href="https://ci.appveyor.com/projects" target="_blank" rel="external">projects page</a></li>
-<li>create new projects, choose Github, source-code repo (支持的所有代码管理工具)</li>
-<li>add appveyor.yml to source-code repo root directory</li>
-<li>get Token from <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/" target="_blank" rel="external">Github</a></li>
-<li>CI platform to <a href="https://ci.appveyor.com/tools/encrypt" target="_blank" rel="external">encrypt Token page</a></li>
-<li>set CI environment<ul>
-<li>STATIC_SITE_REPO    – github content repo</li>
-<li>TARGET_BRANCH       – content repo branch</li>
-<li>GIT_USER_EMAIL      – github account</li>
-<li>GIT_USER_NAME       – github username</li>
-</ul>
-</li>
-<li>oK,  you can using your blog， finally push source repo</li>
-<li><strong>Debug</strong> project page can monitor appveyor.yml file <a href="https://ci.appveyor.com/project/FloatingGuy/floatingguy-github-io" target="_blank" rel="external">console</a></li>
-</ol>
-</li>
-</ol>
-<p><del>最终没有找到好的解决办法,目前就先这样啦,等找到办法了再来更新</del></p>
-<h3 id="github-托管-source"><a href="#github-托管-source" class="headerlink" title="github 托管 source"></a>github 托管 source</h3><p>原理就是将常用电脑上的 blog根目录下建立 git仓库(source repo)，然后注意哪些文件要上传，哪些不能上传。以后可以在任意一台电脑上将 source repo clone 到本地，然后按照下面的步骤来配置。<br>步骤：</p>
-<ol>
-<li>安装 node-v6.9.4</li>
-<li>clone 到本地以后，进入 repo目录然后安装工具&amp;模块。</li>
-<li><p>执行下面的命令就可以配置好 hexo</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">npm install hexo --save</div><div class="line">npm install</div><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
-</li>
-<li><p>下面就是测试 server,generate,deploy命令了</p>
-</li>
-</ol>
-<p>再来总结一下哪些文件需要上传，哪些不能上传：<br>上传:</p>
-<pre><code>* _config.yml
-* theme/
-* source/
-* scaffolds/
-* package.json
-* .gitignore
-</code></pre><p>theme 下所有的.git/目录要删除，.gitignore 根据需要做修改。</p>
-<p>不上传:</p>
-<pre><code>* .git/
-* db.json
-* node_modules/
-* public/
-* .deploy_git/
-</code></pre><blockquote>
-<p>我遇到的坑, 在使用 GhoSadillaX 主题时，因为其gitignore 不上传_config.yml, 导致在 mac 上测试一直显示 duoshao 没配置short_name, 最后还是把 theme下的_config.yml找回来才解决。</p>
-</blockquote>
-<h3 id="hexo-博文设置-密码验证"><a href="#hexo-博文设置-密码验证" class="headerlink" title="hexo 博文设置 密码验证"></a>hexo 博文设置 密码验证</h3><p>首先，我们要了解 hexo 支持 markdown和javascript 混合编程。那么要实现对 单独的blog 加密，就可以在md 文件中嵌入一段校验密码的 js代码，如果要对所有的 blog 加密可以在 theme 中的 layout/_partial/header.ejs文件中添加一段校验密码的 js代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    <span class="keyword">if</span>( prompt(<span class="string">"Please input password"</span>) !== <span class="built_in">String</span>(&#123;&#123; password &#125;&#125;) )</div><div class="line">    &#123;</div><div class="line">        alert(<span class="string">'密码错误！'</span>);</div><div class="line">        self.location=<span class="string">'http://localhost:4000/about/'</span>;</div><div class="line">        <span class="comment">// history.back();</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        alert(<span class="string">"密码正确"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
-<p>password 可以在 md文件头部设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: xxx</div><div class="line">date: 2017-</div><div class="line">tags:  [xx,zz]</div><div class="line">categories:</div><div class="line">password: password</div><div class="line">---</div></pre></td></tr></table></figure></p>
-<h2 id="辅助脚本"><a href="#辅助脚本" class="headerlink" title="辅助脚本"></a>辅助脚本</h2><h3 id="本地测试脚本"><a href="#本地测试脚本" class="headerlink" title="本地测试脚本"></a>本地测试脚本</h3><p>rtest.sh<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Bhome=/home/floatg/data/FG-B<span class="built_in">log</span>/hexo/blog</div><div class="line">killall -9 hexo</div><div class="line"><span class="built_in">cd</span> <span class="variable">$Bhome</span></div><div class="line">hexo g</div><div class="line">hexo s</div></pre></td></tr></table></figure></p>
-<h3 id="gitignore-内容"><a href="#gitignore-内容" class="headerlink" title=".gitignore 内容"></a>.gitignore 内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.DS_Store</div><div class="line">*.log</div><div class="line">/.deploy*</div><div class="line">/_config.yml</div><div class="line">node_modules/</div><div class="line">public/</div><div class="line">rtest.sh</div><div class="line">db.json</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;基础配置（一）&quot;&gt;&lt;a href=&quot;#基础配置（一）&quot; class=&quot;headerlink&quot; title=&quot;基础配置（一）&quot;&gt;&lt;/a&gt;基础配置（一）&lt;/h2&gt;&lt;h3 id=&quot;工具安装&quot;&gt;&lt;a href=&quot;#工具安装&quot; class=&quot;headerlink&quot; title=&quot;工具安装&quot;&gt;&lt;/a&gt;工具安装&lt;/h3&gt;
-    
-    </summary>
-    
-      <category term="捣鼓" scheme="http://yoursite.com/categories/categories-fiddle/"/>
-    
-    
-      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
-    
-      <category term="AppVeyor" scheme="http://yoursite.com/tags/AppVeyor/"/>
-    
-      <category term="CI" scheme="http://yoursite.com/tags/CI/"/>
-    
-      <category term="Git" scheme="http://yoursite.com/tags/Git/"/>
     
   </entry>
   
