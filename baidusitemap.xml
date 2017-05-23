@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/05/18/%E5%BC%80%E5%8F%91/C%E5%86%85%E6%95%9B%E6%B1%87%E7%BC%96/</loc>
+    <lastmod>2017-05-23T13:36:49.000Z</lastmod>
+    <data>
+        <display>
+        <title>C内敛汇编</title>
+        <pubTime>2017-05-18T07:01:39.000Z</pubTime>
+        
+        <tag>C</tag>
+         
+         
+           
+             
+              <breadCrumb title="开发" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/04/10/%E5%BC%80%E5%8F%91/frida%20hook%20%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C/</loc>
-    <lastmod>2017-05-10T17:54:48.000Z</lastmod>
+    <lastmod>2017-05-23T13:33:32.000Z</lastmod>
     <data>
         <display>
         <title>Frida Hook 操作手册</title>
@@ -26,28 +46,8 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/05/03/CIA-%E6%AD%A6%E5%99%A8%E5%BA%93/</loc>
-    <lastmod>2017-05-09T03:43:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>CIA 武器库</title>
-        <pubTime>2017-05-03T00:53:14.000Z</pubTime>
-        
-        <tag>CIA</tag>
-         
-         
-           
-             
-              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/04/30/%E5%BC%80%E5%8F%91/%E6%B5%85%E8%B0%88Tweak-%E5%BC%80%E5%8F%91/</loc>
-    <lastmod>2017-05-09T02:33:20.000Z</lastmod>
+    <lastmod>2017-05-23T13:29:45.000Z</lastmod>
     <data>
         <display>
         <title>浅谈Tweak 开发</title>
@@ -68,8 +68,167 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/05/17/%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E6%8A%80%E6%9C%AF%E5%86%99%E4%BD%9C%E6%B0%B4%E5%B9%B3%EF%BC%9F/</loc>
+    <lastmod>2017-05-23T13:28:22.000Z</lastmod>
+    <data>
+        <display>
+        <title>如何提高技术类文章写作水平？</title>
+        <pubTime>2017-05-17T06:31:30.000Z</pubTime>
+        
+        <tag>软实力</tag>
+         
+         
+           
+             
+              <breadCrumb title="生活" url="http://yoursite.com/categories/categories-life/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/05/23/Needle%E5%88%9D%E6%8E%A2/</loc>
+    <lastmod>2017-05-23T13:26:10.000Z</lastmod>
+    <data>
+        <display>
+        <title>Needle初探</title>
+        <pubTime>2017-05-23T13:24:31.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/04/19/%E6%95%99%E7%A8%8B/%E7%8E%A9%E8%BD%AC-android-%E8%99%9A%E6%8B%9F%E6%9C%BA/</loc>
+    <lastmod>2017-05-23T13:23:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>玩转 android 虚拟机</title>
+        <pubTime>2017-04-19T07:38:47.000Z</pubTime>
+        
+        <tag>public intelligence</tag>
+         
+         
+           
+             
+              <breadCrumb title="逆向" url="http://yoursite.com/categories/%E9%80%86%E5%90%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/05/22/Aflred-%E5%88%9B%E5%BB%BAworkflows/</loc>
+    <lastmod>2017-05-23T13:22:21.000Z</lastmod>
+    <data>
+        <display>
+        <title>Aflred 创建workflows</title>
+        <pubTime>2017-05-22T04:49:30.000Z</pubTime>
+        
+        <tag>Tools</tag>
+         
+         
+           
+             
+              <breadCrumb title="捣鼓" url="http://yoursite.com/categories/categories-fiddle/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/05/22/Bug-pip-%E5%AE%89%E8%A3%85module%E7%9A%84bug/</loc>
+    <lastmod>2017-05-23T13:21:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>[Bug] pip 安装module的bug</title>
+        <pubTime>2017-05-22T06:17:39.000Z</pubTime>
+        
+        <tag>bug</tag>
+         
+         
+           
+             
+              <breadCrumb title="捣鼓" url="http://yoursite.com/categories/categories-fiddle/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/05/15/Android-ART-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%E6%A1%86%E6%9E%B6-%E6%A8%A1%E5%9D%97/</loc>
+    <lastmod>2017-05-23T13:18:53.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android ART 虚拟机学习(一) -- 框架/模块</title>
+        <pubTime>2017-05-15T14:03:37.000Z</pubTime>
+        
+        <tag>ART虚拟机</tag>
+         
+        <tag>Android OS</tag>
+         
+         
+           
+             
+              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/04/19/%E3%80%8A%E4%B8%89%E4%BD%93%E3%80%8B/</loc>
+    <lastmod>2017-05-23T13:14:24.000Z</lastmod>
+    <data>
+        <display>
+        <title>《三体》</title>
+        <pubTime>2017-04-19T08:05:17.000Z</pubTime>
+        
+        <tag>小说</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书" url="http://yoursite.com/categories/%E8%AF%BB%E4%B9%A6/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/05/15/CVE-2017-0601-Android-%E8%93%9D%E7%89%99app-%E6%BC%8F%E6%B4%9E/</loc>
+    <lastmod>2017-05-20T04:37:24.000Z</lastmod>
+    <data>
+        <display>
+        <title>CVE-2017-0601 Android 蓝牙app 漏洞</title>
+        <pubTime>2017-05-15T03:54:55.000Z</pubTime>
+        
+        <tag>app漏洞</tag>
+         
+        <tag>蓝牙</tag>
+         
+         
+           
+             
+              <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/02/08/iOS-roadMap/</loc>
-    <lastmod>2017-05-08T02:37:52.000Z</lastmod>
+    <lastmod>2017-05-20T04:37:24.000Z</lastmod>
     <data>
         <display>
         <title>iOS RoadMap</title>
@@ -90,32 +249,14 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/04/28/%E5%BC%80%E5%8F%91/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84UDID%E5%92%8CUUID/</loc>
-    <lastmod>2017-04-28T03:38:16.000Z</lastmod>
+    <loc>http://yoursite.com/2017/05/03/CIA-%E6%AD%A6%E5%99%A8%E5%BA%93/</loc>
+    <lastmod>2017-05-20T04:37:24.000Z</lastmod>
     <data>
         <display>
-        <title>iOS开发中的UDID和UUID</title>
-        <pubTime>2017-04-28T02:34:24.000Z</pubTime>
+        <title>CIA 武器库</title>
+        <pubTime>2017-05-03T00:53:14.000Z</pubTime>
         
-         
-           
-             
-              <breadCrumb title="开发" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/04/27/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/CVE-2017-0561-%E9%AB%98%E9%80%9Awifi-soc%E7%9A%84RCE%E6%94%BB%E5%87%BB%E6%A1%88%E4%BE%8B/</loc>
-    <lastmod>2017-04-28T02:48:38.000Z</lastmod>
-    <data>
-        <display>
-        <title>CVE-2017-0561高通wifi-soc的RCE攻击案例</title>
-        <pubTime>2017-04-27T02:40:57.000Z</pubTime>
-        
-        <tag>pi</tag>
+        <tag>CIA</tag>
          
          
            
@@ -128,17 +269,18 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/04/19/%E6%95%99%E7%A8%8B/%E7%8E%A9%E8%BD%AC-android-%E8%99%9A%E6%8B%9F%E6%9C%BA/</loc>
-    <lastmod>2017-04-28T02:48:38.000Z</lastmod>
+    <loc>http://yoursite.com/2017/04/28/%E5%BC%80%E5%8F%91/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84UDID%E5%92%8CUUID/</loc>
+    <lastmod>2017-05-20T04:37:24.000Z</lastmod>
     <data>
         <display>
-        <title>玩转 android 虚拟机</title>
-        <pubTime>2017-04-19T07:38:47.000Z</pubTime>
+        <title>iOS开发中的UDID和UUID</title>
+        <pubTime>2017-04-28T02:34:24.000Z</pubTime>
         
-        <tag>public intelligence</tag>
-         
          
            
+             
+              <breadCrumb title="开发" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+          
         </display>
     </data>
     </url>
@@ -162,6 +304,30 @@
            
              
               <breadCrumb title="开发" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/03/16/%E6%95%99%E7%A8%8B/%E9%80%86%E5%90%91%E5%88%86%E6%9E%90-cocoa-App/</loc>
+    <lastmod>2017-04-28T02:48:38.000Z</lastmod>
+    <data>
+        <display>
+        <title>逆向分析 cocoa App</title>
+        <pubTime>2017-03-16T05:50:01.000Z</pubTime>
+        
+        <tag>public intelligence</tag>
+         
+        <tag>ios</tag>
+         
+        <tag>cocoa app</tag>
+         
+         
+           
+             
+              <breadCrumb title="逆向" url="http://yoursite.com/categories/%E9%80%86%E5%90%91/"/>
           
         </display>
     </data>
@@ -211,23 +377,19 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/03/16/%E6%95%99%E7%A8%8B/%E9%80%86%E5%90%91%E5%88%86%E6%9E%90-cocoa-App/</loc>
+    <loc>http://yoursite.com/2017/04/27/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/CVE-2017-0561-%E9%AB%98%E9%80%9Awifi-soc%E7%9A%84RCE%E6%94%BB%E5%87%BB%E6%A1%88%E4%BE%8B/</loc>
     <lastmod>2017-04-28T02:48:38.000Z</lastmod>
     <data>
         <display>
-        <title>逆向分析 cocoa App</title>
-        <pubTime>2017-03-16T05:50:01.000Z</pubTime>
+        <title>CVE-2017-0561高通wifi-soc的RCE攻击案例</title>
+        <pubTime>2017-04-27T02:40:57.000Z</pubTime>
         
-        <tag>public intelligence</tag>
-         
-        <tag>ios</tag>
-         
-        <tag>cocoa app</tag>
+        <tag>pi</tag>
          
          
            
              
-              <breadCrumb title="逆向" url="http://yoursite.com/categories/%E9%80%86%E5%90%91/"/>
+              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
           
         </display>
     </data>
@@ -253,21 +415,6 @@
              
               <breadCrumb title="捣鼓" url="http://yoursite.com/categories/categories-fiddle/"/>
           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/04/19/%E3%80%8A%E4%B8%89%E4%BD%93%E3%80%8B/</loc>
-    <lastmod>2017-04-19T09:13:44.000Z</lastmod>
-    <data>
-        <display>
-        <title>《三体》</title>
-        <pubTime>2017-04-19T08:05:17.000Z</pubTime>
-        
-         
-           
         </display>
     </data>
     </url>
@@ -416,26 +563,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/02/08/2016-Pwnie-Awards/</loc>
-    <lastmod>2017-03-09T16:42:40.000Z</lastmod>
-    <data>
-        <display>
-        <title>2016 Pwnie Awards</title>
-        <pubTime>2017-02-08T05:01:24.000Z</pubTime>
-        
-        <tag>blackhat-2016</tag>
-         
-         
-           
-             
-              <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/01/22/%E9%85%8D%E7%BD%AEhexo-github-page-%E4%B8%AA%E4%BA%BABlog/</loc>
     <lastmod>2017-03-09T16:42:40.000Z</lastmod>
     <data>
@@ -455,6 +582,26 @@
            
              
               <breadCrumb title="捣鼓" url="http://yoursite.com/categories/categories-fiddle/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/08/2016-Pwnie-Awards/</loc>
+    <lastmod>2017-03-09T16:42:40.000Z</lastmod>
+    <data>
+        <display>
+        <title>2016 Pwnie Awards</title>
+        <pubTime>2017-02-08T05:01:24.000Z</pubTime>
+        
+        <tag>blackhat-2016</tag>
+         
+         
+           
+             
+              <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
           
         </display>
     </data>
@@ -501,24 +648,6 @@
            
              
               <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/02/04/happy-new-year/</loc>
-    <lastmod>2017-03-09T16:04:46.000Z</lastmod>
-    <data>
-        <display>
-        <title>happy new year</title>
-        <pubTime>2017-02-03T17:32:43.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="生活" url="http://yoursite.com/categories/categories-life/"/>
           
         </display>
     </data>
