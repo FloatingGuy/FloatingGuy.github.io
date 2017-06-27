@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-06-21T06:35:49.000Z</updated>
+  <updated>2017-06-27T06:49:42.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,146 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【调研】微信企业版</title>
+    <link href="http://yoursite.com/2017/06/27/%E3%80%90%E8%B0%83%E7%A0%94%E3%80%91%E5%BE%AE%E4%BF%A1%E4%BC%81%E4%B8%9A%E7%89%88/"/>
+    <id>http://yoursite.com/2017/06/27/【调研】微信企业版/</id>
+    <published>2017-06-27T06:29:07.000Z</published>
+    <updated>2017-06-27T06:49:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
+<hr>
+<a id="more"></a>
+<script>
+    if( prompt("Please input password") !== String(10086) )
+    {
+        alert('密码错误！');
+        self.location='https://floatingguy.github.io/about/';
+        // history.back();
+    } else {
+        alert("密码正确");
+    }
+</script>
+
+
+<p>调研企业版微信。<br>需求分析：</p>
+<ol>
+<li>各个平台要能数据互通<ul>
+<li>iOS/Android/Windows/Mac</li>
+</ul>
+</li>
+<li>资金成本<ul>
+<li>目前没发现需要收费，应为服务器这些腾讯免费提供了</li>
+<li>可能需要企业资质的材料 （应该是没有也行）</li>
+</ul>
+</li>
+<li>展示各个商家获取积压情况<ul>
+<li>下面会在 <code>场景</code>里演示</li>
+</ul>
+</li>
+<li>网上下订单<ul>
+<li>应该是可以的，应为提供了微信支付的接口。</li>
+<li>但是官方没有给对应的APP</li>
+</ul>
+</li>
+</ol>
+<h1 id="企业版："><a href="#企业版：" class="headerlink" title="企业版："></a>企业版：</h1><blockquote>
+<p>关注需要认证，认证通过以后才可以加入</p>
+</blockquote>
+<p><img src="/include/img/life/DF8E8972F859C785969E598CE32F4E5D.jpg" alt=""></p>
+<p>欢迎扫描加入 <code>仙山瓜子</code><br><img src="/include/img/life/F8BA33CCA91F43FD3E82BB47F810E822.jpg" alt=""></p>
+<h2 id="功能描述"><a href="#功能描述" class="headerlink" title="功能描述"></a>功能描述</h2><ul>
+<li>打卡（无提醒）</li>
+<li>日报</li>
+<li>创建企业应用</li>
+<li>同事吧 （论坛）</li>
+<li>公告 （只能是管理员发送信息，无限制）</li>
+<li>设置部门<ul>
+<li>商家一个部门</li>
+<li>送货员一个部门</li>
+<li>所有发货商一个部门</li>
+<li>。。。</li>
+</ul>
+</li>
+<li>其他</li>
+</ul>
+<p>功能可通过SDK扩展， 具体需求安排在TODO 中。</p>
+<h2 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h2><ol>
+<li>针对 个人的限制</li>
+<li>针对 部门的限制</li>
+<li><p>影藏的部门<br><img src="/include/img/life/848BE5ACEB34856B71B5B8AAD83395ED.jpg" alt=""></p>
+</li>
+<li><p>分级管理员 （企业老板）<br><img src="/include/img/life/7B85FC781ED14DAE1180EAB8C04AAF2D.jpg" alt=""></p>
+</li>
+</ol>
+<h2 id="使用场景-（重要）"><a href="#使用场景-（重要）" class="headerlink" title="使用场景 （重要）"></a>使用场景 （重要）</h2><blockquote>
+<p>送货员负责记录商家 货物积压情况，并且及时的通知上游发货方， 发货方可以在电脑端（软件， 网页）查看具体的信息。</p>
+</blockquote>
+<p>人员角色：</p>
+<ul>
+<li>送货员A</li>
+<li>商家B</li>
+<li>发货人， 也是 汇报人</li>
+</ul>
+<p>步骤：</p>
+<ol>
+<li><p>前期准备：<br>当需要发货的时候,发货方可以提前在微信告知 <code>送货员A</code>, <code>送货员A</code> 取货以后运送到<code>商家B</code>, 检查商家货物积压情况。</p>
+</li>
+<li><p>送货员 记录信息上传服务器<br><code>送货员A</code>完成对商家存货情况的了解,<code>送货员A</code>就可以在手机端 <code>打卡</code>了。</p>
+<ul>
+<li>如果没有积压， 没有什么要 特殊交待的事情，那么直接打卡 【完成】发货就OK了。</li>
+<li>如果有 积压等重要信息需要记录，那么在打卡处 简单说明告知 后期会通过 <code>日报</code>的方式发送具体详细的信息。<br>（注意：员工 打卡的汇报人接收不到提醒消息， 只能自己主动查看）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>[建议]这里可以创建一个  <code>打卡</code>模板 和 <code>日报</code>模板。</p>
+</blockquote>
+<p><img src="/include/img/life/42DD76E6263D7D646A583033793953BC.jpg" alt=""><br><img src="/include/img/life/1094F97425E8F185CC6A96E65A07145B.jpg" alt=""><br>汇报人在手机/电脑上可以查看到 送货员的打卡消息。</p>
+<ol>
+<li>发货方查看消息 （web 端为例）</li>
+</ol>
+<p><img src="/include/img/life/EA4FA565F289E739F4975B3A94247C93.jpg" alt=""></p>
+<p>（iphone 上查看打卡列表）<br>每个 送货员收集的商家的情况一目了然。</p>
+<p>如果有<code>日报</code>发送给<code>汇报人</code>， 那么<code>汇报人</code>的手机微信企业版有提醒。</p>
+<p><img src="/include/img/life/7A39D7C7C1163BE10C360CED2D54C660.jpg" alt=""><br>（iphone 上查看 日报）<br>评论区可以聊天，建议送货员发送完<code>日报</code>就发送一条评论可以提醒 <code>发货方</code>查看。</p>
+<ol>
+<li>通过 网页端汇总日报</li>
+</ol>
+<p><img src="/include/img/life/2C135F4461DB6120E5E0982B49C65CAD.jpg" alt=""><br>所有的<code>日报</code>都是可以导出到电脑上， 方便<code>发货人</code>对 积压情况数据做进一步分析、处理， 下图是导出到电脑上显示。<br><img src="/include/img/life/4E6D8B0CAFCAB48ADF3CC1726648645F.jpg" alt=""></p>
+<blockquote>
+<p>[建议] 再次建议制定 <code>日报</code>模板</p>
+</blockquote>
+<h3 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h3><p>使用<code>打卡</code>的好处：发货方在手机 可以看到每个送货员的打卡列表，一目了然 不用在聊天记录里一个一个翻看（提高用户体验）</p>
+<p><code>日报</code>的好处：关键是 可以导出数据，在电脑上使用表格软件做排序还可以打印出来做长远的方案参考资料，制定下一个季度的方案。使用的好的化可以杜绝出现货物积压导致过期损失资金的情况。</p>
+<p>不足：</p>
+<ul>
+<li>Web端没有数据导入功能</li>
+<li>功能不够完善</li>
+<li>该软件的定位还清晰，不清楚具体针对的人群</li>
+</ul>
+<h2 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h2><ul>
+<li>开发后台数据处理接口</li>
+<li>优化网页端控制</li>
+<li>权限管理优化</li>
+<li>打卡 提醒的功能</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+    
+    </summary>
+    
+      <category term="捣鼓" scheme="http://yoursite.com/categories/categories-fiddle/"/>
+    
+    
+      <category term="wechat" scheme="http://yoursite.com/tags/wechat/"/>
+    
+  </entry>
   
   <entry>
     <title>iOS 免越狱注入技术</title>
@@ -1377,42 +1517,6 @@
     
     
       <category term="public intelligence" scheme="http://yoursite.com/tags/public-intelligence/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Andorid 添加系统证书</title>
-    <link href="http://yoursite.com/2017/04/10/Andorid-%E6%B7%BB%E5%8A%A0%E7%B3%BB%E7%BB%9F%E8%AF%81%E4%B9%A6/"/>
-    <id>http://yoursite.com/2017/04/10/Andorid-添加系统证书/</id>
-    <published>2017-04-10T09:45:01.000Z</published>
-    <updated>2017-04-27T03:19:20.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>作者：FloatingGuy 转载请注明出处：<a href="https://floatingguy.github.io/" target="_blank" rel="external">https://floatingguy.github.io/</a></p>
-<hr>
-<p>在 Android 上抓 HTTPs 的数据包，即使手动导入了证书还是无法 潇洒的抓包，应为手动导入的证书是用户证书，而不是系统证书。<br><a id="more"></a></p>
-<p>因为没有 逆向分析 证书管理 apk 的代码，所以我只能推测 用户态证书会被递归检测 CA 颁发机构，如果根证书不是 系统证书中标准 CA 颁发的，那么在设置代理的环境下访问 https 服务就会一直谈窗提醒证书不可信。</p>
-<h3 id="正题-–-导入系统证书"><a href="#正题-–-导入系统证书" class="headerlink" title="正题 – 导入系统证书"></a>正题 – 导入系统证书</h3><p>1.下载证书 <a href="https://www.charlesproxy.com/assets/legacy-ssl/charles.crt" target="_blank" rel="external">charles.crt</a></p>
-<p>2.push 证书到 <code>/system/etc/security/cacerts/</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#pc 上操作</span></div><div class="line">adb push  xx/xx/charles.crt  /data/<span class="built_in">local</span>/tmp</div><div class="line"></div><div class="line"><span class="comment">#mobile   上操作</span></div><div class="line">adb shell</div><div class="line">su     <span class="comment">#获取 root</span></div><div class="line">mount -o remount,rw /system</div><div class="line">cp  /data/<span class="built_in">local</span>/tmp/charles.crt   /system/etc/security/cacerts</div></pre></td></tr></table></figure></p>
-<p>3.修改文件权限<br>chmod  777 /system/etc/security/cacerts/charles.crt</p>
-<p>最后 在手机的证书管理工具中查看就 OK 了</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;作者：FloatingGuy 转载请注明出处：&lt;a href=&quot;https://floatingguy.github.io/&quot;&gt;https://floatingguy.github.io/&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;在 Android 上抓 HTTPs 的数据包，即使手动导入了证书还是无法 潇洒的抓包，应为手动导入的证书是用户证书，而不是系统证书。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="捣鼓" scheme="http://yoursite.com/categories/categories-fiddle/"/>
-    
-    
-      <category term="了解" scheme="http://yoursite.com/tags/%E4%BA%86%E8%A7%A3/"/>
-    
-      <category term="抓包" scheme="http://yoursite.com/tags/%E6%8A%93%E5%8C%85/"/>
-    
-      <category term="https" scheme="http://yoursite.com/tags/https/"/>
     
   </entry>
   
