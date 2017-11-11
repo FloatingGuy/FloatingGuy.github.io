@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://yoursite.com/2017/11/11/%E7%94%9F%E6%B4%BB/%E5%B2%81%E6%9C%88%E6%97%A0%E6%83%85%E5%82%AC%E4%BA%BA%E8%80%81%E3%80%81%E4%BA%BA%E7%94%9F%E5%8C%86%E5%8C%86%E5%A6%82%E8%BF%87%E5%AE%A2/</loc>
-    <lastmod>2017-11-11T05:08:11.000Z</lastmod>
+    <lastmod>2017-11-11T14:59:50.000Z</lastmod>
     <data>
         <display>
         <title>岁月无情催人老、人生匆匆如过客</title>
@@ -13,6 +13,49 @@
         
          
            
+             
+              <breadCrumb title="生活" url="http://yoursite.com/categories/categories-life/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/10/08/%E7%94%9F%E6%B4%BB/%E6%97%85%E6%B8%B8/2017%E5%8D%81%E4%B8%80%E6%B8%B8%E5%A4%A9%E5%A0%82%E5%AF%A8/</loc>
+    <lastmod>2017-11-11T14:57:38.000Z</lastmod>
+    <data>
+        <display>
+        <title>2017十一游天堂寨</title>
+        <pubTime>2017-10-08T13:25:51.000Z</pubTime>
+        
+        <tag>旅游</tag>
+         
+         
+           
+             
+              <breadCrumb title="生活" url="http://yoursite.com/categories/categories-life/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/08/19/%E7%94%9F%E6%B4%BB/%E5%81%A5%E8%BA%AB%E8%AE%A1%E5%88%92/%E5%81%A5%E8%BA%AB%E8%AE%A1%E5%88%92/</loc>
+    <lastmod>2017-08-19T07:21:10.000Z</lastmod>
+    <data>
+        <display>
+        <title>健身计划</title>
+        <pubTime>2017-08-19T07:07:08.000Z</pubTime>
+        
+        <tag>健身</tag>
+         
+         
+           
+             
+              <breadCrumb title="生活" url="http://yoursite.com/categories/categories-life/"/>
+          
         </display>
     </data>
     </url>
@@ -359,28 +402,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/02/08/iOS-roadMap/</loc>
-    <lastmod>2017-05-20T04:37:24.000Z</lastmod>
-    <data>
-        <display>
-        <title>iOS RoadMap</title>
-        <pubTime>2017-02-08T05:58:07.000Z</pubTime>
-        
-        <tag>熟悉</tag>
-         
-        <tag>ios</tag>
-         
-         
-           
-             
-              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/05/03/CIA-%E6%AD%A6%E5%99%A8%E5%BA%93/</loc>
     <lastmod>2017-05-20T04:37:24.000Z</lastmod>
     <data>
@@ -401,17 +422,21 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/04/28/%E5%BC%80%E5%8F%91/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84UDID%E5%92%8CUUID/</loc>
+    <loc>http://yoursite.com/2017/02/08/iOS-roadMap/</loc>
     <lastmod>2017-05-20T04:37:24.000Z</lastmod>
     <data>
         <display>
-        <title>iOS开发中的UDID和UUID</title>
-        <pubTime>2017-04-28T02:34:24.000Z</pubTime>
+        <title>iOS RoadMap</title>
+        <pubTime>2017-02-08T05:58:07.000Z</pubTime>
         
+        <tag>熟悉</tag>
+         
+        <tag>ios</tag>
+         
          
            
              
-              <breadCrumb title="开发" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+              <breadCrumb title="研究" url="http://yoursite.com/categories/categories-research/"/>
           
         </display>
     </data>
@@ -441,23 +466,59 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/03/16/%E5%BC%80%E5%8F%91/OSX-FirstExtension-%E5%BC%80%E5%8F%91/</loc>
+    <loc>http://yoursite.com/2017/04/28/%E5%BC%80%E5%8F%91/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84UDID%E5%92%8CUUID/</loc>
+    <lastmod>2017-05-20T04:37:24.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS开发中的UDID和UUID</title>
+        <pubTime>2017-04-28T02:34:24.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="开发" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/03/20/%E5%BC%80%E5%8F%91/java-ArrayList-String-add-%E7%94%A8%E6%B3%95%E8%AF%B4%E6%98%8E/</loc>
     <lastmod>2017-04-28T02:48:38.000Z</lastmod>
     <data>
         <display>
-        <title>OSX FirstExtension 开发</title>
-        <pubTime>2017-03-16T05:34:03.000Z</pubTime>
+        <title>java ArrayList<String>(){{add();}}; 用法说明</title>
+        <pubTime>2017-03-20T06:03:15.000Z</pubTime>
         
-        <tag>xnu</tag>
-         
-        <tag>kext</tag>
-         
-        <tag>c</tag>
+        <tag>java</tag>
          
          
            
              
               <breadCrumb title="开发" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/03/06/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/%E6%B5%85%E8%B0%88CVE-2016-4625-exploit/</loc>
+    <lastmod>2017-04-28T02:48:38.000Z</lastmod>
+    <data>
+        <display>
+        <title>浅谈 CVE-2016-4625 exploit</title>
+        <pubTime>2017-03-06T06:54:26.000Z</pubTime>
+        
+        <tag>熟悉</tag>
+         
+        <tag>ios/osx</tag>
+         
+         
+           
+             
+              <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
           
         </display>
     </data>
@@ -509,36 +570,18 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/03/06/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/%E6%B5%85%E8%B0%88CVE-2016-4625-exploit/</loc>
+    <loc>http://yoursite.com/2017/03/16/%E5%BC%80%E5%8F%91/OSX-FirstExtension-%E5%BC%80%E5%8F%91/</loc>
     <lastmod>2017-04-28T02:48:38.000Z</lastmod>
     <data>
         <display>
-        <title>浅谈 CVE-2016-4625 exploit</title>
-        <pubTime>2017-03-06T06:54:26.000Z</pubTime>
+        <title>OSX FirstExtension 开发</title>
+        <pubTime>2017-03-16T05:34:03.000Z</pubTime>
         
-        <tag>熟悉</tag>
+        <tag>xnu</tag>
          
-        <tag>ios/osx</tag>
+        <tag>kext</tag>
          
-         
-           
-             
-              <breadCrumb title="漏洞" url="http://yoursite.com/categories/categories-exploit/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/03/20/%E5%BC%80%E5%8F%91/java-ArrayList-String-add-%E7%94%A8%E6%B3%95%E8%AF%B4%E6%98%8E/</loc>
-    <lastmod>2017-04-28T02:48:38.000Z</lastmod>
-    <data>
-        <display>
-        <title>java ArrayList<String>(){{add();}}; 用法说明</title>
-        <pubTime>2017-03-20T06:03:15.000Z</pubTime>
-        
-        <tag>java</tag>
+        <tag>c</tag>
          
          
            
